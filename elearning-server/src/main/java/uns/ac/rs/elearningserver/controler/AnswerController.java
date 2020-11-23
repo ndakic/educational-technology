@@ -4,13 +4,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uns.ac.rs.elearningserver.service.QuestionService;
+import uns.ac.rs.elearningserver.service.AnswerService;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/answer")
 @RequiredArgsConstructor
-public class QuestionController {
+public class AnswerController {
 
     @NonNull
-    private final QuestionService questionService;
+    private final AnswerService answerService;
 }
