@@ -1,0 +1,24 @@
+version: "3"
+services:
+  postgres:
+    image: elearning/postgres:9.3
+    build:
+      context: ./
+      dockerfile: config/Dockerfile
+    container_name: postgres
+    volumes:
+      - ./config/pg_hba.conf:/etc/postgresql/9.3/main/pg_hba.conf
+      - ./config/postgresql.conf:/etc/postgresql/9.3/main/postgresql.conf
+    networks:
+      intranet:
+        ipv4_address: 172.22.0.11
+    ports:
+      - 5432:5432
+networks:
+  intranet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
+volumes:
+  postgresql:
