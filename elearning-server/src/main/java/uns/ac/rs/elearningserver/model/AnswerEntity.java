@@ -19,6 +19,7 @@ public class AnswerEntity {
     private String text;
     private QuestionEntity question;
     private StatusEntity status;
+    private Boolean isCorrect;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_id_seq")
@@ -67,4 +68,11 @@ public class AnswerEntity {
         this.status = status;
     }
 
+    public Boolean getCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(Boolean correct) {
+        isCorrect = correct;
+    }
 }

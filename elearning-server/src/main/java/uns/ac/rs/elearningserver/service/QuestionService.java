@@ -62,22 +62,4 @@ public class QuestionService {
                 )
                 .build();
     }
-
-    public List<Question.Resource> getAllQuestionsByTestId(String testId){
-        return questionRepository.findAllByTest_Md5H(testId)
-                .stream()
-                .map(questionEntity -> Question.Resource.builder()
-                        .id(questionEntity.getMd5H())
-                        .text(questionEntity.getText())
-                        .answers(questionEntity.getAnswers()
-                                .stream()
-                                .map(answerEntity -> Answer.Resource.builder()
-                                        .id(answerEntity.getMd5H())
-                                        .text(answerEntity.getText())
-                                        .questionId(answerEntity.getQuestion().getMd5H())
-                                        .build())
-                                .collect(Collectors.toList()))
-                        .build())
-                .collect(Collectors.toList());
-    }
 }
