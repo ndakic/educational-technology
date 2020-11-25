@@ -1,4 +1,4 @@
-package uns.ac.rs.elearningserver.controler;
+package uns.ac.rs.elearningserver.rest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

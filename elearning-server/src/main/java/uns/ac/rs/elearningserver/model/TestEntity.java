@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -14,7 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TestEntity {
+public class TestEntity implements Serializable {
 
     private long id;
     private String md5H;
@@ -53,7 +54,7 @@ public class TestEntity {
         this.title = title;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "euser_id", referencedColumnName = "euser_id", nullable = false)
     public UserEntity getTeacher() {
         return teacher;
@@ -96,7 +97,7 @@ public class TestEntity {
         this.questions = questions;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id", referencedColumnName = "status_id", nullable = false)
     public StatusEntity getStatus() {
         return status;

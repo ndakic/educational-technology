@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import uns.ac.rs.elearningserver.constant.UserType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     private long id;
     private String md5H;

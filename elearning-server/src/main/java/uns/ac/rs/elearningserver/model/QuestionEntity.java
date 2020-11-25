@@ -1,10 +1,12 @@
 package uns.ac.rs.elearningserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
@@ -13,7 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionEntity {
+public class QuestionEntity implements Serializable {
 
     private long id;
     private String md5H;
@@ -58,7 +60,7 @@ public class QuestionEntity {
         this.position = position;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "test_id", referencedColumnName = "test_id", nullable = false)
     public TestEntity getTest() {
         return test;
@@ -77,7 +79,7 @@ public class QuestionEntity {
         this.answers = answers;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id", referencedColumnName = "status_id", nullable = false)
     public StatusEntity getStatus() {
         return status;
