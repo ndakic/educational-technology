@@ -21,8 +21,11 @@ public class Answer {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Resource {
-        private String id;
+        private String answerId;
         private String text;
         private String questionId;
+        private String testId;
+        private String userId;
+        private boolean isCorrect;
     }
 }

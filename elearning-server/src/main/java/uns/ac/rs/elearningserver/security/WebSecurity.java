@@ -32,6 +32,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/question/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/test/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/test/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/answer/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/answer/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -39,7 +39,7 @@ public class TestService {
                                 .answers(questionEntity.getAnswers()
                                         .stream()
                                         .map(answerEntity -> Answer.Resource.builder()
-                                                .id(answerEntity.getMd5H())
+                                                .answerId(answerEntity.getMd5H())
                                                 .text(answerEntity.getText())
                                                 .questionId(answerEntity.getQuestion().getMd5H())
                                                 .build())

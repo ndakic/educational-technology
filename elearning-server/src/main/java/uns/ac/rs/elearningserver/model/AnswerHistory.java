@@ -27,6 +27,8 @@ public class AnswerHistory {
     private long id;
     private AnswerEntity answer;
     private UserEntity user;
+    private QuestionEntity question;
+    private TestEntity test;
     private Timestamp date;
 
     @Id
@@ -48,6 +50,25 @@ public class AnswerHistory {
 
     public void setAnswer(AnswerEntity answer) {
         this.answer = answer;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", referencedColumnName = "question_id", nullable = false)
+    public QuestionEntity getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(QuestionEntity question) {
+        this.question = question;
+    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "test_id", referencedColumnName = "test_id", nullable = false)
+    public TestEntity getTest() {
+        return test;
+    }
+
+    public void setTest(TestEntity test) {
+        this.test = test;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
