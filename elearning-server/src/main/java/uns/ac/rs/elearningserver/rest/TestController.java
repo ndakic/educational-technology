@@ -24,4 +24,9 @@ public class TestController {
     public ResponseEntity<?> get(@PathVariable String testId){
         return ResponseEntity.ok(testService.get(testId));
     }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity<?> get(){
+        return ResponseEntity.ok(testService.getAll());
+    }
 }

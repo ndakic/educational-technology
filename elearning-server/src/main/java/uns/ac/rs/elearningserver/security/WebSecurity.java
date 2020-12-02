@@ -43,10 +43,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public org.springframework.web.filter.CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
-        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Location", "X-Requested-With", "Authorization", "Cache-Control", "Content-Type", "X-Total-Count"));
+        config.addAllowedOriginPattern("*");
+        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Location", "X-Requested-With", "Authorization", "Cache-Control", "Content-Type", "X-Total-Count", "allowedOriginPatterns"));
         config.addAllowedMethod(HttpMethod.OPTIONS.name());
         config.addAllowedMethod(HttpMethod.GET.name());
         config.addAllowedMethod(HttpMethod.PUT.name());

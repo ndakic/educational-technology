@@ -12,6 +12,7 @@ import uns.ac.rs.elearningserver.rest.resource.Answer;
 import uns.ac.rs.elearningserver.rest.resource.Question;
 import uns.ac.rs.elearningserver.rest.resource.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,35 @@ public class TestService {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public List<Test.Resource> getAll(){
+        return testRepository.findAll()
+                .stream()
+                .map(testEntity -> Test.Resource.builder()
+                            .id(testEntity.getMd5H())
+                            .title(testEntity.getTitle())
+                            .startDate(testEntity.getStartDate())
+                            .endDate(testEntity.getEndDate())
+                            .teacherId(testEntity.getTeacher().getMd5H())
+                            .questions(testEntity.getQuestions()
+                                    .stream()
+                                    .map(questionEntity -> Question.Resource.builder()
+                                            .id(questionEntity.getMd5H())
+                                            .text(questionEntity.getText())
+                                            .testId(questionEntity.getTest().getMd5H())
+                                            .answers(questionEntity.getAnswers()
+                                                    .stream()
+                                                    .map(answerEntity -> Answer.Resource.builder()
+                                                            .answerId(answerEntity.getMd5H())
+                                                            .text(answerEntity.getText())
+                                                            .questionId(answerEntity.getQuestion().getMd5H())
+                                                            .build())
+                                                    .collect(Collectors.toList()))
+                                            .build())
+                                    .collect(Collectors.toList()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }
