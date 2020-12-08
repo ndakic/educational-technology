@@ -1,25 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { PreviewTestComponent } from './test/components/preview-test/preview-test.component';
+import { ShellComponent } from './core/components/shell/shell.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    component: HomeComponent
-  },
-  {
-    path: 'test',
-    component: PreviewTestComponent
-  },
-  {
-    path: '**',
-    redirectTo: 'others/404'
+    component: ShellComponent,
+    canActivate: [],
+    children: [
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      {
+        path: 'test',
+        canActivate: [],
+        loadChildren: () => import('./test/test.module').then(m => m.TestModule)
+      },
+     ]
   }
 ];
 
