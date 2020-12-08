@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TestService } from '../../services/test.service';
 
 @Component({
   selector: 'app-preview-test',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PreviewTestComponent implements OnInit {
 
-  constructor() { }
+  public tests: any;
+
+  constructor(
+    private testService: TestService
+  ) { }
 
   ngOnInit(): void {
+    this.testService.getAllTests().subscribe(response => this.tests = response);
   }
 
 }

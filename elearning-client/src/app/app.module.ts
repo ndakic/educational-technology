@@ -3,25 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { TestService } from './test/services/test.service';
 import { HttpClientModule } from '@angular/common/http';
-import { CreateTestComponent } from './test/components/create-test/create-test.component';
-import { PreviewTestComponent } from './test/components/preview-test/preview-test.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ShellComponent } from './core/components/shell/shell.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    CreateTestComponent,
-    PreviewTestComponent
+    ShellComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
-  providers: [TestService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
