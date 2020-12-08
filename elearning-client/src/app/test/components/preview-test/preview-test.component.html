@@ -1,4 +1,6 @@
-<div>
-    <mat-card *ngFor="let test of tests">{{test.title}}</mat-card>
+<div class="test-container">
+    <mat-card *ngFor="let test of tests" class="test-content">
+        <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
+        <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
+    </mat-card>
 </div>
-

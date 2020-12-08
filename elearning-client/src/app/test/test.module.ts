@@ -4,12 +4,12 @@ import { CreateTestComponent } from './components/create-test/create-test.compon
 import { PreviewTestComponent } from './components/preview-test/preview-test.component';
 import { TestRoutingModule } from './test-routing.module';
 import { MatCardModule } from '@angular/material/card';
-
+import { DetailsTestComponent } from './components/details-test/details-test.component';
 
 
 
 @NgModule({
-  declarations: [CreateTestComponent, PreviewTestComponent],
+  declarations: [CreateTestComponent, PreviewTestComponent, DetailsTestComponent],
   imports: [
     CommonModule,
     TestRoutingModule,

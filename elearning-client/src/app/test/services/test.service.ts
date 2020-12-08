@@ -15,4 +15,8 @@ export class TestService {
   getAllTests(): Observable<any>{
     return this.http.get(environment.apiUrlPrefix + `/test/all`);
   }
+
+  getById(id: string){
+    return this.http.get(environment.apiUrlPrefix + `/test/${id}`);
+  }
 }

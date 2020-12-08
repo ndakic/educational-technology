@@ -8,7 +8,7 @@ const routes: Routes = [
     component: ShellComponent,
     canActivate: [],
     children: [
-      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      { path: '', redirectTo: '/test/preview', pathMatch: 'full' },
       {
         path: 'test',
         canActivate: [],
