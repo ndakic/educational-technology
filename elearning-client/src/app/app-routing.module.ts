@@ -14,6 +14,11 @@ const routes: Routes = [
         canActivate: [],
         loadChildren: () => import('./test/test.module').then(m => m.TestModule)
       },
+      {
+        path: 'graph',
+        canActivate: [],
+        loadChildren: () => import('./graph/graph.module').then(m => m.GraphModule)
+      },
      ]
   }
 ];
