@@ -1,0 +1,18 @@
+<div class="fill-test-container">
+    <h1>
+       {{test.title}}
+    </h1>
+    <hr>
+    <div *ngFor="let question of test.questions; let i = index" class="test-question">
+        {{question.text}}
+        <div *ngFor="let answer of question.answers; let j = index" class="test-question-answer">
+            <mat-checkbox color="primary" (change)="addOrRemoveAnswer($event, answer.answerId)">{{answer.text}}</mat-checkbox>
+        </div>
+    </div>
+    <br>
+    <div>
+        <button mat-raised-button color="primary" (click)="submitAnswers()">
+            Finish Test
+        </button>
+    </div>
+</div>

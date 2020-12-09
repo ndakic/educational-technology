@@ -1,1 +1,61 @@
-<p>create-test works!</p>
+<div class="create-test-container">
+    <h1>
+        New Test
+    </h1>
+    <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input type="text" matInput [(ngModel)]="test.title">
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;
+    <mat-form-field appearance="fill">
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="test.startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;
+    <mat-form-field appearance="fill">
+        <mat-label>End date</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="test.endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+    <hr>
+    <button mat-icon-button color="primary" (click)="addQuestion()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <div *ngFor="let question of test.questions; let i = index" class="test-question">
+        <mat-form-field appearance="fill">
+            <mat-label>Question #{{i + 1}}</mat-label>
+            <input type="text" matInput [(ngModel)]="question.text">
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="removeQuestion(i)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <div>
+            <button mat-icon-button color="primary" (click)="addAnswer(question)">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+        <div *ngFor="let answer of question.answers; let j = index" class="test-question-answer">
+            <mat-form-field appearance="fill">
+                <mat-label>Answer #{{j + 1}}</mat-label>
+                <input type="text" matInput [(ngModel)]="answer.text">
+            </mat-form-field>
+            &nbsp;&nbsp;&nbsp;
+            <mat-checkbox color="primary">is correct?</mat-checkbox>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button mat-icon-button color="primary" (click)="removeAnswer(question, j)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+        <button mat-raised-button color="primary" (click)="createTest()">
+            Create Test
+        </button>
+    </div>
+</div>

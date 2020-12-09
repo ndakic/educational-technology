@@ -62,15 +62,13 @@ public class AnswerService {
     public void history(Answer.Resource resource){
         AnswerEntity answer = answerRepository.findOneByMd5H(resource.getAnswerId()).orElseThrow(() -> new ResourceNotExistException(String.format("Answer %s not found!", resource.getAnswerId()), ErrorCode.NOT_FOUND));
         UserEntity user = userRepository.findOneByMd5H(resource.getUserId()).orElseThrow(() -> new ResourceNotExistException(String.format("User %s not found!", resource.getUserId()), ErrorCode.NOT_FOUND));
-        QuestionEntity question = questionRepository.getOneByMd5H(resource.getQuestionId()).orElseThrow(() -> new ResourceNotExistException(String.format("Question %s not found!", resource.getQuestionId()), ErrorCode.NOT_FOUND));
-        TestEntity test = testRepository.getOnyByMd5H(resource.getTestId()).orElseThrow(() -> new ResourceNotExistException(String.format("Test %s not found!", resource.getTestId()), ErrorCode.NOT_FOUND));
-        Optional<AnswerHistory> checkAnswer = answerHistoryRepository.findOneByAnswer_Md5HAndQuestion_Md5HAndTest_Md5H(resource.getAnswerId(), resource.getQuestionId(), resource.getTestId());
+        Optional<AnswerHistory> checkAnswer = answerHistoryRepository.findOneByAnswer_Md5HAndQuestion_Md5HAndTest_Md5H(answer.getMd5H(), answer.getQuestion().getMd5H(), answer.getQuestion().getTest().getMd5H());
         if(checkAnswer.isPresent()) { throw new ResourceAlreadyExist(String.format("Answer %s already exist!", resource.getAnswerId()), ErrorCode.NOT_FOUND);}
         answerHistoryRepository.save(AnswerHistory.builder()
                 .answer(answer)
                 .user(user)
-                .question(question)
-                .test(test)
+                .question(answer.getQuestion())
+                .test(answer.getQuestion().getTest())
                 .date(DateUtil.nowSystemTime())
                 .build());
     }

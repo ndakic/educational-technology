@@ -6,7 +6,7 @@ import { TestService } from '../services/test.service';
 @Injectable({
   providedIn: 'root'
 })
-export class TestDetailsResolver implements Resolve<any> {
+export class TestFillResolver implements Resolve<any> {
 
   constructor(
     private testService: TestService) { }

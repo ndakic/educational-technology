@@ -1,6 +1,10 @@
 <div class="test-container">
+    <a mat-raised-button color="primary" href="/test/create">Create New Test</a>
     <mat-card *ngFor="let test of tests" class="test-content">
         <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
         <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
+        <div mat-dialog-actions align="end">
+            <a mat-raised-button color="primary" href="/test/{{test.id}}/fill">Fill Test</a>
+        </div>
     </mat-card>
 </div>

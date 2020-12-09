@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import uns.ac.rs.elearningserver.rest.resource.Answer;
 import uns.ac.rs.elearningserver.service.AnswerService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/answer")
 @RequiredArgsConstructor
@@ -17,7 +19,6 @@ public class AnswerController {
 
     @NonNull
     private final AnswerService answerService;
-
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Answer.Resource resource) {
@@ -29,5 +30,13 @@ public class AnswerController {
     public ResponseEntity<?> history(@RequestBody Answer.Resource resource) {
         answerService.history(resource);
         return ResponseEntity.ok(resource);
+    }
+
+    @RequestMapping(value = "/history/test", method = RequestMethod.POST)
+    public ResponseEntity<?> history(@RequestBody List<Answer.Resource> resources) {
+        for (Answer.Resource resource : resources) {
+            answerService.history(resource);
+        }
+        return ResponseEntity.ok(resources);
     }
 }

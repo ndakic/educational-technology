@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "elearning-client"
+  "defaultProject": "elearning-client",
+  "cli": {
+    "analytics": false
+  }
 }
