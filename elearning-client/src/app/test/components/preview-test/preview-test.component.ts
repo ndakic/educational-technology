@@ -11,8 +11,7 @@ export class PreviewTestComponent implements OnInit {
   public tests: any;
 
   constructor(
-    private testService: TestService
-  ) { }
+    private testService: TestService) { }
 
   ngOnInit(): void {
     this.testService.getAllTests().subscribe(response => this.tests = response);

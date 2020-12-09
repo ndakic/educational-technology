@@ -9,11 +9,10 @@ import uns.ac.rs.elearningserver.constant.QuestionStatus;
 import uns.ac.rs.elearningserver.constant.TestStatus;
 import uns.ac.rs.elearningserver.constant.UserType;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
+import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.model.TestEntity;
-import uns.ac.rs.elearningserver.repository.StatusRepository;
-import uns.ac.rs.elearningserver.repository.TestRepository;
-import uns.ac.rs.elearningserver.repository.UserRepository;
+import uns.ac.rs.elearningserver.repository.*;
 import uns.ac.rs.elearningserver.rest.resource.Answer;
 import uns.ac.rs.elearningserver.rest.resource.Question;
 import uns.ac.rs.elearningserver.rest.resource.Test;
@@ -31,6 +30,10 @@ public class TestService {
 
     @NonNull
     private final TestRepository testRepository;
+    @NonNull
+    private final QuestionRepository questionRepository;
+    @NonNull
+    private final AnswerRepository answerRepository;
     @NonNull
     private final StatusRepository statusRepository;
     @NonNull
@@ -94,6 +97,7 @@ public class TestService {
 
     @Transactional
     public Test.Resource create(Test.Resource resource){
+
         TestEntity test = TestEntity.builder()
                 .title(resource.getTitle())
                 .teacher(userRepository.findOneByMd5HAndUserType(resource.getTeacherId(), UserType.TEACHER).get())
@@ -101,10 +105,30 @@ public class TestService {
                 .creationDate(DateUtil.nowSystemTime())
                 .startDate(resource.getStartDate())
                 .endDate(resource.getEndDate())
-//                .questions() TODO: set questions
                 .build();
         testRepository.save(test);
         test.setMd5H(Md5Generator.generateHash(test.getId(), Md5Salt.TEST));
+
+        for (Question.Resource qResource : resource.getQuestions()) {
+            QuestionEntity question = QuestionEntity.builder()
+                    .text(qResource.getText())
+                    .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                    .test(test)
+                    .build();
+            questionRepository.save(question);
+            question.setMd5H(Md5Generator.generateHash(question.getId(), Md5Salt.TEST));
+            for (Answer.Resource aResource: qResource.getAnswers()) {
+                AnswerEntity answer = AnswerEntity.builder()
+                        .text(aResource.getText())
+                        .isCorrect(aResource.isCorrect())
+                        .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                        .question(question)
+                        .build();
+                answerRepository.save(answer);
+                answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.TEST));
+            }
+        }
+
         resource.setId(test.getMd5H());
         return resource;
     }

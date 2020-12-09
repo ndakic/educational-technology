@@ -12,6 +12,10 @@ export class TestService {
     private http: HttpClient,
   ) {}
 
+  createTest(test: object): Observable<any>{
+    return this.http.post(environment.apiUrlPrefix + `/test`, test);
+  }
+  
   getAllTests(): Observable<any>{
     return this.http.get(environment.apiUrlPrefix + `/test/all`);
   }

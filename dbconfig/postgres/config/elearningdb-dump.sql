@@ -20,11 +20,11 @@ SET row_security = off;
 -- Name: elearningdb; Type: DATABASE; Schema: -; Owner: postgres
 --
 
+DROP DATABASE IF EXISTS elearningdb;
 CREATE DATABASE elearningdb WITH TEMPLATE = template0 ENCODING = 'SQL_ASCII' LOCALE = 'C';
 
 
 ALTER DATABASE elearningdb OWNER TO postgres;
-
 \connect elearningdb
 
 SET statement_timeout = 0;
@@ -258,7 +258,7 @@ INSERT INTO public.answer_history VALUES (1, '2020-12-02 01:54:11.487774', 1, 1,
 --
 
 INSERT INTO public.euser VALUES (1, 'daka@gmail.com', 'Nikola', 'Dakic', '8d4aff29071ddee43ffa150a3c7aace8', '1234', NULL, 1, 'TEACHER');
-
+INSERT INTO public.euser VALUES (2, 'borossasa@gmail.com', 'Sasa', 'Boros', '5bc67bef74afd2fb0f5a370d72b1c913', '1234', NULL, 1, 'TEACHER');
 
 --
 -- Data for Name: question; Type: TABLE DATA; Schema: public; Owner: euser
