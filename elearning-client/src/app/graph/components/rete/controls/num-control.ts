@@ -14,19 +14,19 @@ export class NumControl extends Control implements AngularControl {
     this.props = {
       readonly,
       change: v => this.onChange(v),
-      value: 0,
+      value: "",
       mounted: () => {
-        this.setValue(+(this.getData(key) as any) || 0);
+        this.setValue((this.getData(key) as any) || "");
       }
     };
   }
 
-  onChange(val: number) {
+  onChange(val: string) {
     this.setValue(val);
     this.emitter.trigger("process");
   }
 
-  setValue(val: number) {
+  setValue(val: string) {
     this.props.value = +val;
     this.putData(this.key, this.props.value);
   }

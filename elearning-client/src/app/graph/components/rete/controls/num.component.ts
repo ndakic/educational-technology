@@ -3,15 +3,14 @@ import { Component, Input } from "@angular/core";
 @Component({
   template: `
     <input
-      type="number"
+      type="string"
       [value]="value"
-      [readonly]="readonly"
-      (change)="change(+$event.target.value)"
+      [readonly]="false"
     />
   `,
   styles: [
     ` input {
-        border-radius: 30px;
+        border-radius: 80px;
         background-color: white;
         padding: 2px 6px;
         border: 1px solid #999;
