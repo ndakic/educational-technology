@@ -22,6 +22,7 @@ public class QuestionEntity implements Serializable {
     private String text;
     private Integer position;
     private TestEntity test;
+    private ProblemEntity problem;
     private StatusEntity status;
     private Collection<AnswerEntity> answers;
 
@@ -68,6 +69,16 @@ public class QuestionEntity implements Serializable {
 
     public void setTest(TestEntity test) {
         this.test = test;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "problem_id", referencedColumnName = "problem_id")
+    public ProblemEntity getProblem() {
+        return problem;
+    }
+
+    public void setProblem(ProblemEntity problem) {
+        this.problem = problem;
     }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
