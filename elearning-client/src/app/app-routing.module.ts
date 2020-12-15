@@ -15,9 +15,9 @@ const routes: Routes = [
         loadChildren: () => import('./test/test.module').then(m => m.TestModule)
       },
       {
-        path: 'graph',
+        path: 'domain',
         canActivate: [],
-        loadChildren: () => import('./graph/graph.module').then(m => m.GraphModule)
+        loadChildren: () => import('./domain/domain.module').then(m => m.DomainModule)
       },
      ]
   }

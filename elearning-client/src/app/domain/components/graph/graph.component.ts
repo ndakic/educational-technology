@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-graph',
@@ -7,9 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GraphComponent implements OnInit {
 
-  constructor() { }
+  constructor( ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
 }

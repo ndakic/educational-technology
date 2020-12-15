@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReteModule } from "rete-angular-render-plugin";
-import { NumberNgControl } from "../rete/controls/num.component";
+import { NumberNgControl } from "./controls/num.component";
 import { ReteComponent } from "./rete.component";
 
 @NgModule({

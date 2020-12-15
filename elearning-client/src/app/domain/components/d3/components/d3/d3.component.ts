@@ -1,12 +1,15 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-d3',
   templateUrl: './d3.component.html',
   styleUrls: ['./d3.component.css']
 })
-export class D3Component implements AfterViewInit {
+export class D3Component implements AfterViewInit, OnInit {
+
   title = 'ng-d3-graph-editor';
   @ViewChild('graphContainer') graphContainer: ElementRef;
 
@@ -33,16 +36,32 @@ export class D3Component implements AfterViewInit {
   lastKeyDown = -1;
 
   nodes = [
-    { id: 0, reflexive: false },
-    { id: 1, reflexive: true },
-    { id: 2, reflexive: false },
-    { id: 3, reflexive: false },
-    { id: 4, reflexive: false }
+    // { id: 0, reflexive: false },
+    // { id: 1, reflexive: true },
+    // { id: 2, reflexive: false },
+    // { id: 3, reflexive: false },
+    // { id: 4, reflexive: false }
   ];
   links = [
-    { source: this.nodes[0], target: this.nodes[1], left: true, right: true },
-    { source: this.nodes[1], target: this.nodes[2], left: false, right: true }
+    // { source: this.nodes[0], target: this.nodes[1], left: true, right: true },
+    // { source: this.nodes[1], target: this.nodes[2], left: false, right: true }
   ];
+
+  domain: any;
+
+  constructor(
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(){
+    this.domain = this.route.snapshot.data["data"];
+    this.nodes = this.domain['domain'][0]['problems'];
+    this.links = this.domain['domain'][0]['links'];
+    this.lastNodeId = this.nodes.length;
+    this.updateLinkNodes();
+    console.log('nodes: ', this.nodes);
+    console.log('links: ', this.links);
+  }
 
   ngAfterViewInit() {
     const rect = this.graphContainer.nativeElement.getBoundingClientRect();
@@ -101,7 +120,6 @@ export class D3Component implements AfterViewInit {
     // handles to link and node element groups
     this.path = this.svg.append('svg:g').selectAll('path');
     this.circle = this.svg.append('svg:g').selectAll('g');
-    console.log('Init Circle: ', this.circle);
     // app starts here
     this.svg.on('mousedown', (dataItem, value, source) => this.mousedown(dataItem, value, source))
       .on('mousemove', (dataItem) => this.mousemove(dataItem))
@@ -370,5 +388,21 @@ export class D3Component implements AfterViewInit {
       this.circle.on('.drag', null);
       this.svg.classed('ctrl', false);
     }
+  }
+
+
+  updateLinkNodes(){
+    this.links.forEach(element => {
+      this.checkNode(element['source']);
+      this.checkNode(element['target']);
+    });
+  }
+
+  checkNode(linkNode){
+    this.nodes.forEach(element => {
+        if(element.id === linkNode.id){
+          linkNode = element;
+        }
+    });
   }
 }
