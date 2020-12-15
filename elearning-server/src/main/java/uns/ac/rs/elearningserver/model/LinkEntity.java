@@ -17,13 +17,13 @@ public class LinkEntity {
     private long id;
     private ProblemEntity source;
     private ProblemEntity target;
-    private Boolean left;
-    private Boolean right;
+    private Boolean leftDirection;
+    private Boolean rightDirection;
     private StatusEntity status;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "link_id_seq")
-    @Column(name = "link_id_seq")
+    @Column(name = "link_id")
     public long getId() {
         return id;
     }
@@ -52,20 +52,20 @@ public class LinkEntity {
         this.target = target;
     }
 
-    public Boolean getLeft() {
-        return left;
+    public Boolean getLeftDirection() {
+        return leftDirection;
     }
 
-    public void setLeft(Boolean left) {
-        this.left = left;
+    public void setLeftDirection(Boolean leftDirection) {
+        this.leftDirection = leftDirection;
     }
 
-    public Boolean getRight() {
-        return right;
+    public Boolean getRightDirection() {
+        return rightDirection;
     }
 
-    public void setRight(Boolean right) {
-        this.right = right;
+    public void setRightDirection(Boolean rightDirection) {
+        this.rightDirection = rightDirection;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
