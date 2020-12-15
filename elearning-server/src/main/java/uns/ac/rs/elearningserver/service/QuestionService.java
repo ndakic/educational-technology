@@ -7,18 +7,15 @@ import uns.ac.rs.elearningserver.constant.ErrorCode;
 import uns.ac.rs.elearningserver.constant.Md5Salt;
 import uns.ac.rs.elearningserver.constant.QuestionStatus;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
-import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.repository.QuestionRepository;
 import uns.ac.rs.elearningserver.repository.StatusRepository;
 import uns.ac.rs.elearningserver.repository.TestRepository;
-import uns.ac.rs.elearningserver.rest.resource.Answer;
-import uns.ac.rs.elearningserver.rest.resource.Question;
+import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
+import uns.ac.rs.elearningserver.rest.resource.QuestionResource;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +32,7 @@ public class QuestionService {
     private final StatusRepository statusRepository;
 
     @Transactional
-    public void create(Question.Resource question){
+    public void create(QuestionResource question){
         QuestionEntity questionEntity = QuestionEntity.builder()
                 .text(question.getText())
                 .test(testRepository.getOnyByMd5H(question.getTestId()).get())
@@ -45,15 +42,15 @@ public class QuestionService {
         questionEntity.setMd5H(Md5Generator.generateHash(questionEntity.getId(), Md5Salt.QUESTION));
     }
 
-    public Question.Resource get(String questionId){
+    public QuestionResource get(String questionId){
         QuestionEntity question = questionRepository.getOneByMd5H(questionId).orElseThrow(() -> new ResourceNotExistException(String.format("Campaign %s not found!", questionId), ErrorCode.NOT_FOUND));
-        return Question.Resource.builder()
+        return QuestionResource.builder()
                 .id(question.getMd5H())
                 .text(question.getText())
                 .testId(question.getTest().getMd5H())
                 .answers(question.getAnswers()
                         .stream()
-                        .map(answerEntity -> Answer.Resource.builder()
+                        .map(answerEntity -> AnswerResource.builder()
                                 .answerId(answerEntity.getMd5H())
                                 .text(answerEntity.getText())
                                 .questionId(answerEntity.getQuestion().getMd5H())

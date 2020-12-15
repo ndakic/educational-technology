@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "link")
@@ -12,9 +13,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LinkEntity {
+public class LinkEntity implements Serializable {
 
     private long id;
+    private DomainEntity domain;
     private ProblemEntity source;
     private ProblemEntity target;
     private Boolean leftDirection;
@@ -50,6 +52,16 @@ public class LinkEntity {
 
     public void setTarget(ProblemEntity target) {
         this.target = target;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "domain_id", referencedColumnName = "domain_id", nullable = false)
+    public DomainEntity getDomain() {
+        return domain;
+    }
+
+    public void setDomain(DomainEntity domain) {
+        this.domain = domain;
     }
 
     public Boolean getLeftDirection() {

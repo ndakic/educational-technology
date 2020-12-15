@@ -11,7 +11,6 @@ import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
 import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.AnswerHistory;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
-import uns.ac.rs.elearningserver.model.TestEntity;
 import uns.ac.rs.elearningserver.model.UserEntity;
 import uns.ac.rs.elearningserver.repository.AnswerHistoryRepository;
 import uns.ac.rs.elearningserver.repository.AnswerRepository;
@@ -19,7 +18,7 @@ import uns.ac.rs.elearningserver.repository.QuestionRepository;
 import uns.ac.rs.elearningserver.repository.StatusRepository;
 import uns.ac.rs.elearningserver.repository.TestRepository;
 import uns.ac.rs.elearningserver.repository.UserRepository;
-import uns.ac.rs.elearningserver.rest.resource.Answer;
+import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
 import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
@@ -45,7 +44,7 @@ public class AnswerService {
 
 
     @Transactional
-    public void create(Answer.Resource resource){
+    public void create(AnswerResource resource){
         QuestionEntity question = questionRepository.getOneByMd5H(resource.getQuestionId()).orElseThrow(() -> new ResourceNotExistException(String.format("Question %s not found!", resource.getQuestionId()), ErrorCode.NOT_FOUND));
         Optional<AnswerEntity> check = answerRepository.findOneByQuestion_Md5HAndTextAndStatus_Id(resource.getQuestionId(), resource.getText(), AnswerStatus.ACTIVE.getId());
         if(check.isPresent()) { throw new ResourceAlreadyExist(String.format("Answer %s already exist!", resource.getText()), ErrorCode.NOT_FOUND); }
@@ -59,7 +58,7 @@ public class AnswerService {
         answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.ANSWER));
     }
 
-    public void history(Answer.Resource resource){
+    public void history(AnswerResource resource){
         AnswerEntity answer = answerRepository.findOneByMd5H(resource.getAnswerId()).orElseThrow(() -> new ResourceNotExistException(String.format("Answer %s not found!", resource.getAnswerId()), ErrorCode.NOT_FOUND));
         UserEntity user = userRepository.findOneByMd5H(resource.getUserId()).orElseThrow(() -> new ResourceNotExistException(String.format("User %s not found!", resource.getUserId()), ErrorCode.NOT_FOUND));
         Optional<AnswerHistory> checkAnswer = answerHistoryRepository.findOneByAnswer_Md5HAndQuestion_Md5HAndTest_Md5H(answer.getMd5H(), answer.getQuestion().getMd5H(), answer.getQuestion().getTest().getMd5H());

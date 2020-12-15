@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "problem")
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProblemEntity {
+public class ProblemEntity implements Serializable {
 
     private long id;
     private String md5H;
@@ -58,12 +59,12 @@ public class ProblemEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id", nullable = false)
-    public QuestionEntity getQuestions() {
+    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    public QuestionEntity getQuestion() {
         return question;
     }
 
-    public void setQuestions(QuestionEntity questions) {
+    public void setQuestion(QuestionEntity questions) {
         this.question = questions;
     }
 

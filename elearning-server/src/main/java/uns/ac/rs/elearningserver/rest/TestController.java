@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uns.ac.rs.elearningserver.rest.resource.Test;
+import uns.ac.rs.elearningserver.rest.resource.TestResource;
 import uns.ac.rs.elearningserver.service.TestService;
 
 @RestController
@@ -20,7 +20,7 @@ public class TestController {
     private final TestService testService;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody Test.Resource resource){
+    public ResponseEntity<?> create(@RequestBody TestResource resource){
         return ResponseEntity.ok(testService.create(resource));
     }
 

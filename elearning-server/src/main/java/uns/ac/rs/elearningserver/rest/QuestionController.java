@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uns.ac.rs.elearningserver.rest.resource.Question;
+import uns.ac.rs.elearningserver.rest.resource.QuestionResource;
 import uns.ac.rs.elearningserver.service.QuestionService;
 
 @RestController
@@ -25,7 +25,7 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody Question.Resource resource) {
+    public ResponseEntity<?> create(@RequestBody QuestionResource resource) {
         questionService.create(resource);
         return ResponseEntity.ok(resource);
     }

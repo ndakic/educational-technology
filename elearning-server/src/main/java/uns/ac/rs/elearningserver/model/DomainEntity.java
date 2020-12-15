@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "domain")
@@ -13,14 +15,15 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DomainEntity {
+public class DomainEntity implements Serializable {
 
     private long id;
     private String md5H;
     private String title;
     private StatusEntity status;
     private UserEntity user;
-    private Collection<ProblemEntity> problems;
+    private Set<ProblemEntity> problems;
+    private Set<LinkEntity> links;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "domain_id_seq")
@@ -70,11 +73,20 @@ public class DomainEntity {
     }
 
     @OneToMany(mappedBy = "domain", fetch = FetchType.EAGER)
-    public Collection<ProblemEntity> getProblems() {
+    public Set<ProblemEntity> getProblems() {
         return problems;
     }
 
-    public void setProblems(Collection<ProblemEntity> problems) {
+    public void setProblems(Set<ProblemEntity> problems) {
         this.problems = problems;
+    }
+
+    @OneToMany(mappedBy = "domain", fetch = FetchType.EAGER)
+    public Set<LinkEntity> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<LinkEntity> links) {
+        this.links = links;
     }
 }

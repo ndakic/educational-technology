@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.ErrorCode;
 import uns.ac.rs.elearningserver.constant.Md5Salt;
-import uns.ac.rs.elearningserver.constant.QuestionStatus;
 import uns.ac.rs.elearningserver.constant.TestStatus;
 import uns.ac.rs.elearningserver.constant.UserType;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
@@ -13,15 +12,14 @@ import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.model.TestEntity;
 import uns.ac.rs.elearningserver.repository.*;
-import uns.ac.rs.elearningserver.rest.resource.Answer;
-import uns.ac.rs.elearningserver.rest.resource.Question;
-import uns.ac.rs.elearningserver.rest.resource.Test;
+import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
+import uns.ac.rs.elearningserver.rest.resource.QuestionResource;
+import uns.ac.rs.elearningserver.rest.resource.TestResource;
 import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +37,10 @@ public class TestService {
     @NonNull
     private final UserRepository userRepository;
 
-    public Test.Resource get(String testId){
-        TestEntity testEntity = testRepository.getOnyByMd5H(testId).orElseThrow(() -> new ResourceNotExistException(String.format("Test with %s not found!", testId), ErrorCode.NOT_FOUND));
-        return Test.Resource.builder()
+    public TestResource get(String testId){
+        TestEntity testEntity = testRepository.getOnyByMd5H(testId).orElseThrow(() ->
+                new ResourceNotExistException(String.format("Test with %s not found!", testId), ErrorCode.NOT_FOUND));
+        return TestResource.builder()
                 .id(testEntity.getMd5H())
                 .title(testEntity.getTitle())
                 .startDate(testEntity.getStartDate())
@@ -49,13 +48,13 @@ public class TestService {
                 .teacherId(testEntity.getTeacher().getMd5H())
                 .questions(testEntity.getQuestions()
                         .stream()
-                        .map(questionEntity -> Question.Resource.builder()
+                        .map(questionEntity -> QuestionResource.builder()
                                 .id(questionEntity.getMd5H())
                                 .text(questionEntity.getText())
                                 .testId(questionEntity.getTest().getMd5H())
                                 .answers(questionEntity.getAnswers()
                                         .stream()
-                                        .map(answerEntity -> Answer.Resource.builder()
+                                        .map(answerEntity -> AnswerResource.builder()
                                                 .answerId(answerEntity.getMd5H())
                                                 .text(answerEntity.getText())
                                                 .questionId(answerEntity.getQuestion().getMd5H())
@@ -66,10 +65,10 @@ public class TestService {
                 .build();
     }
 
-    public List<Test.Resource> getAll(){
+    public List<TestResource> getAll(){
         return testRepository.findAll()
                 .stream()
-                .map(testEntity -> Test.Resource.builder()
+                .map(testEntity -> TestResource.builder()
                             .id(testEntity.getMd5H())
                             .title(testEntity.getTitle())
                             .startDate(testEntity.getStartDate())
@@ -77,13 +76,13 @@ public class TestService {
                             .teacherId(testEntity.getTeacher().getMd5H())
                             .questions(testEntity.getQuestions()
                                     .stream()
-                                    .map(questionEntity -> Question.Resource.builder()
+                                    .map(questionEntity -> QuestionResource.builder()
                                             .id(questionEntity.getMd5H())
                                             .text(questionEntity.getText())
                                             .testId(questionEntity.getTest().getMd5H())
                                             .answers(questionEntity.getAnswers()
                                                     .stream()
-                                                    .map(answerEntity -> Answer.Resource.builder()
+                                                    .map(answerEntity -> AnswerResource.builder()
                                                             .answerId(answerEntity.getMd5H())
                                                             .text(answerEntity.getText())
                                                             .questionId(answerEntity.getQuestion().getMd5H())
@@ -96,7 +95,7 @@ public class TestService {
     }
 
     @Transactional
-    public Test.Resource create(Test.Resource resource){
+    public TestResource create(TestResource resource){
 
         TestEntity test = TestEntity.builder()
                 .title(resource.getTitle())
@@ -109,7 +108,7 @@ public class TestService {
         testRepository.save(test);
         test.setMd5H(Md5Generator.generateHash(test.getId(), Md5Salt.TEST));
 
-        for (Question.Resource qResource : resource.getQuestions()) {
+        for (QuestionResource qResource : resource.getQuestions()) {
             QuestionEntity question = QuestionEntity.builder()
                     .text(qResource.getText())
                     .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
@@ -117,7 +116,7 @@ public class TestService {
                     .build();
             questionRepository.save(question);
             question.setMd5H(Md5Generator.generateHash(question.getId(), Md5Salt.TEST));
-            for (Answer.Resource aResource: qResource.getAnswers()) {
+            for (AnswerResource aResource: qResource.getAnswers()) {
                 AnswerEntity answer = AnswerEntity.builder()
                         .text(aResource.getText())
                         .isCorrect(aResource.isCorrect())
