@@ -3,10 +3,8 @@ package uns.ac.rs.elearningserver.rest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uns.ac.rs.elearningserver.rest.resource.ProblemResource;
 import uns.ac.rs.elearningserver.service.ProblemService;
 
 @RestController
@@ -20,6 +18,11 @@ public class ProblemController {
     @RequestMapping(value = "/domain/{domainId}/all", method = RequestMethod.GET)
     public ResponseEntity<?> getAll(@PathVariable String domainId){
         return ResponseEntity.ok(problemService.getAllProblemsByDomain(domainId));
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public ResponseEntity<?> save(@RequestBody ProblemResource problem){
+        return ResponseEntity.ok(problemService.save(problem));
     }
 
 }
