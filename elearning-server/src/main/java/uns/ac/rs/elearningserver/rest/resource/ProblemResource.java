@@ -11,6 +11,7 @@ import uns.ac.rs.elearningserver.model.ProblemEntity;
 @NoArgsConstructor
 public class ProblemResource {
     private Long id;
+    private String md5h;
     private Boolean reflexive;
     private String title;
     private QuestionResource question;
@@ -20,6 +21,7 @@ public class ProblemResource {
         if(ObjectUtils.isEmpty(problemEntity)) { return null; }
         return ProblemResource.builder()
                 .id(problemEntity.getId())
+                .md5h(problemEntity.getMd5H())
                 .reflexive(problemEntity.getReflexive())
                 .title(problemEntity.getTitle())
                 .question(QuestionResource.entityToResource(problemEntity.getQuestion()))

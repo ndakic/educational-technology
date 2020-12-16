@@ -10,6 +10,7 @@ import uns.ac.rs.elearningserver.model.LinkEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LinkResource {
+    private String md5h;
     private Boolean left;
     private Boolean right;
     private ProblemResource source;
@@ -19,6 +20,7 @@ public class LinkResource {
     public static LinkResource entityToResource(LinkEntity linkEntity){
         if(ObjectUtils.isEmpty(linkEntity)) { return null; }
         return LinkResource.builder()
+                .md5h(linkEntity.getMd5h())
                 .left(linkEntity.getLeftDirection())
                 .right(linkEntity.getRightDirection())
                 .source(ProblemResource.entityToResource(linkEntity.getSource()))

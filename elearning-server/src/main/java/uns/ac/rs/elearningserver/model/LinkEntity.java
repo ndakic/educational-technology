@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class LinkEntity implements Serializable {
 
     private long id;
+    private String md5h;
     private DomainEntity domain;
     private ProblemEntity source;
     private ProblemEntity target;
@@ -32,6 +33,14 @@ public class LinkEntity implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getMd5h() {
+        return md5h;
+    }
+
+    public void setMd5h(String md5h) {
+        this.md5h = md5h;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

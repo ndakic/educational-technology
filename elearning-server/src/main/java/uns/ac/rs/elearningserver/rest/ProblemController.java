@@ -25,4 +25,9 @@ public class ProblemController {
         return ResponseEntity.ok(problemService.save(problem));
     }
 
+    @RequestMapping(value = "/{problemId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable String problemId){
+        return ResponseEntity.ok(problemService.delete(problemId));
+    }
+
 }

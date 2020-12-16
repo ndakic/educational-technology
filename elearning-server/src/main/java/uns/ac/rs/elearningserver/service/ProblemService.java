@@ -42,9 +42,16 @@ public class ProblemService {
                 .title(problem.getTitle())
                 .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030c92").get())
                 .reflexive(problem.getReflexive())
-                .status(statusRepository.getOne(DomainStatus.ACTIVE.getId()))
+                .status(statusRepository.getOne(ProblemStatus.ACTIVE.getId()))
                 .build());
         problemEntity.setMd5H(Md5Generator.generateHash(problemEntity.getId(), Md5Salt.PROBLEM));
-        return problem;
+        return ProblemResource.entityToResource(problemEntity);
+    }
+
+    public ProblemResource delete(String problemId){
+        ProblemEntity problemEntity = problemRepository.findByMd5H(problemId).get();
+        problemEntity.setStatus(statusRepository.getOne(ProblemStatus.DELETED.getId()));
+        problemRepository.save(problemEntity);
+        return ProblemResource.entityToResource(problemEntity);
     }
 }
