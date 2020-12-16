@@ -16,6 +16,10 @@ export class ProblemService {
     return this.http.post(environment.apiUrlPrefix + `/problem`, problem);
   }
 
+  deleteProblem(problemId: string){
+    return this.http.delete(environment.apiUrlPrefix + `/problem/${problemId}`);
+  }
+
 }
 
 

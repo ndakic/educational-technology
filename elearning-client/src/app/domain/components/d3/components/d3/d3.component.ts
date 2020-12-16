@@ -25,15 +25,14 @@ export class D3Component implements AfterViewInit, OnInit {
   dragLine: any;
 
   // mouse event vars
-  currentNode = null;
-  selectedNode = null;
-  selectedLink = null;
+  public selectedNode = null;
+  public selectedLink = null;
   mousedownLink = null;
   mousedownNode = null;
   mouseupNode = null;
 
   lastNodeId = 99;
-  lastKeyDown = -1; // only respond once per keydown
+  // lastKeyDown = -1; // only respond once per keydown
 
   nodes = [];
   links = [];
@@ -49,13 +48,10 @@ export class D3Component implements AfterViewInit, OnInit {
     this.nodes = this.domain['domain'][0]['problems'];
     this.links = this.domain['domain'][0]['links'];
     this.lastNodeId = this.nodes.length;
-    // this.updateLinkNodes();
-    // console.log('nodes: ', this.nodes);
-    // console.log('links: ', this.links);
   }
 
   ngAfterViewInit() {
-    console.log('noddeee: ', this.nodes);
+    console.log('nodes: ', this.nodes);
     const rect = this.graphContainer.nativeElement.getBoundingClientRect();
     this.width = rect.width;
     this.svg = d3.select('#graphContainer')
@@ -117,7 +113,7 @@ export class D3Component implements AfterViewInit, OnInit {
       .on('mousemove', (dataItem) => this.mousemove(dataItem))
       .on('mouseup', (dataItem) => this.mouseup(dataItem));
     d3.select(window)
-      .on('keydown', this.keydown)
+      .on('keydown', selected => this.keydown(selected))
       .on('keyup', this.keyup);
     this.restart();
   }
@@ -150,7 +146,8 @@ export class D3Component implements AfterViewInit, OnInit {
   }
 
   // update graph (called when needed)
-  restart() {
+  public restart() {
+    console.log("-- Restart");
     // path (link) group
     this.path = this.path.data(this.links);
     // update existing links
@@ -166,10 +163,11 @@ export class D3Component implements AfterViewInit, OnInit {
       .style('marker-start', (d) => d.left ? 'url(#start-arrow)' : '')
       .style('marker-end', (d) => d.right ? 'url(#end-arrow)' : '')
       .on('mousedown', (d) => {
+        console.log('-- Mousedown in restart function!')
         if (d3.event.ctrlKey) return;
         // select link
-        this.mousedownLink = d;
-        this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
+        // this.mousedownLink = d;
+        // this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
         // this.selectedNode = null;
         this.restart();
       })
@@ -183,8 +181,10 @@ export class D3Component implements AfterViewInit, OnInit {
       .classed('reflexive', (d) => d.reflexive);
     // remove old nodes
     this.circle.exit().remove();
+    console.log('\tOld nodes removed.');
     // add new nodes
     const g = this.circle.enter().append('svg:g');
+    console.log('\tNew nodes added: ', g);
     g.append('svg:circle')
       .attr('class', 'node')
       .attr('r', 12)
@@ -206,10 +206,9 @@ export class D3Component implements AfterViewInit, OnInit {
         if (d3.event.ctrlKey) return;
         // select node
         this.mousedownNode = d;
-        // this.selectedNode = (this.mousedownNode === this.selectedNode) ? null : this.mousedownNode;
+        this.selectedNode = (this.mousedownNode === this.selectedNode) ? null : this.mousedownNode;
         console.log('\tSetting selected node: ', d);
-        this.selectedNode = d;
-        this.currentNode = 'blaa';
+        // this.selectedNode = d;
         console.log('\tSelected Node setted: ', this.selectedNode);
         this.selectedLink = null;
         // reposition drag line
@@ -260,7 +259,7 @@ export class D3Component implements AfterViewInit, OnInit {
         console.log("Selected node released: ", this.selectedNode);
         this.restart();
       });
-      
+    console.log('\t ...');
     // show node IDs
     g.append('svg:text')
       .attr('x', 0)
@@ -276,7 +275,7 @@ export class D3Component implements AfterViewInit, OnInit {
       .force('link').links(this.links);
 
     this.force.alphaTarget(0.3).restart();
-    console.log('\t<g.apend> end: ', this.selectedNode);
+    console.log('\tRestart function end: ', this.selectedNode);
   }
 
   mousedown(dataItem: any, value: any, source: any) {
@@ -291,19 +290,19 @@ export class D3Component implements AfterViewInit, OnInit {
     const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "TO-DO" };
     console.log('new node: ', node);
     console.log('save new node');
-    this.nodes.push(node);
+    
     this.problemService.saveProblem(node).subscribe(response => {
-      console.log('Problem succesfully saved: ', response);
+      node['md5h'] = response['md5h'];
+      this.nodes.push(node);
+      console.log('Problem succesfully saved: ', node);
     });
     this.restart();
   }
 
   mousemove(source: any) {
     if (!this.mousedownNode) return;
-
     // update drag line
     this.dragLine.attr('d', `M${this.mousedownNode.x},${this.mousedownNode.y}L${d3.mouse(d3.event.currentTarget)[0]},${d3.mouse(d3.event.currentTarget)[1]}`);
-
     this.restart();
   }
 
@@ -329,14 +328,13 @@ export class D3Component implements AfterViewInit, OnInit {
     }
   }
 
-  keydown() {
+  public keydown(selected) {
     console.log('Key Down: ', d3.event.keyCode);
     console.log("\tSelected node: ", this.selectedNode);
-    console.log("\tCurrent node: ", this.currentNode);
+    // console.log("\tLast key Down: ", this.lastKeyDown);
     d3.event.preventDefault();
-    console.log("\tLast key Down: ", this.lastKeyDown);
-    if (this.lastKeyDown !== -1) return;
-    this.lastKeyDown = d3.event.keyCode;
+    // if (this.lastKeyDown !== -1) return;
+    // this.lastKeyDown = d3.event.keyCode;
     // ctrl
     if (d3.event.keyCode === 17) {
       console.log("\tCTRL pressed!");
@@ -344,8 +342,7 @@ export class D3Component implements AfterViewInit, OnInit {
       // this.svg.classed('ctrl', true);
     }
     console.log('\tselected node: ', this.selectedNode, 'selected link: ', this.selectedLink);
-    if (!this.selectedNode && !this.selectedLink) return;
-    console.log('\tswitch: ', d3.event.keyCode);
+    // if (!this.selectedNode && !this.selectedLink) return;
     switch (d3.event.keyCode) {
       case 8: // backspace
       case 46: // delete
@@ -353,11 +350,14 @@ export class D3Component implements AfterViewInit, OnInit {
         if (this.selectedNode) {
           this.nodes.splice(this.nodes.indexOf(this.selectedNode), 1);
           this.spliceLinksForNode(this.selectedNode);
+          this.problemService.deleteProblem(this.selectedNode.md5h).subscribe(response => {
+            console.log('Problem successfully deleted! ', this.selectedNode);
+          });
         } else if (this.selectedLink) {
           this.links.splice(this.links.indexOf(this.selectedLink), 1);
         }
         this.selectedLink = null;
-        // this.selectedNode = null;
+        this.selectedNode = null;
         this.restart();
         break;
       case 66: // B
@@ -392,7 +392,7 @@ export class D3Component implements AfterViewInit, OnInit {
 
   keyup() {
     console.log('Key Up: ', d3.event.keyCode);
-    this.lastKeyDown = -1;
+    // this.lastKeyDown = -1;
     // ctrl
     // if (d3.event.keyCode === 17) {
     //   this.circle.on('.drag', null);
