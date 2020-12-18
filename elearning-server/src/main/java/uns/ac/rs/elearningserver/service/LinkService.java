@@ -49,9 +49,24 @@ public class LinkService {
                 .source(problemRepository.findByMd5H(linkResource.getSource().getMd5h()).get())
                 .target(problemRepository.findByMd5H(linkResource.getTarget().getMd5h()).get())
                 .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030c92").get())
-                .status(statusRepository.getOne(ProblemStatus.ACTIVE.getId()))
+                .status(statusRepository.getOne(LinkStatus.ACTIVE.getId()))
                 .build());
         linkEntity.setMd5h(Md5Generator.generateHash(linkEntity.getId(), Md5Salt.LINK));
         return LinkResource.entityToResource(linkEntity);
+    }
+
+    public void delete(String linkId){
+        LinkEntity linkEntity = linkRepository.findOneByMd5h(linkId).get();
+        linkEntity.setStatus(statusRepository.getOne(LinkStatus.DELETED.getId()));
+        linkRepository.save(linkEntity);
+    }
+
+    @Transactional
+    public void deleteLinks(String problemId){
+        List<LinkEntity> linkEntities = linkRepository.findAllBySource_Md5HOrTarget_Md5H(problemId, problemId);
+        for(LinkEntity linkEntity: linkEntities) {
+            linkEntity.setStatus(statusRepository.getOne(LinkStatus.DELETED.getId()));
+            linkRepository.save(linkEntity);
+        }
     }
 }

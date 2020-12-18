@@ -16,7 +16,7 @@ public class DomainController {
     private final DomainService domainService;
 
     @RequestMapping(value = "/{domainId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAll(@PathVariable String domainId){
+    public ResponseEntity<?> get(@PathVariable String domainId){
         return ResponseEntity.ok(domainService.get(domainId));
     }
 

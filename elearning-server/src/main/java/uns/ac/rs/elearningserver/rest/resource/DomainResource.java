@@ -2,6 +2,7 @@ package uns.ac.rs.elearningserver.rest.resource;
 
 import lombok.*;
 import org.springframework.util.ObjectUtils;
+import uns.ac.rs.elearningserver.constant.LinkStatus;
 import uns.ac.rs.elearningserver.constant.ProblemStatus;
 import uns.ac.rs.elearningserver.model.DomainEntity;
 
@@ -31,8 +32,13 @@ public class DomainResource {
                 .problems(domainEntity.getProblems()
                         .stream()
                         .filter(problemEntity -> problemEntity.getStatus().getId() == ProblemStatus.ACTIVE.getId())
-                        .map(ProblemResource::entityToResource).collect(Collectors.toList()))
-                .links(domainEntity.getLinks().stream().map(LinkResource::entityToResource).collect(Collectors.toList()))
+                        .map(ProblemResource::entityToResource)
+                        .collect(Collectors.toList()))
+                .links(domainEntity.getLinks()
+                        .stream()
+                        .filter(linkEntity -> linkEntity.getStatus().getId() == LinkStatus.ACTIVE.getId())
+                        .map(LinkResource::entityToResource)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
