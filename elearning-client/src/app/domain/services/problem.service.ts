@@ -12,11 +12,11 @@ export class ProblemService {
     private http: HttpClient
   ) {}
 
-  saveProblem(problem: any){
+  save(problem: any){
     return this.http.post(environment.apiUrlPrefix + `/problem`, problem);
   }
 
-  deleteProblem(problemId: string){
+  delete(problemId: string){
     return this.http.delete(environment.apiUrlPrefix + `/problem/${problemId}`);
   }
 

@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
 import { ProblemService } from 'src/app/domain/services/problem.service';
+import { LinkService } from 'src/app/domain/services/link.service';
 
 @Component({
   selector: 'app-d3',
@@ -40,7 +41,8 @@ export class D3Component implements AfterViewInit, OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private problemService: ProblemService
+    private problemService: ProblemService,
+    private linkService: LinkService
   ) {}
 
   ngOnInit(){
@@ -163,12 +165,12 @@ export class D3Component implements AfterViewInit, OnInit {
       .style('marker-start', (d) => d.left ? 'url(#start-arrow)' : '')
       .style('marker-end', (d) => d.right ? 'url(#end-arrow)' : '')
       .on('mousedown', (d) => {
-        console.log('-- Mousedown in restart function!')
         if (d3.event.ctrlKey) return;
         // select link
-        // this.mousedownLink = d;
-        // this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
-        // this.selectedNode = null;
+        this.mousedownLink = d;
+        this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
+        console.log('selected LinnnK: ', this.selectedLink);
+        this.selectedNode = null;
         this.restart();
       })
       .merge(this.path);
@@ -184,7 +186,6 @@ export class D3Component implements AfterViewInit, OnInit {
     console.log('\tOld nodes removed.');
     // add new nodes
     const g = this.circle.enter().append('svg:g');
-    console.log('\tNew nodes added: ', g);
     g.append('svg:circle')
       .attr('class', 'node')
       .attr('r', 12)
@@ -202,12 +203,10 @@ export class D3Component implements AfterViewInit, OnInit {
         d3.select(this).attr('transform', '');
       })
       .on('mousedown', (d) => {
-        console.log('-- Mousedown:');
         if (d3.event.ctrlKey) return;
         // select node
         this.mousedownNode = d;
         this.selectedNode = (this.mousedownNode === this.selectedNode) ? null : this.mousedownNode;
-        console.log('\tSetting selected node: ', d);
         // this.selectedNode = d;
         console.log('\tSelected Node setted: ', this.selectedNode);
         this.selectedLink = null;
@@ -220,9 +219,7 @@ export class D3Component implements AfterViewInit, OnInit {
       })
       .on('mouseup', (dataItem: any) => {
         console.log('-- Mouseup:');
-        console.log('\t Data item: :', dataItem);
         console.log('\tSelected Node setted: ', this.selectedNode);
-        console.log('\tMouse up node: ', this.mouseupNode, ' Mouse down node: ', this.mousedownNode);
         // debugger;
         if (!this.mousedownNode) return;
 
@@ -245,18 +242,23 @@ export class D3Component implements AfterViewInit, OnInit {
         const isRight = this.mousedownNode.id < this.mouseupNode.id;
         const source = isRight ? this.mousedownNode : this.mouseupNode;
         const target = isRight ? this.mouseupNode : this.mousedownNode;
-
         const link = this.links.filter((l) => l.source === source && l.target === target)[0];
         if (link) {
           link[isRight ? 'right' : 'left'] = true;
         } else {
-          this.links.push({ source, target, left: !isRight, right: isRight });
+          const _link = { source, target, left: !isRight, right: isRight };
+          this.links.push(_link);
+          this.linkService.save(_link).subscribe(response => {
+            _link['md5h'] = response['md5h'];
+            this.links[this.links.length-1] = _link;
+            console.log('Link successfully saved: ', _link);
+          });
         }
 
         // select new link
         this.selectedLink = link;
         // this.selectedNode = null;
-        console.log("Selected node released: ", this.selectedNode);
+        console.log("Selected link: ", this.selectedLink);
         this.restart();
       });
     console.log('\t ...');
@@ -290,10 +292,9 @@ export class D3Component implements AfterViewInit, OnInit {
     const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "TO-DO" };
     console.log('new node: ', node);
     console.log('save new node');
-    
-    this.problemService.saveProblem(node).subscribe(response => {
-      node['md5h'] = response['md5h'];
-      this.nodes.push(node);
+    this.nodes.push(node);
+    this.problemService.save(node).subscribe(response => {
+      this.nodes[this.nodes.length-1]['md5h'] = response['md5h'];
       console.log('Problem succesfully saved: ', node);
     });
     this.restart();
@@ -350,11 +351,15 @@ export class D3Component implements AfterViewInit, OnInit {
         if (this.selectedNode) {
           this.nodes.splice(this.nodes.indexOf(this.selectedNode), 1);
           this.spliceLinksForNode(this.selectedNode);
-          this.problemService.deleteProblem(this.selectedNode.md5h).subscribe(response => {
+          this.problemService.delete(this.selectedNode.md5h).subscribe(response => {
             console.log('Problem successfully deleted! ', this.selectedNode);
+            this.deleteLinksWithoutNode(response['md5h']);
           });
         } else if (this.selectedLink) {
           this.links.splice(this.links.indexOf(this.selectedLink), 1);
+          this.linkService.delete(this.selectedLink.md5h).subscribe(response => {
+            console.log("Link successfully deleted!");
+          });
         }
         this.selectedLink = null;
         this.selectedNode = null;
@@ -418,4 +423,12 @@ export class D3Component implements AfterViewInit, OnInit {
       }
     }
   }
+
+  deleteLinksWithoutNode(nodeId: string){
+    this.linkService.deleteLinksByProblemId(nodeId).subscribe(response => {
+      console.log("Links successfully deleted: ", response);
+    });
+  }
+
+
 }
