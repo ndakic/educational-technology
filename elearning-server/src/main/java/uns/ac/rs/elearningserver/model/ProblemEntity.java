@@ -22,6 +22,7 @@ public class ProblemEntity implements Serializable {
     private StatusEntity status;
     private Boolean reflexive;
     private QuestionEntity question; // can be updated to support multiple questions
+    private Integer orderValue;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "problem_id_seq")
@@ -86,5 +87,13 @@ public class ProblemEntity implements Serializable {
 
     public void setStatus(StatusEntity status) {
         this.status = status;
+    }
+
+    public Integer getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(Integer orderValue) {
+        this.orderValue = orderValue;
     }
 }

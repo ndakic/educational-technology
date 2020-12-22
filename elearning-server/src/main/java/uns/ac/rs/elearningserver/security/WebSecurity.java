@@ -42,6 +42,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/link/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/problem/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/problem/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/problem/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/problem/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/domain/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/domain/**").permitAll()

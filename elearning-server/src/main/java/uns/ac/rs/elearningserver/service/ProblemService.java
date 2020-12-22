@@ -42,6 +42,7 @@ public class ProblemService {
                 .title(problem.getTitle())
                 .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030c92").get())
                 .reflexive(problem.getReflexive())
+                .orderValue(problem.getOrder())
                 .status(statusRepository.getOne(ProblemStatus.ACTIVE.getId()))
                 .build());
         problemEntity.setMd5H(Md5Generator.generateHash(problemEntity.getId(), Md5Salt.PROBLEM));
@@ -51,6 +52,14 @@ public class ProblemService {
     public ProblemResource delete(String problemId){
         ProblemEntity problemEntity = problemRepository.findByMd5H(problemId).get();
         problemEntity.setStatus(statusRepository.getOne(ProblemStatus.DELETED.getId()));
+        problemRepository.save(problemEntity);
+        return ProblemResource.entityToResource(problemEntity);
+    }
+
+    public ProblemResource update(ProblemResource problem){
+        ProblemEntity problemEntity = problemRepository.findByMd5H(problem.getMd5h()).get();
+        problemEntity.setTitle(problem.getTitle());
+        problemEntity.setOrderValue(problem.getOrder());
         problemRepository.save(problemEntity);
         return ProblemResource.entityToResource(problemEntity);
     }

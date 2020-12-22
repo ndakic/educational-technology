@@ -16,6 +16,7 @@ public class ProblemResource {
     private String title;
     private QuestionResource question;
     private StatusResource status;
+    private Integer order;
 
     public static ProblemResource entityToResource(ProblemEntity problemEntity){
         if(ObjectUtils.isEmpty(problemEntity)) { return null; }
@@ -24,6 +25,7 @@ public class ProblemResource {
                 .md5h(problemEntity.getMd5H())
                 .reflexive(problemEntity.getReflexive())
                 .title(problemEntity.getTitle())
+                .order(problemEntity.getOrderValue())
                 .question(QuestionResource.entityToResource(problemEntity.getQuestion()))
                 .status(StatusResource.entityToResource(problemEntity.getStatus()))
                 .build();

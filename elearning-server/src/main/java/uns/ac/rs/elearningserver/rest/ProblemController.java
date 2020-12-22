@@ -30,4 +30,9 @@ public class ProblemController {
         return ResponseEntity.ok(problemService.delete(problemId));
     }
 
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@RequestBody ProblemResource problem){
+        return ResponseEntity.ok(problemService.update(problem));
+    }
+
 }
