@@ -28,16 +28,17 @@ export class D3Component implements AfterViewInit, OnInit {
   // mouse event vars
   public selectedNode = null;
   public selectedLink = null;
+  public titleInputFocus = false;
   mousedownLink = null;
   mousedownNode = null;
   mouseupNode = null;
 
   lastNodeId = 99;
-  // lastKeyDown = -1; // only respond once per keydown
+  lastKeyDown = -1; // only respond once per keydown
 
-  nodes = [];
-  links = [];
-  domain: any;
+  public nodes = [];
+  public links = [];
+  public domain: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,7 +116,7 @@ export class D3Component implements AfterViewInit, OnInit {
       .on('mousemove', (dataItem) => this.mousemove(dataItem))
       .on('mouseup', (dataItem) => this.mouseup(dataItem));
     d3.select(window)
-      .on('keydown', selected => this.keydown(selected))
+      .on('keydown', (selected) => this.keydown(selected))
       .on('keyup', this.keyup);
     this.restart();
   }
@@ -149,7 +150,7 @@ export class D3Component implements AfterViewInit, OnInit {
 
   // update graph (called when needed)
   public restart() {
-    console.log("-- Restart");
+    // console.log("-- Restart");
     // path (link) group
     this.path = this.path.data(this.links);
     // update existing links
@@ -169,7 +170,6 @@ export class D3Component implements AfterViewInit, OnInit {
         // select link
         this.mousedownLink = d;
         this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
-        console.log('selected LinnnK: ', this.selectedLink);
         this.selectedNode = null;
         this.restart();
       })
@@ -183,7 +183,6 @@ export class D3Component implements AfterViewInit, OnInit {
       .classed('reflexive', (d) => d.reflexive);
     // remove old nodes
     this.circle.exit().remove();
-    console.log('\tOld nodes removed.');
     // add new nodes
     const g = this.circle.enter().append('svg:g');
     g.append('svg:circle')
@@ -208,7 +207,6 @@ export class D3Component implements AfterViewInit, OnInit {
         this.mousedownNode = d;
         this.selectedNode = (this.mousedownNode === this.selectedNode) ? null : this.mousedownNode;
         // this.selectedNode = d;
-        console.log('\tSelected Node setted: ', this.selectedNode);
         this.selectedLink = null;
         // reposition drag line
         this.dragLine
@@ -218,8 +216,9 @@ export class D3Component implements AfterViewInit, OnInit {
         this.restart();
       })
       .on('mouseup', (dataItem: any) => {
-        console.log('-- Mouseup:');
         console.log('\tSelected Node setted: ', this.selectedNode);
+        
+
         // debugger;
         if (!this.mousedownNode) return;
 
@@ -234,40 +233,50 @@ export class D3Component implements AfterViewInit, OnInit {
           this.resetMouseVars();
           return;
         }
+        console.log('\tMouse Up Node: ', this.mouseupNode);
         // unenlarge target node
         d3.select(d3.event.currentTarget).attr('transform', '');
 
         // add link to graph (update if exists)
         // NB: links are strictly source < target; arrows separately specified by booleans
-        const isRight = this.mousedownNode.id < this.mouseupNode.id;
-        const source = isRight ? this.mousedownNode : this.mouseupNode;
-        const target = isRight ? this.mouseupNode : this.mousedownNode;
+        // const isRight = this.mousedownNode.id < this.mouseupNode.id;
+        const source = this.mousedownNode;
+        const target = this.mouseupNode;
         const link = this.links.filter((l) => l.source === source && l.target === target)[0];
         if (link) {
-          link[isRight ? 'right' : 'left'] = true;
+          // link[isRight ? 'right' : 'left'] = true;
+          link['right'] = true;
         } else {
-          const _link = { source, target, left: !isRight, right: isRight };
-          this.links.push(_link);
-          this.linkService.save(_link).subscribe(response => {
-            _link['md5h'] = response['md5h'];
-            this.links[this.links.length-1] = _link;
-            console.log('Link successfully saved: ', _link);
-          });
+          console.log('source: ', source.title, " target: ", target.title);
+          console.log('source order: ', source.order, " target order: ", target.order);
+          if(source.order <= target.order || (source.order > target.order && target.order === 0)) {
+            if(source.order === 0) {
+              source.order += 1;
+            }
+            target.order += source.order + 1;
+            const _link = { source, target, left: false, right: true };
+            this.links.push(_link);
+            this.linkService.save(_link).subscribe(response => {
+              _link['md5h'] = response['md5h'];
+              this.links[this.links.length-1] = _link;
+              console.log('Link successfully saved: ', _link);
+            });
+            this.updateNode(source);
+            this.updateNode(target);
+          }
         }
 
         // select new link
         this.selectedLink = link;
-        // this.selectedNode = null;
-        console.log("Selected link: ", this.selectedLink);
+        this.selectedNode = null;
         this.restart();
       });
-    console.log('\t ...');
     // show node IDs
     g.append('svg:text')
       .attr('x', 0)
       .attr('y', 4)
       .attr('class', 'id')
-      .text((d) => d.id);
+      .text((d) => d.title);
 
     this.circle = g.merge(this.circle);
 
@@ -277,7 +286,6 @@ export class D3Component implements AfterViewInit, OnInit {
       .force('link').links(this.links);
 
     this.force.alphaTarget(0.3).restart();
-    console.log('\tRestart function end: ', this.selectedNode);
   }
 
   mousedown(dataItem: any, value: any, source: any) {
@@ -289,9 +297,8 @@ export class D3Component implements AfterViewInit, OnInit {
     // insert new node at point
     const point = d3.mouse(d3.event.currentTarget);
     // const point = d3.mouse(this);
-    const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "TO-DO" };
+    const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "title", order: 0 };
     console.log('new node: ', node);
-    console.log('save new node');
     this.nodes.push(node);
     this.problemService.save(node).subscribe(response => {
       this.nodes[this.nodes.length-1]['md5h'] = response['md5h'];
@@ -329,20 +336,24 @@ export class D3Component implements AfterViewInit, OnInit {
     }
   }
 
-  public keydown(selected) {
+  public keydown(event) {
     console.log('Key Down: ', d3.event.keyCode);
     console.log("\tSelected node: ", this.selectedNode);
+    console.log("\ttitleInputFocus node: ", this.titleInputFocus);
+    console.log("\tastKeyDown: ", this.lastKeyDown);
+    if(this.titleInputFocus) {return;}
     // console.log("\tLast key Down: ", this.lastKeyDown);
     d3.event.preventDefault();
     // if (this.lastKeyDown !== -1) return;
-    // this.lastKeyDown = d3.event.keyCode;
+    this.lastKeyDown = d3.event.keyCode;
     // ctrl
     if (d3.event.keyCode === 17) {
       console.log("\tCTRL pressed!");
       // this.circle.call(this.drag);
       // this.svg.classed('ctrl', true);
     }
-    console.log('\tselected node: ', this.selectedNode, 'selected link: ', this.selectedLink);
+    console.log('\tselected node: ', this.selectedNode);
+    console.log('\tselected link: ', this.selectedLink);
     // if (!this.selectedNode && !this.selectedLink) return;
     switch (d3.event.keyCode) {
       case 8: // backspace
@@ -356,6 +367,12 @@ export class D3Component implements AfterViewInit, OnInit {
             this.deleteLinksWithoutNode(response['md5h']);
           });
         } else if (this.selectedLink) {
+          console.log('target order: ', this.selectedLink.target.order, ' source order: ', this.selectedLink.source.order);
+          if (this.selectedLink.source.order > this.selectedLink.target.order){
+            this.nodes[this.nodes.indexOf(this.selectedLink.target)].order = 0;
+          } else {
+            this.nodes[this.nodes.indexOf(this.selectedLink.target)].order -= this.selectedLink.source.order;
+          }
           this.links.splice(this.links.indexOf(this.selectedLink), 1);
           this.linkService.delete(this.selectedLink.md5h).subscribe(response => {
             console.log("Link successfully deleted!");
@@ -397,7 +414,7 @@ export class D3Component implements AfterViewInit, OnInit {
 
   keyup() {
     console.log('Key Up: ', d3.event.keyCode);
-    // this.lastKeyDown = -1;
+    this.lastKeyDown = -1;
     // ctrl
     // if (d3.event.keyCode === 17) {
     //   this.circle.on('.drag', null);
@@ -430,5 +447,23 @@ export class D3Component implements AfterViewInit, OnInit {
     });
   }
 
+  public onFocus(){
+    this.titleInputFocus = true;
+  }
 
+  public focusout(){
+    console.log('selected node: ', this.selectedNode, this.domain);
+    this.problemService.update(this.selectedNode).subscribe(response => {
+      this.nodes[this.nodes.indexOf(this.selectedNode)].title = response['title'];
+      this.restart();
+      this.titleInputFocus = false;
+      this.selectedNode = null;
+    });
+  }
+
+  updateNode(node){
+    this.problemService.update(node).subscribe(response => {
+      console.log("Node updated: ", response);
+    });
+  }
 }

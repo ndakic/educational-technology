@@ -24,6 +24,10 @@ export class LinkService {
     return this.http.delete(environment.apiUrlPrefix + `/link/problem/${problemId}`);
   }
 
+  getLinksByDomainId(domainId: string){
+    return this.http.get(environment.apiUrlPrefix + `/link/domain/${domainId}/all`);
+  }
+
 }
 
 

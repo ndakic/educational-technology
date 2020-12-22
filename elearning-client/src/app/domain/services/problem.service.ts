@@ -20,6 +20,14 @@ export class ProblemService {
     return this.http.delete(environment.apiUrlPrefix + `/problem/${problemId}`);
   }
 
+  update(problem: any){
+    return this.http.put(environment.apiUrlPrefix + `/problem`, problem);
+  }
+
+  getProblemsByDomainId(domainId: string){
+    return this.http.get(environment.apiUrlPrefix + `/problem/domain/${domainId}/all`);
+  }
+
 }
 
 
