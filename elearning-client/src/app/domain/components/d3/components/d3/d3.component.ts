@@ -22,6 +22,7 @@ export class D3Component implements AfterViewInit, OnInit {
   force: any;
   path: any;
   circle: any;
+  public text: any;
   drag: any;
   dragLine: any;
 
@@ -122,7 +123,7 @@ export class D3Component implements AfterViewInit, OnInit {
   }
 
   // update force layout (called automatically each iteration)
-  tick() {
+  public tick() {
     this.updateLinkNodes();
     // draw directed edges with proper padding from node centers
     this.path.attr('d', (d: any) => {
@@ -187,10 +188,10 @@ export class D3Component implements AfterViewInit, OnInit {
     const g = this.circle.enter().append('svg:g');
     g.append('svg:circle')
       .attr('class', 'node')
-      .attr('r', 12)
+      .attr('r', 20)
       .style('fill', (d) => (d === this.selectedNode) ? d3.rgb(this.colors(d.id)).brighter().toString() : this.colors(d.id))
       .style('stroke', (d) => d3.rgb(this.colors(d.id)).darker().toString())
-      .classed('reflexive', (d) => d.reflexive)
+      // .classed('reflexive', (d) => d.reflexive)
       .on('mouseover', function (d) {
         if (!this.mousedownNode || d === this.mousedownNode) return;
         // enlarge target node
@@ -277,7 +278,6 @@ export class D3Component implements AfterViewInit, OnInit {
       .attr('y', 4)
       .attr('class', 'id')
       .text((d) => d.title);
-
     this.circle = g.merge(this.circle);
 
     // set the graph in motion
@@ -454,8 +454,11 @@ export class D3Component implements AfterViewInit, OnInit {
   public focusout(){
     console.log('selected node: ', this.selectedNode, this.domain);
     this.problemService.update(this.selectedNode).subscribe(response => {
+      // update text of node
+      this.circle.select("text")
+        .text(function(d) { console.log('title: ', d.title); return d.title; })
+        .style("fill-opacity", 1);
       this.nodes[this.nodes.indexOf(this.selectedNode)].title = response['title'];
-      this.restart();
       this.titleInputFocus = false;
       this.selectedNode = null;
     });
