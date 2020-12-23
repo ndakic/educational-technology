@@ -20,6 +20,7 @@ public class QuestionResource {
     private String id;
     private String text;
     private String testId;
+    private Integer order;
     private List<AnswerResource> answers;
 
     public static QuestionResource entityToResource(QuestionEntity questionEntity){
@@ -28,6 +29,7 @@ public class QuestionResource {
                 .id(questionEntity.getMd5H())
                 .text(questionEntity.getText())
                 .testId(questionEntity.getTest().getMd5H())
+                .order(questionEntity.getProblem().getOrderValue())
                 .build();
     }
 }

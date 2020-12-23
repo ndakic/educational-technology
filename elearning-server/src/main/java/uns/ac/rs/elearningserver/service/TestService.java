@@ -19,6 +19,7 @@ import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,7 @@ public class TestService {
                                 .id(questionEntity.getMd5H())
                                 .text(questionEntity.getText())
                                 .testId(questionEntity.getTest().getMd5H())
+                                .order(questionEntity.getProblem().getOrderValue())
                                 .answers(questionEntity.getAnswers()
                                         .stream()
                                         .map(answerEntity -> AnswerResource.builder()
@@ -61,6 +63,7 @@ public class TestService {
                                                 .build())
                                         .collect(Collectors.toList()))
                                 .build())
+                        .sorted(Comparator.comparingInt(QuestionResource::getOrder))
                         .collect(Collectors.toList()))
                 .build();
     }
