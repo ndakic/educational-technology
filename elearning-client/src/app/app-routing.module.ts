@@ -19,6 +19,11 @@ const routes: Routes = [
         canActivate: [],
         loadChildren: () => import('./domain/domain.module').then(m => m.DomainModule)
       },
+      {
+        path: 'ks',
+        canActivate: [],
+        loadChildren: () => import('./knowledge-space/ks.module').then(m => m.KSModule)
+      },
      ]
   }
 ];
