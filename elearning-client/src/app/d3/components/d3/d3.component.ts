@@ -39,7 +39,8 @@ export class D3Component implements AfterViewInit, OnInit {
 
   public nodes = [];
   public links = [];
-  public domain: any;
+  public data: any;
+  public editable = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,9 +49,17 @@ export class D3Component implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit(){
-    this.domain = this.route.snapshot.data["data"];
-    this.nodes = this.domain['domain'][0]['problems'];
-    this.links = this.domain['domain'][0]['links'];
+    this.data = this.route.snapshot.data["data"];
+    if(this.data['domain']) {
+      this.nodes = this.data['domain'][0]['problems'];
+      this.links = this.data['domain'][0]['links'];
+    }
+    console.log(this.data);
+    if(this.data['ks']) {
+      this.nodes = this.data['ks']['problems'];
+      this.links = this.data['ks']['links'];
+      this.editable = false;
+    }
     this.lastNodeId = this.nodes.length;
   }
 
@@ -167,7 +176,7 @@ export class D3Component implements AfterViewInit, OnInit {
       .style('marker-start', (d) => d.left ? 'url(#start-arrow)' : '')
       .style('marker-end', (d) => d.right ? 'url(#end-arrow)' : '')
       .on('mousedown', (d) => {
-        if (d3.event.ctrlKey) return;
+        if (d3.event.ctrlKey || !this.editable) return;
         // select link
         this.mousedownLink = d;
         this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
@@ -221,7 +230,7 @@ export class D3Component implements AfterViewInit, OnInit {
         
 
         // debugger;
-        if (!this.mousedownNode) return;
+        if (!this.mousedownNode || !this.editable) return;
 
         // needed by FF
         this.dragLine
@@ -291,8 +300,8 @@ export class D3Component implements AfterViewInit, OnInit {
   mousedown(dataItem: any, value: any, source: any) {
     // because :active only works in WebKit?
     this.svg.classed('active', true);
-
-    if (d3.event.ctrlKey || this.mousedownNode || this.mousedownLink) return;
+    console.log('Editable: ', this.editable);
+    if (d3.event.ctrlKey || this.mousedownNode || this.mousedownLink || !this.editable) return;
 
     // insert new node at point
     const point = d3.mouse(d3.event.currentTarget);
@@ -341,7 +350,7 @@ export class D3Component implements AfterViewInit, OnInit {
     console.log("\tSelected node: ", this.selectedNode);
     console.log("\ttitleInputFocus node: ", this.titleInputFocus);
     console.log("\tastKeyDown: ", this.lastKeyDown);
-    if(this.titleInputFocus) {return;}
+    if(this.titleInputFocus || !this.editable) {return;}
     // console.log("\tLast key Down: ", this.lastKeyDown);
     d3.event.preventDefault();
     // if (this.lastKeyDown !== -1) return;
@@ -452,7 +461,6 @@ export class D3Component implements AfterViewInit, OnInit {
   }
 
   public focusout(){
-    console.log('selected node: ', this.selectedNode, this.domain);
     this.problemService.update(this.selectedNode).subscribe(response => {
       // update text of node
       this.circle.select("text")
