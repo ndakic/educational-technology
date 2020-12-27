@@ -25,6 +25,7 @@ public class TestEntity implements Serializable {
     private Timestamp startDate;
     private Timestamp endDate;
     private StatusEntity status;
+    private DomainEntity domain;
     private Collection<QuestionEntity> questions;
 
     @Id
@@ -105,5 +106,15 @@ public class TestEntity implements Serializable {
 
     public void setStatus(StatusEntity status) {
         this.status = status;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "domain_id", referencedColumnName = "domain_id")
+    public DomainEntity getDomain() {
+        return domain;
+    }
+
+    public void setDomain(DomainEntity domain) {
+        this.domain = domain;
     }
 }

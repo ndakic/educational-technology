@@ -3,7 +3,6 @@ package uns.ac.rs.elearningserver.rest.resource;
 import lombok.*;
 import org.springframework.util.ObjectUtils;
 import uns.ac.rs.elearningserver.constant.UserType;
-import uns.ac.rs.elearningserver.model.DomainEntity;
 import uns.ac.rs.elearningserver.model.UserEntity;
 
 @Getter
