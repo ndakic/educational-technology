@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { GraphComponent } from './components/graph/graph.component';
+import { GraphComponent } from './components/graph-editor/graph.component';
 import { DomainResolver } from './resolvers/domain.resolver';
 
 
