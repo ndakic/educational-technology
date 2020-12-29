@@ -110,8 +110,6 @@ public class KnowledgeSpaceService {
      */
     public boolean compareLink(List<LinkResource> links, LinkResource compareToLink){
         for(LinkResource linkResource: links) {
-            System.out.printf("Graph1 - Graph2 - SourceId: %d == SourceId: %d \n", linkResource.getSource().getId(), compareToLink.getSource().getId());
-            System.out.printf("Graph1 - Graph2 - TargetId: %d == TargetId: %d \n", linkResource.getTarget().getId(), compareToLink.getTarget().getId());
             if(linkResource.getSource().getId().equals(compareToLink.getSource().getId()) &&
                linkResource.getTarget().getId().equals(compareToLink.getTarget().getId())) {
                 return true;
