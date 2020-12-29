@@ -21,4 +21,9 @@ public class KnowledgeSpaceController {
     public ResponseEntity<?> get(@PathVariable String testId){
         return ResponseEntity.ok(knowledgeSpaceService.getKnowledgeSpace(testId));
     }
+
+    @RequestMapping(value = "/compare/{testId}", method = RequestMethod.GET)
+    public ResponseEntity<?> compareGraphs(@PathVariable String testId){
+        return ResponseEntity.ok(knowledgeSpaceService.compareGraphs(testId));
+    }
 }
