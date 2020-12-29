@@ -54,10 +54,14 @@ export class D3Component implements AfterViewInit, OnInit {
       this.nodes = this.data['domain'][0]['problems'];
       this.links = this.data['domain'][0]['links'];
     }
-    console.log(this.data);
     if(this.data['ks']) {
       this.nodes = this.data['ks']['problems'];
       this.links = this.data['ks']['links'];
+      this.editable = false;
+    }
+    if(this.data['compare']) {
+      this.nodes = this.data['compare']['problems'];
+      this.links = this.data['compare']['links'];
       this.editable = false;
     }
     this.lastNodeId = this.nodes.length;

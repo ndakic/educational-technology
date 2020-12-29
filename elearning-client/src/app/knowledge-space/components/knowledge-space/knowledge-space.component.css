@@ -1,7 +1,13 @@
 .title {
-    width: 70%;
-  }
+  width: 100%;
+}
 
 .center {
-text-align: center;
+  text-align: center;
+}
+
+
+.d3-container {
+  width: 100%;
+  margin: auto;
 }

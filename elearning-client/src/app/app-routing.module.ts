@@ -24,6 +24,11 @@ const routes: Routes = [
         canActivate: [],
         loadChildren: () => import('./knowledge-space/ks.module').then(m => m.KSModule)
       },
+      {
+        path: 'compare-graphs',
+        canActivate: [],
+        loadChildren: () => import('./compare-graphs/compare-graphs.module').then(m => m.CompareGraphModule)
+      },
      ]
   }
 ];
