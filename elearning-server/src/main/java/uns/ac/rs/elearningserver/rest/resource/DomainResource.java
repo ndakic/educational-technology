@@ -21,6 +21,7 @@ public class DomainResource {
     private StatusResource status;
     private List<ProblemResource> problems;
     private List<LinkResource> links;
+    private List<TestResource> tests;
 
     public static DomainResource entityToResource(DomainEntity domainEntity){
         if(ObjectUtils.isEmpty(domainEntity)) { return null; }
@@ -39,6 +40,7 @@ public class DomainResource {
                         .filter(linkEntity -> linkEntity.getStatus().getId() == LinkStatus.ACTIVE.getId())
                         .map(LinkResource::entityToResource)
                         .collect(Collectors.toList()))
+                .tests(domainEntity.getTests().stream().map(TestResource::entityToResource).collect(Collectors.toList()))
                 .build();
     }
 }

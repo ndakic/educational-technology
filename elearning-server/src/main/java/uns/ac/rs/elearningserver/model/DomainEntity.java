@@ -24,6 +24,7 @@ public class DomainEntity implements Serializable {
     private UserEntity user;
     private Set<ProblemEntity> problems;
     private Set<LinkEntity> links;
+    private Set<TestEntity> tests;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "domain_id_seq")
@@ -88,5 +89,14 @@ public class DomainEntity implements Serializable {
 
     public void setLinks(Set<LinkEntity> links) {
         this.links = links;
+    }
+
+    @OneToMany(mappedBy = "domain", fetch = FetchType.EAGER)
+    public Set<TestEntity> getTests() {
+        return tests;
+    }
+
+    public void setTests(Set<TestEntity> tests) {
+        this.tests = tests;
     }
 }

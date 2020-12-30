@@ -15,6 +15,7 @@ import uns.ac.rs.elearningserver.repository.*;
 import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
 import uns.ac.rs.elearningserver.rest.resource.QuestionResource;
 import uns.ac.rs.elearningserver.rest.resource.TestResource;
+import uns.ac.rs.elearningserver.rest.resource.UserResource;
 import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
@@ -46,7 +47,7 @@ public class TestService {
                 .title(testEntity.getTitle())
                 .startDate(testEntity.getStartDate())
                 .endDate(testEntity.getEndDate())
-                .teacherId(testEntity.getTeacher().getMd5H())
+                .teacher(UserResource.entityToResource(testEntity.getTeacher()))
                 .questions(testEntity.getQuestions()
                         .stream()
                         .map(questionEntity -> QuestionResource.builder()
@@ -76,7 +77,7 @@ public class TestService {
                             .title(testEntity.getTitle())
                             .startDate(testEntity.getStartDate())
                             .endDate(testEntity.getEndDate())
-                            .teacherId(testEntity.getTeacher().getMd5H())
+                        .teacher(UserResource.entityToResource(testEntity.getTeacher()))
                             .questions(testEntity.getQuestions()
                                     .stream()
                                     .map(questionEntity -> QuestionResource.builder()
@@ -102,7 +103,7 @@ public class TestService {
 
         TestEntity test = TestEntity.builder()
                 .title(resource.getTitle())
-                .teacher(userRepository.findOneByMd5HAndUserType(resource.getTeacherId(), UserType.TEACHER).get())
+                .teacher(userRepository.findOneByMd5HAndUserType(resource.getTeacher().getId(), UserType.TEACHER).get())
                 .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
                 .creationDate(DateUtil.nowSystemTime())
                 .startDate(resource.getStartDate())
