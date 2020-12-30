@@ -4,6 +4,14 @@
         <mat-card-content class="mt-20">
             <p>Status - {{domain.status.description}}</p>
             <p>Teacher - {{domain.user.firstName}} {{domain.user.lastName}}</p>
+            <h2>Graph Editor: <a class="mt-20 mb-20" href="/domain/graph/{{domain.id}}">link</a></h2>
+            <h2>Tests</h2>
+            <div class="test-container mt-20">
+                <mat-card *ngFor="let test of domain.tests" class="test-content">
+                    <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
+                    <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
+                </mat-card>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>
