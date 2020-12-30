@@ -27,9 +27,14 @@ public class DomainService {
     @NonNull
     private final StatusRepository statusRepository;
 
+    public DomainResource get(String domainId){
+        return domainRepository.findOneByMd5H(domainId)
+                .map(DomainResource::entityToResource)
+                .orElse(null);
+    }
 
-    public List<DomainResource> get(String domainId){
-        return domainRepository.findAllByMd5H(domainId)
+    public List<DomainResource> getAll(){
+        return domainRepository.findAll()
                 .stream()
                 .map(DomainResource::entityToResource)
                 .collect(Collectors.toList());

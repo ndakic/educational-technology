@@ -48,7 +48,7 @@ public class LinkService {
                 .rightDirection(linkResource.getRight())
                 .source(problemRepository.findByMd5H(linkResource.getSource().getMd5h()).get())
                 .target(problemRepository.findByMd5H(linkResource.getTarget().getMd5h()).get())
-                .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030c92").get())
+                .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030222").get())
                 .status(statusRepository.getOne(LinkStatus.ACTIVE.getId()))
                 .build());
         linkEntity.setMd5h(Md5Generator.generateHash(linkEntity.getId(), Md5Salt.LINK));

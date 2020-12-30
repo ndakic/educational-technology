@@ -20,6 +20,11 @@ public class DomainController {
         return ResponseEntity.ok(domainService.get(domainId));
     }
 
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(){
+        return ResponseEntity.ok(domainService.getAll());
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> save(@RequestBody DomainResource domain){
         return ResponseEntity.ok(domainService.save(domain));
