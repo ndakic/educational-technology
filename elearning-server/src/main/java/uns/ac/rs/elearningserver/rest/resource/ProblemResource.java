@@ -17,6 +17,7 @@ public class ProblemResource {
     private QuestionResource question;
     private StatusResource status;
     private Integer order;
+    private DomainResource domain;
 
     public static ProblemResource entityToResource(ProblemEntity problemEntity){
         if(ObjectUtils.isEmpty(problemEntity)) { return null; }
@@ -28,6 +29,10 @@ public class ProblemResource {
                 .order(problemEntity.getOrderValue())
                 .question(QuestionResource.entityToResource(problemEntity.getQuestion()))
                 .status(StatusResource.entityToResource(problemEntity.getStatus()))
+                .domain(DomainResource.builder()
+                        .id(!ObjectUtils.isEmpty(problemEntity.getDomain()) ? problemEntity.getDomain().getMd5H(): null)
+                        .title(!ObjectUtils.isEmpty(problemEntity.getDomain()) ? problemEntity.getDomain().getTitle(): null)
+                        .build())
                 .build();
     }
 }

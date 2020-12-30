@@ -27,7 +27,10 @@ public class LinkResource {
                 .source(ProblemResource.entityToResource(linkEntity.getSource()))
                 .target(ProblemResource.entityToResource(linkEntity.getTarget()))
                 .status(StatusResource.entityToResource(linkEntity.getStatus()))
-                .domain(DomainResource.entityToResource(linkEntity.getDomain()))
+                .domain(DomainResource.builder()
+                        .id(!ObjectUtils.isEmpty(linkEntity.getDomain()) ? linkEntity.getDomain().getMd5H(): null)
+                        .title(!ObjectUtils.isEmpty(linkEntity.getDomain()) ? linkEntity.getDomain().getTitle(): null)
+                        .build())
                 .build();
     }
 }
