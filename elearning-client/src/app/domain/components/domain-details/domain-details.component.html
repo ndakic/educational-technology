@@ -4,12 +4,17 @@
         <mat-card-content class="mt-20">
             <p>Status - {{domain.status.description}}</p>
             <p>Teacher - {{domain.user.firstName}} {{domain.user.lastName}}</p>
-            <h2>Graph Editor: <a class="mt-20 mb-20" href="/domain/graph/{{domain.id}}">link</a></h2>
+            <h2>Graph Editor: <a class="mt-20 mb-20" href="/domain/graph/{{domain.id}}">Editor</a></h2>
             <h2>Tests</h2>
             <div class="test-container mt-20">
                 <mat-card *ngFor="let test of domain.tests" class="test-content">
                     <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
                     <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
+                    <mat-card-content class="mt-20">
+                        <h2>Real Knowledge Space: <a class="mt-20 mb-20" href="/ks/{{test.id}}">Link</a></h2>
+                        <h2>Compare Teacher's and Real Knowledge Space: <a class="mt-20 mb-20" href="/compare-graphs/{{test.id}}">Link</a></h2>
+                        <h2> Export in IMS QTI: <a class="mt-20 mb-20" href="/test/export/{{test.id}}">Here</a></h2>
+                    </mat-card-content>
                 </mat-card>
             </div>
         </mat-card-content>
