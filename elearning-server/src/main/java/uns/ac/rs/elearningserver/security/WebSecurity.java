@@ -50,6 +50,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/knowledge-space/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/knowledge-space/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/knowledge-space/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/export/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/export/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/export/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

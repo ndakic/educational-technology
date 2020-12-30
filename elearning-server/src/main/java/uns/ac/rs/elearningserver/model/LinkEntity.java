@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Entity
@@ -68,7 +69,7 @@ public class LinkEntity implements Serializable {
     public DomainEntity getDomain() {
         return domain;
     }
-
+    @XmlTransient
     public void setDomain(DomainEntity domain) {
         this.domain = domain;
     }

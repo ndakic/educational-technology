@@ -1,13 +1,19 @@
 package uns.ac.rs.elearningserver.model;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "test")
@@ -15,6 +21,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
 public class TestEntity implements Serializable {
 
     private long id;
@@ -26,7 +33,7 @@ public class TestEntity implements Serializable {
     private Timestamp endDate;
     private StatusEntity status;
     private DomainEntity domain;
-    private Collection<QuestionEntity> questions;
+    private Set<QuestionEntity> questions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "test_id_seq")
@@ -50,7 +57,7 @@ public class TestEntity implements Serializable {
     public String getTitle() {
         return title;
     }
-
+    @XmlElement
     public void setTitle(String title) {
         this.title = title;
     }
@@ -60,7 +67,7 @@ public class TestEntity implements Serializable {
     public UserEntity getTeacher() {
         return teacher;
     }
-
+    @XmlElement
     public void setTeacher(UserEntity teacher) {
         this.teacher = teacher;
     }
@@ -68,7 +75,7 @@ public class TestEntity implements Serializable {
     public Timestamp getCreationDate() {
         return creationDate;
     }
-
+    @XmlElement
     public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
@@ -76,7 +83,7 @@ public class TestEntity implements Serializable {
     public Timestamp getStartDate() {
         return startDate;
     }
-
+    @XmlElement
     public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
@@ -84,17 +91,17 @@ public class TestEntity implements Serializable {
     public Timestamp getEndDate() {
         return endDate;
     }
-
+    @XmlElement
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
     @OneToMany(mappedBy = "test", fetch = FetchType.EAGER)
-    public Collection<QuestionEntity> getQuestions() {
+    public Set<QuestionEntity> getQuestions() {
         return questions;
     }
-
-    public void setQuestions(Collection<QuestionEntity> questions) {
+    @XmlElement(name = "qti-questions")
+    public void setQuestions(Set<QuestionEntity> questions) {
         this.questions = questions;
     }
 
@@ -113,7 +120,8 @@ public class TestEntity implements Serializable {
     public DomainEntity getDomain() {
         return domain;
     }
-
+    @Ignore
+    @XmlTransient
     public void setDomain(DomainEntity domain) {
         this.domain = domain;
     }

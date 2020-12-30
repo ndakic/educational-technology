@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "answer")
@@ -12,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
 public class AnswerEntity {
 
     private long id;
@@ -27,7 +31,7 @@ public class AnswerEntity {
     public long getId() {
         return id;
     }
-
+    @XmlTransient
     public void setId(long id) {
         this.id = id;
     }
@@ -35,7 +39,7 @@ public class AnswerEntity {
     public String getMd5H() {
         return md5H;
     }
-
+    @XmlTransient
     public void setMd5H(String md5H) {
         this.md5H = md5H;
     }
@@ -43,7 +47,7 @@ public class AnswerEntity {
     public String getText() {
         return text;
     }
-
+    @XmlElement(name = "qti-simple-choice")
     public void setText(String text) {
         this.text = text;
     }
@@ -54,6 +58,7 @@ public class AnswerEntity {
         return question;
     }
 
+    @XmlTransient
     public void setQuestion(QuestionEntity question) {
         this.question = question;
     }
@@ -63,7 +68,7 @@ public class AnswerEntity {
     public StatusEntity getStatus() {
         return status;
     }
-
+    @XmlTransient
     public void setStatus(StatusEntity status) {
         this.status = status;
     }
@@ -71,7 +76,7 @@ public class AnswerEntity {
     public Boolean getCorrect() {
         return isCorrect;
     }
-
+    @XmlTransient
     public void setCorrect(Boolean correct) {
         isCorrect = correct;
     }

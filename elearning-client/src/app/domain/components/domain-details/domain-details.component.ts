@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-domain-details',
@@ -17,6 +18,11 @@ export class DomainDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.domain = this.route.snapshot.data["data"]['domain'];
     console.log('details: ', this.domain);
+  }
+
+
+  export(testId){
+    window.open(environment.apiUrlPrefix + `/export/${testId}`, '_blank');
   }
 
 }

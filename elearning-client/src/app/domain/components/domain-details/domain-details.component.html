@@ -13,7 +13,7 @@
                     <mat-card-content class="mt-20">
                         <h2>Real Knowledge Space: <a class="mt-20 mb-20" href="/ks/{{test.id}}">Link</a></h2>
                         <h2>Compare Teacher's and Real Knowledge Space: <a class="mt-20 mb-20" href="/compare-graphs/{{test.id}}">Link</a></h2>
-                        <h2> Export in IMS QTI: <a class="mt-20 mb-20" href="/test/export/{{test.id}}">Here</a></h2>
+                        <h2> Export in IMS QTI: <a class="mt-20 mb-20" (click)="export(test.id)">Here</a></h2>
                     </mat-card-content>
                 </mat-card>
             </div>

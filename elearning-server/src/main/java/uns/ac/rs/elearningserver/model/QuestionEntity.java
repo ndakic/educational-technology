@@ -6,8 +6,12 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "question")
@@ -15,6 +19,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
 public class QuestionEntity implements Serializable {
 
     private long id;
@@ -24,7 +29,7 @@ public class QuestionEntity implements Serializable {
     private TestEntity test;
     private ProblemEntity problem;
     private StatusEntity status;
-    private Collection<AnswerEntity> answers;
+    private Set<AnswerEntity> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_seq")
@@ -32,7 +37,7 @@ public class QuestionEntity implements Serializable {
     public long getId() {
         return id;
     }
-
+    @XmlTransient
     public void setId(long id) {
         this.id = id;
     }
@@ -40,7 +45,7 @@ public class QuestionEntity implements Serializable {
     public String getMd5H() {
         return md5H;
     }
-
+    @XmlTransient
     public void setMd5H(String md5H) {
         this.md5H = md5H;
     }
@@ -56,7 +61,7 @@ public class QuestionEntity implements Serializable {
     public Integer getPosition() {
         return position;
     }
-
+    @XmlTransient
     public void setPosition(Integer position) {
         this.position = position;
     }
@@ -67,6 +72,7 @@ public class QuestionEntity implements Serializable {
         return test;
     }
 
+    @XmlTransient
     public void setTest(TestEntity test) {
         this.test = test;
     }
@@ -76,17 +82,17 @@ public class QuestionEntity implements Serializable {
     public ProblemEntity getProblem() {
         return problem;
     }
-
+    @XmlTransient
     public void setProblem(ProblemEntity problem) {
         this.problem = problem;
     }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-    public Collection<AnswerEntity> getAnswers() {
+    public Set<AnswerEntity> getAnswers() {
         return answers;
     }
-
-    public void setAnswers(Collection<AnswerEntity> answers) {
+    @XmlElement(name = "qti-choice-interaction")
+    public void setAnswers(Set<AnswerEntity> answers) {
         this.answers = answers;
     }
 
@@ -95,7 +101,7 @@ public class QuestionEntity implements Serializable {
     public StatusEntity getStatus() {
         return status;
     }
-
+    @XmlTransient
     public void setStatus(StatusEntity status) {
         this.status = status;
     }

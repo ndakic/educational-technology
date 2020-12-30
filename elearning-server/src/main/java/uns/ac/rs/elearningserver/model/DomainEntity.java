@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
@@ -15,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
 public class DomainEntity implements Serializable {
 
     private long id;
@@ -68,7 +71,7 @@ public class DomainEntity implements Serializable {
     public UserEntity getUser() {
         return user;
     }
-
+    @XmlTransient
     public void setUser(UserEntity user) {
         this.user = user;
     }
@@ -77,7 +80,7 @@ public class DomainEntity implements Serializable {
     public Set<ProblemEntity> getProblems() {
         return problems;
     }
-
+    @XmlTransient
     public void setProblems(Set<ProblemEntity> problems) {
         this.problems = problems;
     }
@@ -86,7 +89,7 @@ public class DomainEntity implements Serializable {
     public Set<LinkEntity> getLinks() {
         return links;
     }
-
+    @XmlTransient
     public void setLinks(Set<LinkEntity> links) {
         this.links = links;
     }
@@ -95,7 +98,7 @@ public class DomainEntity implements Serializable {
     public Set<TestEntity> getTests() {
         return tests;
     }
-
+    @XmlTransient
     public void setTests(Set<TestEntity> tests) {
         this.tests = tests;
     }
