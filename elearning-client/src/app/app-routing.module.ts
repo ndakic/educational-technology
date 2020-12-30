@@ -8,7 +8,12 @@ const routes: Routes = [
     component: ShellComponent,
     canActivate: [],
     children: [
-      { path: '', redirectTo: '/test/preview', pathMatch: 'full' },
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      {
+        path: 'home',
+        canActivate: [],
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
+      },
       {
         path: 'test',
         canActivate: [],

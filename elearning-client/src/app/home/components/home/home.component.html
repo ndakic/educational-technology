@@ -1,0 +1,6 @@
+<div class="home-container">
+    <h1> Domains </h1>
+    <mat-card *ngFor="let domain of domains" class="home-content">
+        <mat-card-title><a href="/domain/{{domain.id}}">{{domain.title}}</a></mat-card-title>
+    </mat-card>
+</div>

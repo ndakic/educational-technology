@@ -19,4 +19,8 @@ export class DomainService {
     return this.http.post(environment.apiUrlPrefix + `/domain`, domain);
   }
 
+  getAllDomains(){
+    return this.http.get(environment.apiUrlPrefix + `/domain/all`);
+  }
+
 }

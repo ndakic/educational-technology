@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GraphComponent } from './components/graph-editor/graph.component';
-import { DomainRoutingModule } from './domain-routing.module';
 import { FormsModule } from '@angular/forms';
-import { D3Module } from '../d3/d3.module';
-import { DomainDetailsComponent } from './components/domain-details/domain-details.component';
+import { HomeComponent } from './components/home/home.component';
+import { HomeRoutingModule } from './home-routing.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,12 +15,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
-  declarations: [GraphComponent, DomainDetailsComponent],
+  declarations: [HomeComponent],
   imports: [
     CommonModule,
-    DomainRoutingModule,
     FormsModule,
-    D3Module,
+    HomeRoutingModule,
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
@@ -32,7 +29,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule
-  ],
-  exports: []
+  ]
 })
-export class DomainModule { }
+export class HomeModule { }

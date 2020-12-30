@@ -51,8 +51,8 @@ export class D3Component implements AfterViewInit, OnInit {
   ngOnInit(){
     this.data = this.route.snapshot.data["data"];
     if(this.data['domain']) {
-      this.nodes = this.data['domain'][0]['problems'];
-      this.links = this.data['domain'][0]['links'];
+      this.nodes = this.data['domain']['problems'];
+      this.links = this.data['domain']['links'];
     }
     if(this.data['ks']) {
       this.nodes = this.data['ks']['problems'];
