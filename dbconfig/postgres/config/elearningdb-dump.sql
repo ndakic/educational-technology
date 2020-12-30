@@ -233,7 +233,8 @@ CREATE TABLE public.problem (
     title character varying(255),
     domain_id bigint NOT NULL,
     question_id bigint,
-    status_id bigint NOT NULL
+    status_id bigint NOT NULL,
+    order_value integer
 );
 
 
@@ -323,7 +324,8 @@ CREATE TABLE public.test (
     creation_date timestamp without time zone,
     end_date timestamp without time zone,
     start_date timestamp without time zone,
-    euser_id bigint NOT NULL
+    euser_id bigint NOT NULL,
+    domain_id bigint
 );
 
 
@@ -365,6 +367,16 @@ INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correc
 INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (2, '0e71d82219018ece79d090eea7e74004', 'Yes', 13, 30, NULL);
 INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (3, 'ad635f5066226cfcc4a8f2952405e30a', 'No', 13, 30, NULL);
 INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (5, 'ce8be9283bd853bee32eaa05e513c6bc', 'Pokemon', 12, 30, false);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (8, 'ce8be9283bd853bee32eaa05e51321312', 'Variable is type of cat.', 16, 30, false);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (7, 'ce8be9283bd853bee32eaa05e51324343', 'Variable is a value that can change, depending on conditions or on information passed to the program', 16, 30, true);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (10, 'ce8be9283bd853bee32eaa05e5136546', 'Function is part of body.', 17, 30, true);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (9, 'ce8be9283bd853bee32eaa05e5132444', 'Named section of a program that performs a specific task.', 17, 30, false);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (16, 'ce8be9283bd853bee32eaa05e5138797', 'Use it with if keyword', 20, 30, true);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (15, 'ce8be9283bd853bee32eaa05e513287987', 'Use it without if keyword', 20, 30, false);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (14, 'ce8be9283bd853bee32eaa05e51324342', 'Dont use that, its totally useless.', 19, 30, false);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (13, 'ce8be9283bd853bee32eaa05e5132333', 'Use it with switch keyword', 19, 30, true);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (12, 'ce8be9283bd853bee32eaa05e51987987', 'Use it with while keyword', 18, 30, true);
+INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correct) VALUES (11, 'ce8be9283bd853bee32eaa05e51534534', 'Dont use while at all', 18, 30, false);
 
 
 --
@@ -372,6 +384,31 @@ INSERT INTO public.answer (answer_id, md5h, text, question_id, status_id, correc
 --
 
 INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1, '2020-12-02 01:54:11.487774', 1, 1, 12, 1);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (651, NULL, 11, 3, 18, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (951, NULL, 13, 4, 19, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (401, NULL, 9, 3, 17, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (101, NULL, 7, 2, 16, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (801, NULL, 11, 6, 18, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (901, NULL, 13, 3, 19, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (501, NULL, 10, 5, 17, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (301, NULL, 7, 6, 16, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (351, NULL, 9, 2, 17, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (701, NULL, 11, 4, 18, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (601, NULL, 11, 2, 18, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (751, NULL, 11, 5, 18, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1101, NULL, 15, 2, 20, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1251, NULL, 15, 4, 20, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1201, NULL, 15, 3, 20, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (851, NULL, 13, 2, 19, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1051, NULL, 14, 6, 19, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1301, NULL, 16, 5, 20, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1351, NULL, 16, 6, 20, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (201, NULL, 7, 4, 16, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (151, NULL, 7, 3, 16, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (251, NULL, 7, 5, 16, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (1001, NULL, 13, 5, 19, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (451, NULL, 9, 4, 17, 5);
+INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id, question_id, test_id) VALUES (551, NULL, 9, 6, 17, 5);
 
 
 --
@@ -379,6 +416,7 @@ INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id,
 --
 
 INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (1, 'f36c55b1740b77205e3277ef1c030c92', 'Test Domain', 60, 1);
+INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (2, 'f36c55b1740b77205e3277ef1c030222', 'Osnove Programiranja', 60, 1);
 
 
 --
@@ -386,63 +424,66 @@ INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (
 --
 
 INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (1, 'daka@gmail.com', 'Nikola', 'Dakic', '8d4aff29071ddee43ffa150a3c7aace8', '1234', NULL, 1, 'TEACHER');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (2, 'marko@gmail.com', 'Marko', 'Markovic', '8d4aff29071ddee43ffa150a3c7aa234', '1234', NULL, 1, 'STUDENT');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (6, 'andrija@gmail.com', 'Andrija', 'Peric', '8d4aff29071ddee43ffa150a3c7aa266', '1234', NULL, 1, 'STUDENT');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (4, 'aleksandar@gmail.com', 'Aleksandar', 'Djukic', '8d4aff29071ddee43ffa150a3c7343', '1234', NULL, 1, 'STUDENT');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (3, 'nemanja@gmail.com', 'Nemanja', 'Letic', '8d4aff29071ddee43ffa150a3c7aa44', '1234', NULL, 1, 'STUDENT');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (5, 'milutin@gmail.com', 'Milutin', 'Maric', '8d4aff29071ddee43ffa150a3c7aa99', '1234', NULL, 1, 'STUDENT');
 
 
 --
 -- Data for Name: link; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (200, false, true, 194, 51, 198, 1, '77c6a7d152e3e870c6d804c19af0189e');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (184, true, false, 196, 50, 200, 1, 'faed8a49c644206635036583a8ba950b');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (185, true, false, 197, 50, 200, 1, 'e4a7301d248a28555ac8b14f97151966');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (199, true, false, 195, 51, 202, 1, '4651202fe8770582592dc614b5d53104');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (191, false, true, 194, 51, 202, 1, 'eb714aae5dd33930ab32ab1bf173008f');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (203, true, false, 194, 51, 202, 1, '1520465ad618cb9d6fc8c131c6f0a55b');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (183, true, false, 193, 51, 194, 1, '90431f5a2a396f4dbd4695ed980bf124');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (204, false, true, 194, 50, 202, 1, 'a599f66d73a72ee8185fd66d607065ea');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (190, false, true, 194, 50, 201, 1, 'fc99bb1866e90c2df3547983d14bff42');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (186, true, false, 193, 51, 196, 1, 'bbf5e5ce0333ec4973ab1d4a63549110');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (187, false, true, 193, 51, 199, 1, 'ea4973fd51e16b7b39db7358a589087b');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (188, false, true, 193, 51, 198, 1, 'a273de619c0528bf54d5fbe11dab3108');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (205, true, false, 199, 50, 202, 1, '521c806b8ea1b81ab22e041aeb610752');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (189, false, true, 193, 51, 194, 1, '96b7d7cf7ff7a46be9c5f3884bb7da4e');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (193, false, true, 194, 50, 195, 1, '195ddcaaeb73485da68ed09bb44dd7c1');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (206, true, false, 197, 50, 201, 1, 'a26ad272c521fcf5a274507db0ccad31');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (192, false, true, 194, 51, 203, 1, 'b3512a6950b68406c0959bd409f50562');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (207, true, false, 196, 50, 202, 1, 'c1da0e589bb1d3d407dea45e83708650');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (194, false, true, 198, 51, 203, 1, 'f930f33d5b58d3b7091bd2e487561778');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (208, false, true, 195, 50, 196, 1, '0964210181f0d10c9c4647f18ca952e5');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (201, true, false, 199, 50, 201, 1, '79e08a2152906f7235d9d73b488d3df8');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (202, false, true, 199, 50, 200, 1, '945c5fd14aaf8f9c7b51f52c3461291d');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (195, true, false, 198, 51, 199, 1, 'bf761b909600e43f3a7d5b55eb9ddb01');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (196, true, false, 198, 51, 202, 1, '244ca531439cc67bc6c120262593754d');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (197, false, true, 195, 51, 198, 1, '536a92df10bbb85f41d336bfe284ec81');
-INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (198, false, true, 196, 51, 198, 1, '02d11041ddd0bcb6d579c90f9bf58f4a');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (453, false, true, 478, 50, 479, 2, 'd6fab524b42e9e5f87d56d7b54a6f6dd');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (454, false, true, 478, 50, 481, 2, '897a06f1f6f09bb81626e51b656ad1d6');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (455, false, true, 480, 50, 479, 2, '77a9551dfe9ad7fe497eb6aa889fb19a');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (456, false, true, 478, 50, 480, 2, '7e34e33aa15622275fc055fd500e1eb9');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (457, false, true, 482, 50, 479, 2, '877a4e540b0e3b9e30a58c4ffa7804aa');
+INSERT INTO public.link (link_id, left_direction, right_direction, source_problem_id, status_id, target_problem_id, domain_id, md5h) VALUES (458, false, true, 482, 50, 478, 2, '6e35cf530e7df7bc1bbaece85cb27358');
 
 
 --
 -- Data for Name: problem; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (194, 'ced5ea13ed68e1f32a36035ce638bda1', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (195, '2f6aa3f38ef571a00f053b36254a704c', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (196, '2d8653b2405fc88bc336dbd393242aa4', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (197, '75e862b04e6b259d52712be95c0fc9c2', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (199, '28ef6477eb37617082a908a740ce72cf', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (200, '62e3ac5cacdf713f571d4ce21e2a03bb', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (201, 'ba7389410b19007b90d8aee46a08317a', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (202, '8efd61235a3374d0efb39f55530fc63f', false, 'TO-DO', 1, NULL, 40);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (193, 'dd59d0d4eeeef36941bf109cd576218e', false, 'TO-DO', 1, NULL, 41);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (203, 'b13c0394a22a5b9ecf78398eade7ae8a', false, 'TO-DO', 1, NULL, 41);
-INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id) VALUES (198, '233dde9eb68854ccf749554883b4da7c', false, 'TO-DO', 1, NULL, 41);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (486, '429fe744a5837fe66a8cc6e5d14e7f21', false, 'title', 1, NULL, 41, 0);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (464, '54a4f5a6c862dc2492e964e883ff9fd2', false, 'problem 1', 1, NULL, 40, 1);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (467, 'a3aa6fc6a9e10e099c96e93db10881fd', false, 'problem 2', 1, NULL, 40, 2);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (465, '9ad735b7d59765489099e9fcab68bbb5', false, 'problem 3', 1, NULL, 40, 2);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (466, 'b29955e8013439236dfdb0253d123964', false, 'problem 4', 1, NULL, 40, 2);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (481, 'd2a4bb05345607201f12961d9f9483', false, 'Switch statement', 2, 19, 40, 2);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (468, 'a5385e1ce27b3d7d10eaf3b62853ffae', false, 'problem 5', 1, NULL, 40, 9);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (480, 'd2a4bb053f6907201662961d9f9493', false, 'While', 2, 18, 40, 3);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (479, 'd2a4bb053f6447201f12961d9f9413', false, 'Functions', 2, 17, 40, 6);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (482, 'd2a4bb053f6907201867961d9f943', false, 'if condition', 2, 20, 40, 1);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (469, 'ef66d3cfff95dc7e16bd8bbaeb8e81cb', false, 'problem 6', 1, NULL, 40, 10);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (470, '19a325c4a313c73e7485f25a35aedc4e', false, 'problem 7', 1, NULL, 40, 10);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (478, 'd2a4bb053f6907201f12961d9f9423', false, 'Variables', 2, 16, 40, 5);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (472, '563c161d6f12a5f0c01a97d8f3bd0e28', false, 'title', 1, NULL, 40, 11);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (471, 'fc0a0726831c58285f67c40429f5366b', false, 'problem 77', 1, NULL, 40, 11);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (476, 'd2a4bb053f6907201f12961d9f94eca0', false, '2', 1, NULL, 40, 1);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (474, '5b4f49adb6fe01aadee8c47521366912', false, '1', 1, NULL, 40, 4);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (475, '68f14685edf1b648ee6455bbab42f430', false, '3', 1, NULL, 40, 3);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (477, '9eeccd1fdd972442be15f86a2a639cad', false, '4', 1, NULL, 40, 2);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (473, 'a3b19f89355103d833d76cb793d38758', false, 'title', 1, NULL, 41, 0);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (484, 'a92ce908626ddede4e32e4a673ffc454', false, 'title', 1, NULL, 41, 0);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (485, 'ee6caedc811b9a63148dc1684248222f', false, 'title', 1, NULL, 40, 0);
+INSERT INTO public.problem (problem_id, md5h, reflexive, title, domain_id, question_id, status_id, order_value) VALUES (487, 'de0ddc6c25f5d1bf528bba338b40361f', false, 'title', 1, NULL, 41, 0);
 
 
 --
 -- Data for Name: question; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (12, '0eef3305e23483be88386624dd811e1a', NULL, 'What is polymorphism?', 20, 1, NULL);
-INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (13, 'b29de7be69a042654bd4ae703d0b76d8', NULL, 'Can you override a private or static method in Java?', 20, 1, NULL);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (12, '0eef3305e23483be88386624dd811e1a', NULL, 'What is polymorphism?', 20, 1, 464);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (13, 'b29de7be69a042654bd4ae703d0b76d8', NULL, 'Can you override a private or static method in Java?', 20, 1, 467);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (14, 'b29de7be69a042654bd4ae703d0b763', NULL, 'blblab?', 20, 1, 468);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (16, 'b29de7be69a042654bd4ae703d0b333', NULL, 'What is variable?', 20, 5, 478);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (17, 'b29de7be69a042654bd4ae703d44444', NULL, 'What is function?', 20, 5, 479);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (18, 'b29de7be69a042654bd4ae703d234234', NULL, 'How to use while?', 20, 5, 480);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (19, 'b29de7be69a042654bd4ae7038888', NULL, 'How to use switch statement?', 20, 5, 481);
+INSERT INTO public.question (question_id, md5h, "position", text, status_id, test_id, problem_id) VALUES (20, 'b29de7be69a042654bd4ae7039999', NULL, 'What is if statement?', 20, 5, 482);
 
 
 --
@@ -469,22 +510,23 @@ INSERT INTO public.status (status_id, description, name) VALUES (61, 'Domain is 
 -- Data for Name: test; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id) VALUES (1, 'Prvi Test', 10, '71eccd018048d9e53156a94cc672afa7', NULL, NULL, NULL, 1);
-INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id) VALUES (4, 'Test broj 2', 10, '5ebf875dcf519e2c6292f70e3aecf922', '2020-12-02 13:01:09.652144', '2020-12-22 01:00:00', '2020-12-02 01:00:00', 1);
+INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id, domain_id) VALUES (1, 'Prvi Test', 10, '71eccd018048d9e53156a94cc672afa7', NULL, NULL, NULL, 1, NULL);
+INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id, domain_id) VALUES (4, 'Test broj 2', 10, '5ebf875dcf519e2c6292f70e3aecf922', '2020-12-02 13:01:09.652144', '2020-12-22 01:00:00', '2020-12-02 01:00:00', 1, NULL);
+INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id, domain_id) VALUES (5, 'Osnove Programiranja Test', 10, '33bf875dcf519e2c6292f70e3aecf933', '2020-12-30 15:08:41', '2021-01-01 15:08:48', '2021-01-30 15:09:06', 1, 2);
 
 
 --
 -- Name: answer_history_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.answer_history_seq', 51, true);
+SELECT pg_catalog.setval('public.answer_history_seq', 1451, true);
 
 
 --
 -- Name: answer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.answer_id_seq', 6, true);
+SELECT pg_catalog.setval('public.answer_id_seq', 16, true);
 
 
 --
@@ -498,14 +540,14 @@ SELECT pg_catalog.setval('public.domain_id_seq', 4, true);
 -- Name: euser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.euser_id_seq', 1, false);
+SELECT pg_catalog.setval('public.euser_id_seq', 2, true);
 
 
 --
 -- Name: link_id_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.link_id_seq', 208, true);
+SELECT pg_catalog.setval('public.link_id_seq', 458, true);
 
 
 --
@@ -526,14 +568,14 @@ SELECT pg_catalog.setval('public.node_id_seq', 1, false);
 -- Name: problem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.problem_id_seq', 203, true);
+SELECT pg_catalog.setval('public.problem_id_seq', 487, true);
 
 
 --
 -- Name: question_id_seq; Type: SEQUENCE SET; Schema: public; Owner: euser
 --
 
-SELECT pg_catalog.setval('public.question_id_seq', 13, true);
+SELECT pg_catalog.setval('public.question_id_seq', 20, true);
 
 
 --
@@ -683,6 +725,14 @@ ALTER TABLE ONLY public.answer
 
 ALTER TABLE ONLY public.question
     ADD CONSTRAINT fk8hejcpbbiq1qje11346akp3uj FOREIGN KEY (test_id) REFERENCES public.test(test_id);
+
+
+--
+-- Name: test fkbdn6ftj7ih0gr5hwtibd2fgdb; Type: FK CONSTRAINT; Schema: public; Owner: euser
+--
+
+ALTER TABLE ONLY public.test
+    ADD CONSTRAINT fkbdn6ftj7ih0gr5hwtibd2fgdb FOREIGN KEY (domain_id) REFERENCES public.domain(domain_id);
 
 
 --
