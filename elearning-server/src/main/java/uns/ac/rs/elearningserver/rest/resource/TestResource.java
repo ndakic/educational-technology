@@ -30,6 +30,7 @@ public class TestResource {
         if(ObjectUtils.isEmpty(testEntity)) { return null; }
         return TestResource.builder()
                 .id(testEntity.getMd5H())
+                .title(testEntity.getTitle())
                 .startDate(testEntity.getStartDate())
                 .endDate(testEntity.getEndDate())
                 .teacher(UserResource.entityToResource(testEntity.getTeacher()))
