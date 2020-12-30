@@ -424,7 +424,7 @@ INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (
 --
 
 INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (1, 'daka@gmail.com', 'Nikola', 'Dakic', '8d4aff29071ddee43ffa150a3c7aace8', '1234', NULL, 1, 'TEACHER');
-INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (2, 'marko@gmail.com', 'Marko', 'Markovic', '8d4aff29071ddee43ffa150a3c7aa234', '1234', NULL, 1, 'STUDENT');
+INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (2, 'marko@gmail.com', 'Marko', 'Markovic', '5bc67bef74afd2fb0f5a370d72b1c913', '1234', NULL, 1, 'STUDENT');
 INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (6, 'andrija@gmail.com', 'Andrija', 'Peric', '8d4aff29071ddee43ffa150a3c7aa266', '1234', NULL, 1, 'STUDENT');
 INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (4, 'aleksandar@gmail.com', 'Aleksandar', 'Djukic', '8d4aff29071ddee43ffa150a3c7343', '1234', NULL, 1, 'STUDENT');
 INSERT INTO public.euser (euser_id, email, first_name, last_name, md5h, password, registration_date, status_id, user_type) VALUES (3, 'nemanja@gmail.com', 'Nemanja', 'Letic', '8d4aff29071ddee43ffa150a3c7aa44', '1234', NULL, 1, 'STUDENT');

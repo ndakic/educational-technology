@@ -8,6 +8,15 @@
     </mat-form-field>
     &nbsp;&nbsp;&nbsp;
     <mat-form-field appearance="fill">
+        <mat-label>Domain</mat-label>
+        <mat-select [(ngModel)]="test.domain">
+            <mat-option *ngFor="let domain of domains" [value]="domain" (click)="loadProblems(domain)" name="domain" ngDefaultControl>
+                {{domain.title}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;
+    <mat-form-field appearance="fill">
         <mat-label>Start date</mat-label>
         <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="test.startDate">
         <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
@@ -29,6 +38,16 @@
             <mat-label>Question #{{i + 1}}</mat-label>
             <input type="text" matInput [(ngModel)]="question.text">
         </mat-form-field>
+        &nbsp;&nbsp;&nbsp;
+        <mat-form-field appearance="fill">
+            <mat-label>Problem</mat-label>
+            <mat-select [(ngModel)]="question.problem">
+                <mat-option *ngFor="let problem of problems; let i = index" [value]="problem" name="problem" ngDefaultControl>
+                    {{problem.title}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        &nbsp;&nbsp;&nbsp;
         <button mat-icon-button color="primary" (click)="removeQuestion(i)">
             <mat-icon>delete</mat-icon>
         </button>

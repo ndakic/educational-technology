@@ -4,6 +4,11 @@
         <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
         <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
         <div mat-dialog-actions align="end">
+            <button mat-icon-button color="primary" (click)="deleteTest(test.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <div mat-dialog-actions>
             <a mat-raised-button color="primary" href="/test/{{test.id}}/fill">Fill Test</a>
         </div>
     </mat-card>

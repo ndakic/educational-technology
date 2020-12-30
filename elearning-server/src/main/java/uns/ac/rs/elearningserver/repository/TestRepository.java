@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface TestRepository extends JpaRepository<TestEntity, Long> {
 
     Optional<TestEntity> getOnyByMd5H(String testId);
+
+    Optional<TestEntity> deleteByMd5H(String testId);
+
 }

@@ -15,6 +15,10 @@ export class TestService {
   createTest(test: object): Observable<any>{
     return this.http.post(environment.apiUrlPrefix + `/test`, test);
   }
+
+  deleteTest(testId: string){
+    return this.http.delete(environment.apiUrlPrefix + `/test/${testId}`);
+  }
   
   getAllTests(): Observable<any>{
     return this.http.get(environment.apiUrlPrefix + `/test/all`);

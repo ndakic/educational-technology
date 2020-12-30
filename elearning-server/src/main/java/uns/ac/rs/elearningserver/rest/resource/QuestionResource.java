@@ -21,6 +21,7 @@ public class QuestionResource {
     private String text;
     private String testId;
     private Integer order;
+    private ProblemResource problem;
     private List<AnswerResource> answers;
 
     public static QuestionResource entityToResource(QuestionEntity questionEntity){

@@ -13,4 +13,6 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> 
     Optional<QuestionEntity> getOneByMd5H(String questionId);
 
     List<QuestionEntity> findAllByTest_Md5H(String testId);
+
+    Optional<QuestionEntity> deleteByMd5H(String questionId);
 }

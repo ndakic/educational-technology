@@ -17,4 +17,14 @@ export class PreviewTestComponent implements OnInit {
     this.testService.getAllTests().subscribe(response => this.tests = response);
   }
 
+  deleteTest(testId: string): void {
+    this.testService.deleteTest(testId).subscribe(response => {
+      var index = this.tests.map(x => {
+        return x.Id;
+      }).indexOf(testId);
+      
+      this.tests.splice(index, 1);
+    });
+  }
+
 }
