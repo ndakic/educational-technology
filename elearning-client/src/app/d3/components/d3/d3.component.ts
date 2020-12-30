@@ -259,7 +259,7 @@ export class D3Component implements AfterViewInit, OnInit {
         const link = this.links.filter((l) => l.source === source && l.target === target)[0];
         if (link) {
           // link[isRight ? 'right' : 'left'] = true;
-          link['right'] = true;
+          // link['right'] = true;
         } else {
           console.log('source: ', source.title, " target: ", target.title);
           console.log('source order: ', source.order, " target order: ", target.order);
@@ -472,7 +472,7 @@ export class D3Component implements AfterViewInit, OnInit {
         .style("fill-opacity", 1);
       this.nodes[this.nodes.indexOf(this.selectedNode)].title = response['title'];
       this.titleInputFocus = false;
-      this.selectedNode = null;
+      // this.selectedNode = null;
     });
   }
 

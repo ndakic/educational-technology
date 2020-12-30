@@ -7,7 +7,7 @@
             #graphContainer>
             </svg>
       </div>
-      <div class="input-container" *ngIf='selectedNode != null && editable'>
+      <div class="input-container" *ngIf='(selectedNode != null || selectedLink != null) && editable'>
             <div class="form-group main mt-20">
                   Title: <input type="text" [(ngModel)]="selectedNode.title" (focus)="onFocus()" (focusout)="focusout()" name="title"> <br> <br>
                   Order: <span>{{selectedNode.order}}</span>
