@@ -33,6 +33,10 @@ public class TestService {
     @NonNull
     private final QuestionRepository questionRepository;
     @NonNull
+    private final DomainRepository domainRepository;
+    @NonNull
+    private final ProblemRepository problemRepository;
+    @NonNull
     private final AnswerRepository answerRepository;
     @NonNull
     private final StatusRepository statusRepository;
@@ -69,7 +73,21 @@ public class TestService {
                 .build();
     }
 
+    @Transactional
+    public void delete(String testId){
+        TestEntity testEntity = testRepository.getOnyByMd5H(testId).get();
+
+        for (QuestionEntity q: testEntity.getQuestions()) {
+            for (AnswerEntity a : q.getAnswers()) {
+                answerRepository.deleteByMd5H(a.getMd5H());
+            }
+            questionRepository.deleteByMd5H(q.getMd5H());
+        }
+        testRepository.deleteByMd5H(testId);
+    }
+
     public List<TestResource> getAll(){
+
         return testRepository.findAll()
                 .stream()
                 .map(testEntity -> TestResource.builder()
@@ -77,7 +95,7 @@ public class TestService {
                             .title(testEntity.getTitle())
                             .startDate(testEntity.getStartDate())
                             .endDate(testEntity.getEndDate())
-                        .teacher(UserResource.entityToResource(testEntity.getTeacher()))
+                            .teacher(UserResource.entityToResource(testEntity.getTeacher()))
                             .questions(testEntity.getQuestions()
                                     .stream()
                                     .map(questionEntity -> QuestionResource.builder()
@@ -105,6 +123,7 @@ public class TestService {
                 .title(resource.getTitle())
                 .teacher(userRepository.findOneByMd5HAndUserType(resource.getTeacher().getId(), UserType.TEACHER).get())
                 .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                .domain(domainRepository.findOneByMd5H(resource.getDomain().getId()).get())
                 .creationDate(DateUtil.nowSystemTime())
                 .startDate(resource.getStartDate())
                 .endDate(resource.getEndDate())
@@ -116,6 +135,7 @@ public class TestService {
             QuestionEntity question = QuestionEntity.builder()
                     .text(qResource.getText())
                     .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                    .problem(problemRepository.findByMd5H(qResource.getProblem().getMd5h()).get())
                     .test(test)
                     .build();
             questionRepository.save(question);

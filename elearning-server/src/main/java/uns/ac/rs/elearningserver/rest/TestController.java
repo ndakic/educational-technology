@@ -29,8 +29,9 @@ public class TestController {
         return ResponseEntity.ok(testService.get(testId));
     }
 
+    @RequestMapping(value = "/{testId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable String testId) { testService.delete(testId); return ResponseEntity.ok().build(); }
+
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<?> getAll(){
-        return ResponseEntity.ok(testService.getAll());
-    }
+    public ResponseEntity<?> getAll() { return ResponseEntity.ok(testService.getAll()); }
 }

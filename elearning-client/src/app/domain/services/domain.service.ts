@@ -11,6 +11,10 @@ export class DomainService {
     private http: HttpClient
   ) {}
 
+  getAll() {
+    return this.http.get(environment.apiUrlPrefix + `/domain/all`);
+  }
+
   getDomainById(domainId: string) {
     return this.http.get(environment.apiUrlPrefix + `/domain/${domainId}`);
   }

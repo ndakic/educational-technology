@@ -24,6 +24,7 @@ public class TestResource {
     private Timestamp startDate;
     private Timestamp endDate;
     private UserResource teacher;
+    private DomainResource domain;
     private List<QuestionResource> questions;
 
     public static TestResource entityToResource(TestEntity testEntity){
