@@ -5,15 +5,12 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.LinkStatus;
 import uns.ac.rs.elearningserver.constant.Md5Salt;
-import uns.ac.rs.elearningserver.constant.ProblemStatus;
 import uns.ac.rs.elearningserver.model.LinkEntity;
-import uns.ac.rs.elearningserver.model.ProblemEntity;
 import uns.ac.rs.elearningserver.repository.DomainRepository;
 import uns.ac.rs.elearningserver.repository.LinkRepository;
 import uns.ac.rs.elearningserver.repository.ProblemRepository;
 import uns.ac.rs.elearningserver.repository.StatusRepository;
 import uns.ac.rs.elearningserver.rest.resource.LinkResource;
-import uns.ac.rs.elearningserver.rest.resource.ProblemResource;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
 import javax.transaction.Transactional;
@@ -48,7 +45,7 @@ public class LinkService {
                 .rightDirection(linkResource.getRight())
                 .source(problemRepository.findByMd5H(linkResource.getSource().getMd5h()).get())
                 .target(problemRepository.findByMd5H(linkResource.getTarget().getMd5h()).get())
-                .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030222").get())
+                .domain(domainRepository.findOneByMd5H(linkResource.getDomain().getId()).get())
                 .status(statusRepository.getOne(LinkStatus.ACTIVE.getId()))
                 .build());
         linkEntity.setMd5h(Md5Generator.generateHash(linkEntity.getId(), Md5Salt.LINK));
