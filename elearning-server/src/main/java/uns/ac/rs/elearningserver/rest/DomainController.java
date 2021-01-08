@@ -2,6 +2,7 @@ package uns.ac.rs.elearningserver.rest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uns.ac.rs.elearningserver.rest.resource.DomainResource;
@@ -28,5 +29,11 @@ public class DomainController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> save(@RequestBody DomainResource domain){
         return ResponseEntity.ok(domainService.save(domain));
+    }
+
+    @RequestMapping(value = "/{domainId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable String domainId){
+        domainService.delete(domainId);
+        return ResponseEntity.ok(HttpEntity.EMPTY);
     }
 }

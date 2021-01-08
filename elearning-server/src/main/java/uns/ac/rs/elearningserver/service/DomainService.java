@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.DomainStatus;
+import uns.ac.rs.elearningserver.constant.ErrorCode;
 import uns.ac.rs.elearningserver.constant.Md5Salt;
+import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
 import uns.ac.rs.elearningserver.model.DomainEntity;
 import uns.ac.rs.elearningserver.repository.DomainRepository;
 import uns.ac.rs.elearningserver.repository.StatusRepository;
@@ -36,6 +38,7 @@ public class DomainService {
     public List<DomainResource> getAll(){
         return domainRepository.findAll()
                 .stream()
+                .filter(domainEntity -> domainEntity.getStatus().getId() == DomainStatus.ACTIVE.getId())
                 .map(DomainResource::entityToResource)
                 .collect(Collectors.toList());
     }
@@ -48,6 +51,13 @@ public class DomainService {
                 .status(statusRepository.getOne(DomainStatus.ACTIVE.getId()))
                 .build());
         domainEntity.setMd5H(Md5Generator.generateHash(domainEntity.getId(), Md5Salt.DOMAIN));
+        domain.setId(domainEntity.getMd5H());
         return domain;
+    }
+
+    public void delete(String domainId){
+        DomainEntity domainEntity = domainRepository.findOneByMd5H(domainId).orElseThrow(() -> new ResourceNotExistException("Domain not exist! ", ErrorCode.NOT_FOUND));
+        domainEntity.setStatus(statusRepository.getOne(DomainStatus.DELETED.getId()));
+        domainRepository.save(domainEntity);
     }
 }

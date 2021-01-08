@@ -2,12 +2,12 @@
 <qti-assessment-item>
     <qti-question>
         <qti-choice-interaction>
-            <qti-correct-response>false</qti-correct-response>
-            <qti-simple-choice>Named section of a program that performs a specific task.</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
             <qti-correct-response>true</qti-correct-response>
             <qti-simple-choice>Function is part of body.</qti-simple-choice>
+        </qti-choice-interaction>
+        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
+            <qti-simple-choice>Named section of a program that performs a specific task.</qti-simple-choice>
         </qti-choice-interaction>
         <p>What is function?</p>
     </qti-question>
@@ -36,6 +36,17 @@
     <qti-question>
         <qti-choice-interaction>
             <qti-correct-response>false</qti-correct-response>
+            <qti-simple-choice>Variable is type of cat.</qti-simple-choice>
+        </qti-choice-interaction>
+        <qti-choice-interaction>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Variable is a value that can change, depending on conditions or on information passed to the program</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>What is variable?</p>
+    </qti-question>
+    <qti-question>
+        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
             <qti-simple-choice>Dont use while at all</qti-simple-choice>
         </qti-choice-interaction>
         <qti-choice-interaction>
@@ -43,16 +54,5 @@
             <qti-simple-choice>Use it with while keyword</qti-simple-choice>
         </qti-choice-interaction>
         <p>How to use while?</p>
-    </qti-question>
-    <qti-question>
-        <qti-choice-interaction>
-            <qti-correct-response>true</qti-correct-response>
-            <qti-simple-choice>Variable is a value that can change, depending on conditions or on information passed to the program</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
-            <qti-correct-response>false</qti-correct-response>
-            <qti-simple-choice>Variable is type of cat.</qti-simple-choice>
-        </qti-choice-interaction>
-        <p>What is variable?</p>
     </qti-question>
 </qti-assessment-item>
