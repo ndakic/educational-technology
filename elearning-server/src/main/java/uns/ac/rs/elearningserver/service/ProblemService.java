@@ -40,7 +40,7 @@ public class ProblemService {
     public ProblemResource save(ProblemResource problem){
         ProblemEntity problemEntity = problemRepository.save(ProblemEntity.builder()
                 .title(problem.getTitle())
-                .domain(domainRepository.findOneByMd5H("f36c55b1740b77205e3277ef1c030c92").get())
+                .domain(domainRepository.findOneByMd5H(problem.getDomain().getId()).get())
                 .reflexive(problem.getReflexive())
                 .orderValue(problem.getOrder())
                 .status(statusRepository.getOne(ProblemStatus.ACTIVE.getId()))
