@@ -54,6 +54,7 @@ public class QuestionEntity implements Serializable {
         return text;
     }
 
+    @XmlElement(name = "p")
     public void setText(String text) {
         this.text = text;
     }

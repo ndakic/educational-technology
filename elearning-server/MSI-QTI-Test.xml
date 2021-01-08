@@ -1,79 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<testEntity>
-    <creationDate>
-        <nanos>0</nanos>
-    </creationDate>
-    <endDate>
-        <nanos>0</nanos>
-    </endDate>
-    <id>5</id>
-    <md5H>33bf875dcf519e2c6292f70e3aecf933</md5H>
-    <qti-questions>
+<qti-assessment-item>
+    <qti-question>
         <qti-choice-interaction>
-            <qti-simple-choice>Dont use that, its totally useless.</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
-            <qti-simple-choice>Use it with switch keyword</qti-simple-choice>
-        </qti-choice-interaction>
-        <text>How to use switch statement?</text>
-    </qti-questions>
-    <qti-questions>
-        <qti-choice-interaction>
-            <qti-simple-choice>Use it with if keyword</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
-            <qti-simple-choice>Use it without if keyword</qti-simple-choice>
-        </qti-choice-interaction>
-        <text>What is if statement?</text>
-    </qti-questions>
-    <qti-questions>
-        <qti-choice-interaction>
-            <qti-simple-choice>Variable is type of cat.</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
-            <qti-simple-choice>Variable is a value that can change, depending on conditions or on information passed to the program</qti-simple-choice>
-        </qti-choice-interaction>
-        <text>What is variable?</text>
-    </qti-questions>
-    <qti-questions>
-        <qti-choice-interaction>
-            <qti-simple-choice>Function is part of body.</qti-simple-choice>
-        </qti-choice-interaction>
-        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
             <qti-simple-choice>Named section of a program that performs a specific task.</qti-simple-choice>
         </qti-choice-interaction>
-        <text>What is function?</text>
-    </qti-questions>
-    <qti-questions>
         <qti-choice-interaction>
-            <qti-simple-choice>Use it with while keyword</qti-simple-choice>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Function is part of body.</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>What is function?</p>
+    </qti-question>
+    <qti-question>
+        <qti-choice-interaction>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Use it with switch keyword</qti-simple-choice>
         </qti-choice-interaction>
         <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
+            <qti-simple-choice>Dont use that, its totally useless.</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>How to use switch statement?</p>
+    </qti-question>
+    <qti-question>
+        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
+            <qti-simple-choice>Use it without if keyword</qti-simple-choice>
+        </qti-choice-interaction>
+        <qti-choice-interaction>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Use it with if keyword</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>What is if statement?</p>
+    </qti-question>
+    <qti-question>
+        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
             <qti-simple-choice>Dont use while at all</qti-simple-choice>
         </qti-choice-interaction>
-        <text>How to use while?</text>
-    </qti-questions>
-    <startDate>
-        <nanos>0</nanos>
-    </startDate>
-    <status>
-        <description>Test is Active</description>
-        <id>10</id>
-        <name>Active</name>
-    </status>
-    <teacher>
-        <email>daka@gmail.com</email>
-        <firstName>Nikola</firstName>
-        <id>1</id>
-        <lastName>Dakic</lastName>
-        <md5H>8d4aff29071ddee43ffa150a3c7aace8</md5H>
-        <password>1234</password>
-        <status>
-            <description>User is Active</description>
-            <id>1</id>
-            <name>Active</name>
-        </status>
-        <userType>TEACHER</userType>
-    </teacher>
-    <title>Osnove Programiranja Test</title>
-</testEntity>
+        <qti-choice-interaction>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Use it with while keyword</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>How to use while?</p>
+    </qti-question>
+    <qti-question>
+        <qti-choice-interaction>
+            <qti-correct-response>true</qti-correct-response>
+            <qti-simple-choice>Variable is a value that can change, depending on conditions or on information passed to the program</qti-simple-choice>
+        </qti-choice-interaction>
+        <qti-choice-interaction>
+            <qti-correct-response>false</qti-correct-response>
+            <qti-simple-choice>Variable is type of cat.</qti-simple-choice>
+        </qti-choice-interaction>
+        <p>What is variable?</p>
+    </qti-question>
+</qti-assessment-item>

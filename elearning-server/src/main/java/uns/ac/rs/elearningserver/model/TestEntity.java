@@ -1,18 +1,14 @@
 package uns.ac.rs.elearningserver.model;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -21,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@XmlRootElement
+@XmlRootElement(name = "qti-assessment-item")
 public class TestEntity implements Serializable {
 
     private long id;
@@ -41,7 +37,7 @@ public class TestEntity implements Serializable {
     public long getId() {
         return id;
     }
-
+    @XmlTransient
     public void setId(long id) {
         this.id = id;
     }
@@ -49,7 +45,7 @@ public class TestEntity implements Serializable {
     public String getMd5H() {
         return md5H;
     }
-
+    @XmlTransient
     public void setMd5H(String md5H) {
         this.md5H = md5H;
     }
@@ -57,7 +53,7 @@ public class TestEntity implements Serializable {
     public String getTitle() {
         return title;
     }
-    @XmlElement
+    @XmlTransient
     public void setTitle(String title) {
         this.title = title;
     }
@@ -67,7 +63,8 @@ public class TestEntity implements Serializable {
     public UserEntity getTeacher() {
         return teacher;
     }
-    @XmlElement
+
+    @XmlTransient
     public void setTeacher(UserEntity teacher) {
         this.teacher = teacher;
     }
@@ -75,7 +72,7 @@ public class TestEntity implements Serializable {
     public Timestamp getCreationDate() {
         return creationDate;
     }
-    @XmlElement
+    @XmlTransient
     public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
@@ -83,7 +80,7 @@ public class TestEntity implements Serializable {
     public Timestamp getStartDate() {
         return startDate;
     }
-    @XmlElement
+    @XmlTransient
     public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
@@ -91,7 +88,7 @@ public class TestEntity implements Serializable {
     public Timestamp getEndDate() {
         return endDate;
     }
-    @XmlElement
+    @XmlTransient
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
@@ -100,7 +97,7 @@ public class TestEntity implements Serializable {
     public Set<QuestionEntity> getQuestions() {
         return questions;
     }
-    @XmlElement(name = "qti-questions")
+    @XmlElement(name = "qti-question")
     public void setQuestions(Set<QuestionEntity> questions) {
         this.questions = questions;
     }
@@ -111,6 +108,7 @@ public class TestEntity implements Serializable {
         return status;
     }
 
+    @XmlTransient
     public void setStatus(StatusEntity status) {
         this.status = status;
     }
@@ -120,7 +118,7 @@ public class TestEntity implements Serializable {
     public DomainEntity getDomain() {
         return domain;
     }
-    @Ignore
+
     @XmlTransient
     public void setDomain(DomainEntity domain) {
         this.domain = domain;

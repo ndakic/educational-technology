@@ -76,7 +76,7 @@ public class AnswerEntity {
     public Boolean getCorrect() {
         return isCorrect;
     }
-    @XmlTransient
+    @XmlElement(name = "qti-correct-response")
     public void setCorrect(Boolean correct) {
         isCorrect = correct;
     }
