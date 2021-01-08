@@ -25,6 +25,7 @@ export class D3Component implements AfterViewInit, OnInit {
   public text: any;
   drag: any;
   dragLine: any;
+  graphSimilarityPercent: any;
 
   // mouse event vars
   public selectedNode = null;
@@ -63,6 +64,7 @@ export class D3Component implements AfterViewInit, OnInit {
       this.nodes = this.data['compare']['problems'];
       this.links = this.data['compare']['links'];
       this.editable = false;
+      this.graphSimilarityPercent = this.data['compare']['graphSimilarityPercent'];
     }
     this.lastNodeId = this.nodes.length;
   }
