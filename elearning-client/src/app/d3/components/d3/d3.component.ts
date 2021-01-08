@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
 import { ProblemService } from 'src/app/domain/services/problem.service';
 import { LinkService } from 'src/app/domain/services/link.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-d3',
@@ -46,7 +47,8 @@ export class D3Component implements AfterViewInit, OnInit {
   constructor(
     private route: ActivatedRoute,
     private problemService: ProblemService,
-    private linkService: LinkService
+    private linkService: LinkService,
+    private _location: Location
   ) {}
 
   ngOnInit(){
@@ -482,5 +484,9 @@ export class D3Component implements AfterViewInit, OnInit {
     this.problemService.update(node).subscribe(response => {
       console.log("Node updated: ", response);
     });
+  }
+
+  back() {
+    this._location.back();
   }
 }

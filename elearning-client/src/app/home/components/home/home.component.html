@@ -1,6 +1,10 @@
 <div class="home-container">
     <h1> Domains </h1>
+    <div class="buttons-container">
+        <button mat-raised-button (click)="createDialog()">Create</button>
+    </div>
     <mat-card *ngFor="let domain of domains" class="home-content">
         <mat-card-title><a href="/domain/{{domain.id}}">{{domain.title}}</a></mat-card-title>
+        <button mat-raised-button color="warn" (click)="delete(domain.id)">Delete</button>
     </mat-card>
 </div>

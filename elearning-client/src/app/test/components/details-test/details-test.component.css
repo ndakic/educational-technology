@@ -4,3 +4,11 @@
     margin-right: auto;
     margin-top: 100px;
 }
+
+.mt-20 {
+    margin-top: 20px;
+  }
+
+.ml-20 {
+    margin-left: 20px !important;
+}

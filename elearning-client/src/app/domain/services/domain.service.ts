@@ -27,4 +27,7 @@ export class DomainService {
     return this.http.get(environment.apiUrlPrefix + `/domain/all`);
   }
 
+  deleteById(domainId: string) {
+    return this.http.delete(environment.apiUrlPrefix + `/domain/${domainId}`);
+  }
 }

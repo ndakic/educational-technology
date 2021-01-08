@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-domain-details',
@@ -13,6 +15,7 @@ export class DomainDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private _location: Location
   ) { }
 
   ngOnInit(): void {
@@ -23,6 +26,10 @@ export class DomainDetailsComponent implements OnInit {
 
   export(testId){
     window.open(environment.apiUrlPrefix + `/export/${testId}`, '_blank');
+  }
+
+  back() {
+    this._location.back();
   }
 
 }

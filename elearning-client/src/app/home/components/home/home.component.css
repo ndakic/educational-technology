@@ -8,4 +8,12 @@
 .home-content{
     margin-bottom: 30px;
     margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }
