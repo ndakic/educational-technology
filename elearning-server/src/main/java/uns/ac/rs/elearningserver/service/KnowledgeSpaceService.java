@@ -35,7 +35,7 @@ public class KnowledgeSpaceService {
     @NonNull
     private final TestRepository testRepository;
     @NonNull
-    private LinkRepository linkRepository;
+    private final LinkRepository linkRepository;
 
     public KnowledgeSpaceGraphResource getKnowledgeSpace(String testId){
         List<Long> questions = answerHistoryRepository.findAllQuestionsByTest_Md5H(testId);
@@ -99,9 +99,12 @@ public class KnowledgeSpaceService {
                 sameProblems.add(link.getTarget());
             }
         }
+        System.out.println("same link size: " + sameLinks.size());
+        System.out.println("bigger graph: " + Math.max(graph1Links.size(), graph2Links.size()));
         return KnowledgeSpaceGraphResource.builder()
                 .problems(sameProblems.stream().filter(distinctByKey(ProblemResource::getMd5h)).collect(Collectors.toList())) // filter duplicates
                 .links(sameLinks.stream().filter(distinctByKey(LinkResource::getMd5h)).collect(Collectors.toList()))          // filter duplicates
+                .graphSimilarityPercent((double) sameLinks.size() / Math.max(graph1Links.size(), graph2Links.size()) * 100)
                 .build();
     }
 

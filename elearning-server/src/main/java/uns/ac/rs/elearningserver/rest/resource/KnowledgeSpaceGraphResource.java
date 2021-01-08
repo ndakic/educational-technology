@@ -12,6 +12,7 @@ import java.util.List;
 public class KnowledgeSpaceGraphResource {
     private List<ProblemResource> problems;
     private List<LinkResource> links;
+    private Double graphSimilarityPercent;
 
     @Getter
     @Setter
