@@ -38,11 +38,13 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.domain.title = result.title;
-      this.domainService.saveDomain(this.domain).subscribe(reponse => {
-        this.domain.id = reponse['id'];
-        this.domains.push(this.domain);
-      });
+      if (result) {
+        this.domain.title = result.title;
+        this.domainService.saveDomain(this.domain).subscribe(reponse => {
+          this.domain.id = reponse['id'];
+          this.domains.push(this.domain);
+        });
+      }
     });
   }
 

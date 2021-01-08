@@ -53,6 +53,7 @@ export class D3Component implements AfterViewInit, OnInit {
 
   ngOnInit(){
     this.data = this.route.snapshot.data["data"];
+    console.log("daaata: ", this.data);
     if(this.data['domain']) {
       this.nodes = this.data['domain']['problems'];
       this.links = this.data['domain']['links'];
@@ -314,7 +315,7 @@ export class D3Component implements AfterViewInit, OnInit {
     // insert new node at point
     const point = d3.mouse(d3.event.currentTarget);
     // const point = d3.mouse(this);
-    const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "title", order: 0 };
+    const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "title", order: 0, domain: { id: this.data['domain']['id']}};
     console.log('new node: ', node);
     this.nodes.push(node);
     this.problemService.save(node).subscribe(response => {
