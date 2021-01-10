@@ -4,7 +4,8 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/elearningdb?ApplicationName=elearning-db
+    url: jdbc:postgresql://172.17.0.1:5432/elearningdb?ApplicationName=elearning-db
+#    url: jdbc:postgresql://localhost:5432/elearningdb?ApplicationName=elearning-db
     username: euser
     password: elearning1234
   jpa:

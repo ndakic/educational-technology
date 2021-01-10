@@ -1,0 +1,53 @@
+version: "3"
+services:
+  elearning-postgres:
+    image: elearning-postgres:9.3
+    build:
+      context: dbconfig/postgres
+      dockerfile: Dockerfile
+    container_name: elearning-postgres-container
+    volumes:
+      - ./dbconfig/postgres/pg_hba.conf:/etc/postgresql/9.3/main/pg_hba.conf
+      - ./dbconfig/postgres/postgresql.conf:/etc/postgresql/9.3/main/postgresql.conf
+      - postgresql:/var/lib/postgresql/
+    ports:
+      - 5432:5432
+    networks:
+      - elearning-network
+  elearning-client:
+    image: elearning-client
+    build:
+      context: elearning-client
+      dockerfile: Dockerfile
+    container_name: elearning-client-container
+    ports:
+      - 4200:4200
+    networks:
+      - elearning-network
+  elearning-server:
+    image: elearning-server
+    build:
+      context: elearning-server
+      dockerfile: Dockerfile
+    container_name: elearning-server-container
+    ports:
+      - 9000:9000
+    networks:
+      - elearning-network
+  elearning-knowledge-space:
+    image: elearning-knowledge-space
+    build:
+      context: ks-server
+      dockerfile: Dockerfile
+    container_name: elearning-knowledge-space-container
+    ports:
+      - 5000:5000
+    networks:
+      - elearning-network
+
+networks:
+  elearning-network:
+    driver: bridge
+
+volumes:
+  postgresql:

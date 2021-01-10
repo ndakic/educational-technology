@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER daka
+LABEL MAINTAINER="daka"
 ARG DEBIAN_FRONTEND=noninteractive
 
 
@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 
 # Copy scripts to container
-COPY config/elearningdb-dump.sql /tmp/elearningdb-dump.sql
+COPY elearningdb-dump.sql /tmp/elearningdb-dump.sql
 USER postgres
 
 
