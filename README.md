@@ -1,6 +1,6 @@
 # Modern Educational Technologies and Standards
 
-Course Modern Educational Technologies and Standards at Faculty of Technical Sciences, University of Novi Sad, 2020
+Course Modern Educational Technologies and Standards at Faculty of Technical Sciences, University of Novi Sad
 
 
 ## Getting started
