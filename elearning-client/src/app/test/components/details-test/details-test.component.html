@@ -3,5 +3,8 @@
     <mat-card>
         <mat-card-title>{{test.title}}</mat-card-title>
         <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
+        <div mat-dialog-actions>
+            <a mat-raised-button color="primary" href="/test/{{test.id}}/fill">Start Test</a>
+        </div>
     </mat-card>
 </div>

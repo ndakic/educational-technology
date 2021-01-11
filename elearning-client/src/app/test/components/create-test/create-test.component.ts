@@ -20,7 +20,7 @@ class Question {
 
 class Answer {
   public text: string;
-  public isCorrect: boolean = false;
+  public correct: boolean = false;
 }
 
 @Component({
@@ -58,7 +58,7 @@ export class CreateTestComponent implements OnInit {
     })
     this.testService.createTest(this.test).subscribe(
       response => {
-        this.router.navigate(['/test/preview'])
+        this.router.navigate([`/domain/${this.test.domain.id}`])
         .then(success => console.log('navigation success?' , success))
         .catch(console.error); 
       },

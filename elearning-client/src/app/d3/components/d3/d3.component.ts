@@ -53,7 +53,6 @@ export class D3Component implements AfterViewInit, OnInit {
 
   ngOnInit(){
     this.data = this.route.snapshot.data["data"];
-    console.log("daaata: ", this.data);
     if(this.data['domain']) {
       this.nodes = this.data['domain']['problems'];
       this.links = this.data['domain']['links'];
@@ -69,7 +68,9 @@ export class D3Component implements AfterViewInit, OnInit {
       this.editable = false;
       this.graphSimilarityPercent = this.data['compare']['graphSimilarityPercent'];
     }
-    this.lastNodeId = this.nodes.length;
+    this.lastNodeId = this.nodes ? this.nodes.length: 0;
+    console.log("nodes: ", this.nodes);
+    console.log("links: ", this.links);
   }
 
   ngAfterViewInit() {

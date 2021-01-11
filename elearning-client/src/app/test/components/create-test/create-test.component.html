@@ -62,7 +62,7 @@
                 <input type="text" matInput [(ngModel)]="answer.text">
             </mat-form-field>
             &nbsp;&nbsp;&nbsp;
-            <mat-checkbox color="primary">is correct?</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="answer.correct">is correct?</mat-checkbox>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button mat-icon-button color="primary" (click)="removeAnswer(question, j)">
                 <mat-icon>delete</mat-icon>
