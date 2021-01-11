@@ -27,7 +27,6 @@ public class ProblemResource {
                 .reflexive(problemEntity.getReflexive())
                 .title(problemEntity.getTitle())
                 .order(problemEntity.getOrderValue())
-                .question(QuestionResource.entityToResource(problemEntity.getQuestion()))
                 .status(StatusResource.entityToResource(problemEntity.getStatus()))
                 .domain(DomainResource.builder()
                         .id(!ObjectUtils.isEmpty(problemEntity.getDomain()) ? problemEntity.getDomain().getMd5H(): null)

@@ -21,7 +21,6 @@ public class ProblemEntity implements Serializable {
     private DomainEntity domain;
     private StatusEntity status;
     private Boolean reflexive;
-    private QuestionEntity question; // can be updated to support multiple questions
     private Integer orderValue;
 
     @Id
@@ -57,16 +56,6 @@ public class ProblemEntity implements Serializable {
 
     public void setReflexive(Boolean reflexive) {
         this.reflexive = reflexive;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-    public QuestionEntity getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(QuestionEntity questions) {
-        this.question = questions;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

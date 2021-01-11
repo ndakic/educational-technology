@@ -17,5 +17,5 @@ public class AnswerResource {
     private String questionId;
     private String testId;
     private String userId;
-    private boolean isCorrect;
+    private boolean correct;
 }

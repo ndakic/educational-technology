@@ -47,13 +47,14 @@ public class KnowledgeSpaceService {
                     .collect(Collectors.toList());
             map.put(String.valueOf(question), values.stream().mapToInt(i->i).toArray());
         }
+        if(map.isEmpty()) { return new KnowledgeSpaceGraphResource();}
         Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(map);
         return getKnowledgeSpaceGraphResource(knowledgeSpace, testId);
     }
 
     public KnowledgeSpaceGraphResource getKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId){
         List<LinkEntity> links = new ArrayList<>();
-        List<ProblemEntity> problems = problemRepository.findAllByQuestion_Test_Md5H(testId);
+        List<ProblemEntity> problems = problemRepository.findAllProblemsByTest(testId);
         for(Integer[] knowledge: knowledgeSpace){
             Integer source = knowledge[0];
             Integer target = knowledge[1];
@@ -89,7 +90,6 @@ public class KnowledgeSpaceService {
     }
 
     public KnowledgeSpaceGraphResource compare(List<LinkResource> graph1Links, List<LinkResource> graph2Links){
-        System.out.printf("Graph1 length: %d - Graph2 length: %d \n", graph1Links.size(), graph2Links.size());
         List<LinkResource> sameLinks = new ArrayList<>();
         List<ProblemResource> sameProblems = new ArrayList<>();
         for(LinkResource link: graph1Links){

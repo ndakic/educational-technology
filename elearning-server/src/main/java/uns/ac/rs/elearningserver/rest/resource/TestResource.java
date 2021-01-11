@@ -35,7 +35,10 @@ public class TestResource {
                 .startDate(testEntity.getStartDate())
                 .endDate(testEntity.getEndDate())
                 .teacher(UserResource.entityToResource(testEntity.getTeacher()))
-                .questions(testEntity.getQuestions().stream().map(QuestionResource::entityToResource).collect(Collectors.toList()))
+                .questions(testEntity.getQuestions()
+                        .stream()
+                        .map(QuestionResource::entityToResource)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

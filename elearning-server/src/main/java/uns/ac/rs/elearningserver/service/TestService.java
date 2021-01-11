@@ -9,6 +9,7 @@ import uns.ac.rs.elearningserver.constant.TestStatus;
 import uns.ac.rs.elearningserver.constant.UserType;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
 import uns.ac.rs.elearningserver.model.AnswerEntity;
+import uns.ac.rs.elearningserver.model.ProblemEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.model.TestEntity;
 import uns.ac.rs.elearningserver.repository.*;
@@ -118,7 +119,6 @@ public class TestService {
 
     @Transactional
     public TestResource create(TestResource resource){
-
         TestEntity test = TestEntity.builder()
                 .title(resource.getTitle())
                 .teacher(userRepository.findOneByMd5HAndUserType(resource.getTeacher().getId(), UserType.TEACHER).get())
@@ -130,7 +130,6 @@ public class TestService {
                 .build();
         testRepository.save(test);
         test.setMd5H(Md5Generator.generateHash(test.getId(), Md5Salt.TEST));
-
         for (QuestionResource qResource : resource.getQuestions()) {
             QuestionEntity question = QuestionEntity.builder()
                     .text(qResource.getText())
@@ -151,7 +150,6 @@ public class TestService {
                 answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.TEST));
             }
         }
-
         resource.setId(test.getMd5H());
         return resource;
     }
