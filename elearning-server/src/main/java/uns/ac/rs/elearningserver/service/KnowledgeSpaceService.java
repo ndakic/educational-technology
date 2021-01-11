@@ -80,7 +80,6 @@ public class KnowledgeSpaceService {
     public KnowledgeSpaceGraphResource compareGraphs(String testId){
         TestEntity testEntity = testRepository.getOnyByMd5H(testId).get();
         KnowledgeSpaceGraphResource knowledgeSpaceGraphResource = getKnowledgeSpace(testId);
-        System.out.printf("DomainId: %s\n", testEntity.getDomain().getMd5H());
         List<LinkEntity> links = linkRepository.findAllByDomain_Md5HAndStatus_Id(testEntity.getDomain().getMd5H(), LinkStatus.ACTIVE.getId());
         return compare(links
                         .stream()
@@ -111,8 +110,10 @@ public class KnowledgeSpaceService {
      */
     public boolean compareLink(List<LinkResource> links, LinkResource compareToLink){
         for(LinkResource linkResource: links) {
-            if(linkResource.getSource().getId().equals(compareToLink.getSource().getId()) &&
-               linkResource.getTarget().getId().equals(compareToLink.getTarget().getId())) {
+            if(
+               (linkResource.getSource().getId().equals(compareToLink.getSource().getId()) && linkResource.getTarget().getId().equals(compareToLink.getTarget().getId())) ||
+               (linkResource.getSource().getId().equals(compareToLink.getTarget().getId()) && linkResource.getTarget().getId().equals(compareToLink.getSource().getId()))
+              ){
                 return true;
             }
         }
