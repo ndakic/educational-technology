@@ -1,6 +1,6 @@
-# Course Modern Educational Technologies and Standards
+# Modern Educational Technologies and Standards
 
-Course Modern Educational Technologies and Standards at Faculty of Technical Sciences, University of Novi Sad, 2020
+Course Modern Educational Technologies and Standards at Faculty of Technical Sciences, University of Novi Sad
 
 
 ## Getting started
@@ -9,10 +9,24 @@ These instructions will help you to run this project.
 
 ### Prerequisites
 
-All applications are dockerized and you only need to install [docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) on your host machine.
+All applications are dockerized and you only need to install:
 
-Make sure following ports are open: 5432, 9000, 4200, 5000
+ - [docker](https://docs.docker.com/engine/installation/)
+ - [docker-compose](https://docs.docker.com/compose/install/)
 
+Make sure following ports are open
+
+- 5432
+- 9000
+- 4200
+- 5000
+
+Supported applications are:
+
+- elearning-postgres
+- elearning-server
+- elearning-client
+- elearning-knowledge-space
 
 ## Launch applications
 
