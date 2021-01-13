@@ -3,10 +3,7 @@ package uns.ac.rs.elearningserver.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uns.ac.rs.elearningserver.constant.ErrorCode;
-import uns.ac.rs.elearningserver.constant.Md5Salt;
-import uns.ac.rs.elearningserver.constant.TestStatus;
-import uns.ac.rs.elearningserver.constant.UserType;
+import uns.ac.rs.elearningserver.constant.*;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
 import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.ProblemEntity;
@@ -66,7 +63,7 @@ public class TestService {
                                                 .build())
                                         .collect(Collectors.toList()))
                                 .build())
-                        .sorted(Comparator.comparingDouble(QuestionResource::getProbability))
+                        .sorted(Comparator.comparingDouble(QuestionResource::getProbability).reversed())
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -128,21 +125,21 @@ public class TestService {
         for (QuestionResource qResource : resource.getQuestions()) {
             QuestionEntity question = QuestionEntity.builder()
                     .text(qResource.getText())
-                    .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                    .status(statusRepository.getOne(QuestionStatus.ACTIVE.getId()))
                     .problem(problemRepository.findByMd5H(qResource.getProblem().getMd5h()).get())
                     .test(test)
                     .build();
             questionRepository.save(question);
-            question.setMd5H(Md5Generator.generateHash(question.getId(), Md5Salt.TEST));
+            question.setMd5H(Md5Generator.generateHash(question.getId(), Md5Salt.QUESTION));
             for (AnswerResource aResource: qResource.getAnswers()) {
                 AnswerEntity answer = AnswerEntity.builder()
                         .text(aResource.getText())
                         .isCorrect(aResource.isCorrect())
-                        .status(statusRepository.getOne(TestStatus.ACTIVE.getId()))
+                        .status(statusRepository.getOne(AnswerStatus.ACTIVE.getId()))
                         .question(question)
                         .build();
                 answerRepository.save(answer);
-                answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.TEST));
+                answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.ANSWER));
             }
         }
         resource.setId(test.getMd5H());

@@ -19,6 +19,7 @@ import uns.ac.rs.elearningserver.util.Md5Generator;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,21 +75,49 @@ public class AnswerService {
                 .date(DateUtil.nowSystemTime())
                 .build());
 
+        Optional<QuestionEntity> questionEntity = questionRepository.getOneByMd5H(resource.getQuestionId());
         List<ProblemEntity> problems = problemRepository.findAllByDomain_Md5HAndStatus_idAndKnowledgeStateContaining(answer.getQuestion().getProblem().getDomain().getMd5H(),
-                                                                                                                     ProblemStatus.ACTIVE.getId(), answer.getQuestion().getProblem().getTitle());
+                                       ProblemStatus.ACTIVE.getId(), answer.getQuestion().getProblem().getTitle())
+                .stream()
+                .filter(problemEntity -> !problemEntity.getMd5H().equals(questionEntity.get().getProblem().getMd5H()))
+                .collect(Collectors.toList());
         /*
             if answer is correct/wrong, update all problems which are related to that question/problem
          */
         for(ProblemEntity problem: problems) {
-            int value = answer.getCorrect() ? 1: -1;
+            int value = answer.getCorrect() ? 2: -2;
             problem.setCredibility(problem.getCredibility() + value);
+            problem.setCredibility(problem.getCredibility() < 0 ? 0: problem.getCredibility());
             problemRepository.save(problem);
         }
+        int value = answer.getCorrect() ? 10: -10;
+        ProblemEntity problemEntity = questionEntity.get().getProblem();
+        problemEntity.setCredibility(problemEntity.getCredibility() + value);
+        problemEntity.setCredibility(problemEntity.getCredibility() < 0 ? 0: problemEntity.getCredibility());
+        problemRepository.save(problemEntity);
+
         knowledgeSpaceService.calculateProbability(answer.getQuestion().getProblem().getDomain().getMd5H());
         return AnswerResource.builder()
                 .questionId(answer.getQuestion().getMd5H())
                 .problem(ProblemResource.entityToResource(answer.getQuestion().getProblem()))
                 .correct(answer.getCorrect())
+                .build();
+    }
+
+    public AnswerResource rejectedQuestion(String questionId, String userId){
+        Optional<QuestionEntity> questionEntity = questionRepository.getOneByMd5H(questionId);
+        Optional<AnswerEntity> answer = answerRepository.findFirstByQuestion_Md5HAndCorrectAndStatus_Id(questionEntity.get().getMd5H(), false, AnswerStatus.ACTIVE.getId());
+        UserEntity user = userRepository.findOneByMd5H(userId).orElseThrow(() -> new ResourceNotExistException(String.format("User %s not found!", userId), ErrorCode.NOT_FOUND));
+        answer.ifPresent(answerEntity -> answerHistoryRepository.save(AnswerHistory.builder()
+                .answer(answerEntity)
+                .user(user)
+                .question(answerEntity.getQuestion())
+                .test(answerEntity.getQuestion().getTest())
+                .date(DateUtil.nowSystemTime())
+                .build()));
+        return AnswerResource.builder()
+                .questionId(questionId)
+                .userId(userId)
                 .build();
     }
 }

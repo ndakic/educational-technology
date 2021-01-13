@@ -14,4 +14,6 @@ public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
     Optional<AnswerEntity> findOneByQuestion_Md5HAndTextAndStatus_Id(String questionId, String text, long statusId);
 
     Optional<AnswerEntity> deleteByMd5H(String answerId);
+
+    Optional<AnswerEntity> findFirstByQuestion_Md5HAndCorrectAndStatus_Id(String questionId, boolean correct, long statusId);
 }
