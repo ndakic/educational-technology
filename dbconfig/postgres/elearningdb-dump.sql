@@ -409,7 +409,7 @@ INSERT INTO public.answer_history (answer_history_id, date, answer_id, euser_id,
 -- Data for Name: domain; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (16, '0ae8563363c3eed8b1cb10eb42dabea9', 'Mata', 60, 1);
+INSERT INTO public.domain (domain_id, md5h, title, status_id, euser_id) VALUES (16, '0ae8563363c3eed8b1cb10eb42dabea9', 'Math', 60, 1);
 
 
 --
@@ -492,7 +492,7 @@ INSERT INTO public.status (status_id, description, name) VALUES (61, 'Domain is 
 -- Data for Name: test; Type: TABLE DATA; Schema: public; Owner: euser
 --
 
-INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id, domain_id) VALUES (21, 'Aritmetičke operacije', 10, 'cf8174e63202397164d2473233ffc1ec', '2021-01-13 14:20:26.865475', '2021-01-15 00:00:00', '2021-01-13 00:00:00', 1, 16);
+INSERT INTO public.test (test_id, title, status_id, md5h, creation_date, end_date, start_date, euser_id, domain_id) VALUES (21, 'Test - Arithmetic Operations', 10, 'cf8174e63202397164d2473233ffc1ec', '2021-01-13 14:20:26.865475', '2021-01-15 00:00:00', '2021-01-13 00:00:00', 1, 16);
 
 
 --
