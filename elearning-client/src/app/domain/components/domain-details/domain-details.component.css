@@ -11,14 +11,28 @@
 }
 
 .mt-20 {
-    margin-top: 20px;;
+    margin-top: 20px;
 }
 
+.mt-10 {
+    margin-top: 10px;
+}
 
 .ml-20 {
-    margin-left: 20px;;
+    margin-left: 20px;
 }
 
 .mb-20 {
-    margin-bottom: 20px;;
+    margin-bottom: 20px;
+}
+
+.create-test-button {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.test-body-content {
+    display: flex;
+    flex-direction: column;
 }

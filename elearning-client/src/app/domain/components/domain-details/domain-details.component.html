@@ -5,17 +5,18 @@
         <mat-card-content class="mt-20">
             <p>Status - {{domain.status.description}}</p>
             <p>Teacher - {{domain.user.firstName}} {{domain.user.lastName}}</p>
-            <h2>Graph Editor: <a class="mt-20 mb-20" href="/domain/graph/{{domain.id}}">Editor</a></h2>
-            <h2>Tests</h2>
-            <a mat-raised-button color="primary" href="/test/create">Create New Test</a>
+            <h2>Create Knowledge Space: <a class="mt-20 mb-20" href="/domain/graph/{{domain.id}}">Editor</a></h2>
+            <div class="create-test-button">
+                <a mat-raised-button color="primary" href="/test/create">Create Test</a>
+            </div>
             <div class="test-container mt-20">
                 <mat-card *ngFor="let test of domain.tests" class="test-content">
                     <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
                     <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
-                    <mat-card-content class="mt-20">
-                        <h2>Real Knowledge Space: <a class="mt-20 mb-20" href="/ks/{{test.id}}">Link</a></h2>
-                        <h2>Compare Teacher's and Real Knowledge Space: <a class="mt-20 mb-20" href="/compare-graphs/{{test.id}}">Link</a></h2>
-                        <h2> Export in IMS QTI: <a class="mt-20 mb-20" href="" (click)="export(test.id)">Here</a></h2>
+                    <mat-card-content class="test-body-content">
+                        <a href="/ks/{{test.id}}">Real Knowledge Space</a>
+                        <a class="mt-10" href="/compare-graphs/{{test.id}}">Compared Teacher's and Real Knowledge Space</a>
+                        <a class="mt-10" href="" (click)="export(test.id)">Export in IMS QTI</a>
                     </mat-card-content>
                 </mat-card>
             </div>

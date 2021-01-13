@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AnswerService } from '../../services/answer.service';
+import { Location } from '@angular/common';
+
 
 class Answer {
   public answerId: string;
   public userId: string = "5bc67bef74afd2fb0f5a370d72b1c913";
+  public questionId: string;
 }
 
 @Component({
@@ -19,7 +22,7 @@ export class FillTestComponent implements OnInit {
   public answers: Array<string> = [];
   public selectedAnswer: any;
 
-  constructor(private answerService: AnswerService, private route: ActivatedRoute, private router: Router) {
+  constructor(private answerService: AnswerService, private route: ActivatedRoute, private router: Router, private _location: Location) {
   }
 
   ngOnInit(): void {
@@ -66,6 +69,7 @@ export class FillTestComponent implements OnInit {
   submitAnswer(question){
     var answer = new Answer();
     answer.answerId = this.selectedAnswer.answerId;
+    answer.questionId = question.id;
     this.answerService.submitAnswer(answer).subscribe((response: any) => {
       /*
         if answer is wrong, remove questions
@@ -78,12 +82,19 @@ export class FillTestComponent implements OnInit {
   }
 
   removeSubQuestions(title: string){
-    this.test.questions.forEach(element => {
-      if(element['problem']['knowledgeState'].includes(title) && element['id'] !== this.selectedAnswer['questionId']) {
-        const index = this.test.questions.indexOf(element);
-        this.test.questions.splice(index, 1);
+    this.test.questions.forEach(question => {
+      console.log("\t ", question['problem']['knowledgeState'], " ", title)
+      if(question['problem']['knowledgeState'].includes(title) && question['id'] !== this.selectedAnswer['questionId']) {
+        this.answerService.rejectedQuestion(question['id'], '5bc67bef74afd2fb0f5a370d72b1c913').subscribe(response => {
+          const index = this.test.questions.indexOf(question);
+          this.test.questions.splice(index, 1);
+        });
       }
     });
+  }
+
+  back() {
+    this._location.back();
   }
 
 }

@@ -20,4 +20,8 @@ export class AnswerService {
     return this.http.post(environment.apiUrlPrefix + `/answer/history`, answer);
   }
 
+  rejectedQuestion(questionId: string, userId: string): Observable<any>{
+    return this.http.get(environment.apiUrlPrefix + `/answer/history/rejected-question/${questionId}/${userId}`);
+  }
+
 }
