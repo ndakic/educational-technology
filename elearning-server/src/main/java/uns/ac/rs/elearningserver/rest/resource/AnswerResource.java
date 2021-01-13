@@ -18,4 +18,5 @@ public class AnswerResource {
     private String testId;
     private String userId;
     private boolean correct;
+    private ProblemResource problem;
 }

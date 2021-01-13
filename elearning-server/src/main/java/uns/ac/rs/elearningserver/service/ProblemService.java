@@ -27,6 +27,8 @@ public class ProblemService {
     private final DomainRepository domainRepository;
     @NonNull
     private final StatusRepository statusRepository;
+    @NonNull
+    private final KnowledgeSpaceService knowledgeSpaceService;
 
 
     public List<ProblemResource> getAllProblemsByDomain(String domainId){
@@ -42,10 +44,15 @@ public class ProblemService {
                 .title(problem.getTitle())
                 .domain(domainRepository.findOneByMd5H(problem.getDomain().getId()).get())
                 .reflexive(problem.getReflexive())
-                .orderValue(problem.getOrder())
+                .credibility(problem.getCredibility())
+                .probability(problem.getProbability())
                 .status(statusRepository.getOne(ProblemStatus.ACTIVE.getId()))
+                .knowledgeState(String.join(",", problem.getKnowledgeState()))
+                .x(problem.getX())
+                .y(problem.getY())
                 .build());
         problemEntity.setMd5H(Md5Generator.generateHash(problemEntity.getId(), Md5Salt.PROBLEM));
+        knowledgeSpaceService.calculateProbability(problem.getDomain().getId());
         return ProblemResource.entityToResource(problemEntity);
     }
 
@@ -53,13 +60,16 @@ public class ProblemService {
         ProblemEntity problemEntity = problemRepository.findByMd5H(problemId).get();
         problemEntity.setStatus(statusRepository.getOne(ProblemStatus.DELETED.getId()));
         problemRepository.save(problemEntity);
+        knowledgeSpaceService.calculateProbability(problemEntity.getDomain().getMd5H());
         return ProblemResource.entityToResource(problemEntity);
     }
 
     public ProblemResource update(ProblemResource problem){
         ProblemEntity problemEntity = problemRepository.findByMd5H(problem.getMd5h()).get();
         problemEntity.setTitle(problem.getTitle());
-        problemEntity.setOrderValue(problem.getOrder());
+        problemEntity.setProbability(problem.getProbability());
+        problemEntity.setCredibility(problem.getCredibility());
+        problemEntity.setKnowledgeState(String.join(",", problem.getKnowledgeState()));
         problemRepository.save(problemEntity);
         return ProblemResource.entityToResource(problemEntity);
     }

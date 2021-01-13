@@ -6,23 +6,18 @@ import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.AnswerStatus;
 import uns.ac.rs.elearningserver.constant.ErrorCode;
 import uns.ac.rs.elearningserver.constant.Md5Salt;
+import uns.ac.rs.elearningserver.constant.ProblemStatus;
 import uns.ac.rs.elearningserver.exception.ResourceAlreadyExist;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
-import uns.ac.rs.elearningserver.model.AnswerEntity;
-import uns.ac.rs.elearningserver.model.AnswerHistory;
-import uns.ac.rs.elearningserver.model.QuestionEntity;
-import uns.ac.rs.elearningserver.model.UserEntity;
-import uns.ac.rs.elearningserver.repository.AnswerHistoryRepository;
-import uns.ac.rs.elearningserver.repository.AnswerRepository;
-import uns.ac.rs.elearningserver.repository.QuestionRepository;
-import uns.ac.rs.elearningserver.repository.StatusRepository;
-import uns.ac.rs.elearningserver.repository.TestRepository;
-import uns.ac.rs.elearningserver.repository.UserRepository;
+import uns.ac.rs.elearningserver.model.*;
+import uns.ac.rs.elearningserver.repository.*;
 import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
+import uns.ac.rs.elearningserver.rest.resource.ProblemResource;
 import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,11 +31,13 @@ public class AnswerService {
     @NonNull
     private final QuestionRepository questionRepository;
     @NonNull
-    private final TestRepository testRepository;
-    @NonNull
     private final UserRepository userRepository;
     @NonNull
     private final StatusRepository statusRepository;
+    @NonNull
+    private final KnowledgeSpaceService knowledgeSpaceService;
+    @NonNull
+    private final ProblemRepository problemRepository;
 
 
     @Transactional
@@ -58,7 +55,15 @@ public class AnswerService {
         answer.setMd5H(Md5Generator.generateHash(answer.getId(), Md5Salt.ANSWER));
     }
 
-    public void history(AnswerResource resource){
+
+    @Transactional
+    public void history(List<AnswerResource> resources){
+        for (AnswerResource resource: resources) {
+            response(resource);
+        }
+    }
+
+    public AnswerResource response(AnswerResource resource){
         AnswerEntity answer = answerRepository.findOneByMd5H(resource.getAnswerId()).orElseThrow(() -> new ResourceNotExistException(String.format("Answer %s not found!", resource.getAnswerId()), ErrorCode.NOT_FOUND));
         UserEntity user = userRepository.findOneByMd5H(resource.getUserId()).orElseThrow(() -> new ResourceNotExistException(String.format("User %s not found!", resource.getUserId()), ErrorCode.NOT_FOUND));
         answerHistoryRepository.save(AnswerHistory.builder()
@@ -68,5 +73,22 @@ public class AnswerService {
                 .test(answer.getQuestion().getTest())
                 .date(DateUtil.nowSystemTime())
                 .build());
+
+        List<ProblemEntity> problems = problemRepository.findAllByDomain_Md5HAndStatus_idAndKnowledgeStateContaining(answer.getQuestion().getProblem().getDomain().getMd5H(),
+                                                                                                                     ProblemStatus.ACTIVE.getId(), answer.getQuestion().getProblem().getTitle());
+        /*
+            if answer is correct/wrong, update all problems which are related to that question/problem
+         */
+        for(ProblemEntity problem: problems) {
+            int value = answer.getCorrect() ? 1: -1;
+            problem.setCredibility(problem.getCredibility() + value);
+            problemRepository.save(problem);
+        }
+        knowledgeSpaceService.calculateProbability(answer.getQuestion().getProblem().getDomain().getMd5H());
+        return AnswerResource.builder()
+                .questionId(answer.getQuestion().getMd5H())
+                .problem(ProblemResource.entityToResource(answer.getQuestion().getProblem()))
+                .correct(answer.getCorrect())
+                .build();
     }
 }

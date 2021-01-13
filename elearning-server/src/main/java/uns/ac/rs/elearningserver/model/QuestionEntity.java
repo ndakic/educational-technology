@@ -25,7 +25,6 @@ public class QuestionEntity implements Serializable {
     private long id;
     private String md5H;
     private String text;
-    private Integer position;
     private TestEntity test;
     private ProblemEntity problem;
     private StatusEntity status;
@@ -57,14 +56,6 @@ public class QuestionEntity implements Serializable {
     @XmlElement(name = "p")
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-    @XmlTransient
-    public void setPosition(Integer position) {
-        this.position = position;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

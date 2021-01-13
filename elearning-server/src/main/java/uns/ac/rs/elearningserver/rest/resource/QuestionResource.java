@@ -20,9 +20,10 @@ public class QuestionResource {
     private String id;
     private String text;
     private String testId;
-    private Integer order;
+    private Double probability;
     private ProblemResource problem;
     private List<AnswerResource> answers;
+    private boolean answered;
 
     public static QuestionResource entityToResource(QuestionEntity questionEntity){
         if(ObjectUtils.isEmpty(questionEntity)) { return null; }
@@ -30,7 +31,9 @@ public class QuestionResource {
                 .id(questionEntity.getMd5H())
                 .text(questionEntity.getText())
                 .testId(questionEntity.getTest().getMd5H())
-                .order(questionEntity.getProblem().getOrderValue())
+                .probability(questionEntity.getProblem().getProbability())
+                .problem(ProblemResource.entityToResource(questionEntity.getProblem()))
+                .answered(false)
                 .build();
     }
 }

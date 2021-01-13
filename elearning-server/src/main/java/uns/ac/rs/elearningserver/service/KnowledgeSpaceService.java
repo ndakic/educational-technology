@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.LinkStatus;
+import uns.ac.rs.elearningserver.constant.ProblemStatus;
 import uns.ac.rs.elearningserver.external.FlaskApiService;
 import uns.ac.rs.elearningserver.model.LinkEntity;
 import uns.ac.rs.elearningserver.model.ProblemEntity;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @AllArgsConstructor
@@ -123,5 +125,15 @@ public class KnowledgeSpaceService {
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
+    }
+
+
+    public void calculateProbability(String domainId){
+        List<ProblemEntity> problems = problemRepository.getAllByDomain_Md5HAndStatus_Id(domainId, ProblemStatus.ACTIVE.getId());
+        int totalCredibility = problems.stream().flatMapToInt(problemEntity -> IntStream.of(problemEntity.getCredibility())).sum();
+        for(ProblemEntity problemEntity: problems) {
+            problemEntity.setProbability((double) problemEntity.getCredibility() / totalCredibility * 100);
+            problemRepository.save(problemEntity);
+        }
     }
 }

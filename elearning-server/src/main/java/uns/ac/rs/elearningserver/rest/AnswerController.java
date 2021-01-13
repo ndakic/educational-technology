@@ -28,15 +28,12 @@ public class AnswerController {
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     public ResponseEntity<?> history(@RequestBody AnswerResource resource) {
-        answerService.history(resource);
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.ok(answerService.response(resource));
     }
 
     @RequestMapping(value = "/history/test", method = RequestMethod.POST)
     public ResponseEntity<?> history(@RequestBody List<AnswerResource> resources) {
-        for (AnswerResource resource : resources) {
-            answerService.history(resource);
-        }
+        answerService.history(resources);
         return ResponseEntity.ok(resources);
     }
 }

@@ -13,10 +13,7 @@ import uns.ac.rs.elearningserver.model.ProblemEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.model.TestEntity;
 import uns.ac.rs.elearningserver.repository.*;
-import uns.ac.rs.elearningserver.rest.resource.AnswerResource;
-import uns.ac.rs.elearningserver.rest.resource.QuestionResource;
-import uns.ac.rs.elearningserver.rest.resource.TestResource;
-import uns.ac.rs.elearningserver.rest.resource.UserResource;
+import uns.ac.rs.elearningserver.rest.resource.*;
 import uns.ac.rs.elearningserver.util.DateUtil;
 import uns.ac.rs.elearningserver.util.Md5Generator;
 
@@ -45,8 +42,7 @@ public class TestService {
     private final UserRepository userRepository;
 
     public TestResource get(String testId){
-        TestEntity testEntity = testRepository.getOnyByMd5H(testId).orElseThrow(() ->
-                new ResourceNotExistException(String.format("Test with %s not found!", testId), ErrorCode.NOT_FOUND));
+        TestEntity testEntity = testRepository.getOnyByMd5H(testId).orElseThrow(() -> new ResourceNotExistException(String.format("Test with %s not found!", testId), ErrorCode.NOT_FOUND));
         return TestResource.builder()
                 .id(testEntity.getMd5H())
                 .title(testEntity.getTitle())
@@ -59,7 +55,8 @@ public class TestService {
                                 .id(questionEntity.getMd5H())
                                 .text(questionEntity.getText())
                                 .testId(questionEntity.getTest().getMd5H())
-                                .order(questionEntity.getProblem().getOrderValue())
+                                .probability(questionEntity.getProblem().getProbability())
+                                .problem(ProblemResource.entityToResource(questionEntity.getProblem()))
                                 .answers(questionEntity.getAnswers()
                                         .stream()
                                         .map(answerEntity -> AnswerResource.builder()
@@ -69,7 +66,7 @@ public class TestService {
                                                 .build())
                                         .collect(Collectors.toList()))
                                 .build())
-                        .sorted(Comparator.comparingInt(QuestionResource::getOrder))
+                        .sorted(Comparator.comparingDouble(QuestionResource::getProbability))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -77,7 +74,6 @@ public class TestService {
     @Transactional
     public void delete(String testId){
         TestEntity testEntity = testRepository.getOnyByMd5H(testId).get();
-
         for (QuestionEntity q: testEntity.getQuestions()) {
             for (AnswerEntity a : q.getAnswers()) {
                 answerRepository.deleteByMd5H(a.getMd5H());
@@ -88,7 +84,6 @@ public class TestService {
     }
 
     public List<TestResource> getAll(){
-
         return testRepository.findAll()
                 .stream()
                 .map(testEntity -> TestResource.builder()
@@ -153,5 +148,4 @@ public class TestService {
         resource.setId(test.getMd5H());
         return resource;
     }
-
 }

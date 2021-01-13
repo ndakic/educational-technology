@@ -21,7 +21,11 @@ public class ProblemEntity implements Serializable {
     private DomainEntity domain;
     private StatusEntity status;
     private Boolean reflexive;
-    private Integer orderValue;
+    private Integer credibility;
+    private Double probability;
+    private String knowledgeState; // Note: This will be array of strings - bad practice but good enough for now
+    private Double x;
+    private Double y;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "problem_id_seq")
@@ -78,11 +82,44 @@ public class ProblemEntity implements Serializable {
         this.status = status;
     }
 
-    public Integer getOrderValue() {
-        return orderValue;
+    public Double getProbability() {
+        return probability;
     }
 
-    public void setOrderValue(Integer orderValue) {
-        this.orderValue = orderValue;
+    public void setProbability(Double probability) {
+        this.probability = probability;
+    }
+
+    @Column(length = 5000)
+    public String getKnowledgeState() {
+        return knowledgeState;
+    }
+
+    public void setKnowledgeState(String knowledgeState) {
+        this.knowledgeState = knowledgeState;
+    }
+
+    public Integer getCredibility() {
+        return credibility;
+    }
+
+    public void setCredibility(Integer credibility) {
+        this.credibility = credibility;
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
     }
 }

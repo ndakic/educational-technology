@@ -2,6 +2,7 @@ package uns.ac.rs.elearningserver.rest.resource;
 
 import lombok.*;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import uns.ac.rs.elearningserver.model.ProblemEntity;
 
 @Getter
@@ -16,8 +17,12 @@ public class ProblemResource {
     private String title;
     private QuestionResource question;
     private StatusResource status;
-    private Integer order;
+    private Integer credibility;
+    private Double probability;
     private DomainResource domain;
+    private String[] knowledgeState;
+    private Double x;
+    private Double y;
 
     public static ProblemResource entityToResource(ProblemEntity problemEntity){
         if(ObjectUtils.isEmpty(problemEntity)) { return null; }
@@ -26,12 +31,16 @@ public class ProblemResource {
                 .md5h(problemEntity.getMd5H())
                 .reflexive(problemEntity.getReflexive())
                 .title(problemEntity.getTitle())
-                .order(problemEntity.getOrderValue())
+                .credibility(problemEntity.getCredibility())
+                .probability(problemEntity.getProbability())
                 .status(StatusResource.entityToResource(problemEntity.getStatus()))
                 .domain(DomainResource.builder()
                         .id(!ObjectUtils.isEmpty(problemEntity.getDomain()) ? problemEntity.getDomain().getMd5H(): null)
                         .title(!ObjectUtils.isEmpty(problemEntity.getDomain()) ? problemEntity.getDomain().getTitle(): null)
                         .build())
+                .knowledgeState(StringUtils.isEmpty(problemEntity.getKnowledgeState()) ? null: problemEntity.getKnowledgeState().split(","))
+                .x(problemEntity.getX())
+                .y(problemEntity.getY())
                 .build();
     }
 }

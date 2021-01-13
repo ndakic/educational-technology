@@ -2,6 +2,7 @@ package uns.ac.rs.elearningserver.rest;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uns.ac.rs.elearningserver.rest.resource.ProblemResource;

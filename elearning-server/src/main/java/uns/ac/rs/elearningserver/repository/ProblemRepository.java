@@ -19,4 +19,8 @@ public interface ProblemRepository extends JpaRepository<ProblemEntity, Long> {
             "               INNER JOIN QuestionEntity question on question.problem.id = problem.id" +
             "           WHERE question.test.md5H = :testId")
     List<ProblemEntity> findAllProblemsByTest(String testId);
+
+    List<ProblemEntity> getAllByDomain_Md5HAndStatus_Id(String domainId, Long statusId);
+
+    List<ProblemEntity> findAllByDomain_Md5HAndStatus_idAndKnowledgeStateContaining(String domainId, Long statusId, String title);
 }
