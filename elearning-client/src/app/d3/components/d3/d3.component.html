@@ -9,10 +9,13 @@
             #graphContainer>
             </svg>
       </div>
-      <div class="input-container" *ngIf='(selectedNode != null || selectedLink != null) && editable'>
-            <div class="form-group main mt-20">
-                  Title: <input type="text" [(ngModel)]="selectedNode.title" (focus)="onFocus()" (focusout)="focusout()" name="title"> <br> <br>
-                  Order: <span>{{selectedNode.order}}</span>
+      <div class="input-container">
+            <div class="form-group main mt-20" *ngIf='(selectedNode != null) && editable'>
+                  Title: <input type="text" [(ngModel)]="selectedNode.title" (focus)="onFocus()" name="title"> <br> <br>
+                  Credibility: <span>{{selectedNode.credibility}}</span> <br> <br>
+                  Probability: <span>{{selectedNode.probability}}%</span> <br> <br>
+                  Knowledge state: <span>{{selectedNode.knowledgeState}}</span><br>
+                  <button class="mt-20" mat-raised-button (click)="confirm()">Confirm</button>
             </div>
       </div>
 </div>

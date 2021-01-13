@@ -16,4 +16,8 @@ export class AnswerService {
     return this.http.post(environment.apiUrlPrefix + `/answer/history/test`, answers);
   }
 
+  submitAnswer(answer: any): Observable<any>{
+    return this.http.post(environment.apiUrlPrefix + `/answer/history`, answer);
+  }
+
 }

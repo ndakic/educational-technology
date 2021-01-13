@@ -69,12 +69,9 @@ export class D3Component implements AfterViewInit, OnInit {
       this.graphSimilarityPercent = this.data['compare']['graphSimilarityPercent'];
     }
     this.lastNodeId = this.nodes ? this.nodes.length: 0;
-    console.log("nodes: ", this.nodes);
-    console.log("links: ", this.links);
   }
 
   ngAfterViewInit() {
-    console.log('nodes: ', this.nodes);
     const rect = this.graphContainer.nativeElement.getBoundingClientRect();
     this.width = rect.width;
     this.svg = d3.select('#graphContainer')
@@ -91,8 +88,8 @@ export class D3Component implements AfterViewInit, OnInit {
     this.drag = d3.drag()
       .on('start', (d: any) => {
         if (!d3.event.active) this.force.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
+        // d.fx = d.x;
+        // d.fy = d.y;
       })
       .on('drag', (d: any) => {
         d.fx = d3.event.x;
@@ -170,7 +167,6 @@ export class D3Component implements AfterViewInit, OnInit {
 
   // update graph (called when needed)
   public restart() {
-    // console.log("-- Restart");
     // path (link) group
     this.path = this.path.data(this.links);
     // update existing links
@@ -191,6 +187,7 @@ export class D3Component implements AfterViewInit, OnInit {
         this.mousedownLink = d;
         this.selectedLink = (this.mousedownLink === this.selectedLink) ? null : this.mousedownLink;
         this.selectedNode = null;
+        console.log('selected link: ', this.selectedLink);
         this.restart();
       })
       .merge(this.path);
@@ -236,9 +233,6 @@ export class D3Component implements AfterViewInit, OnInit {
         this.restart();
       })
       .on('mouseup', (dataItem: any) => {
-        console.log('\tSelected Node setted: ', this.selectedNode);
-        
-
         // debugger;
         if (!this.mousedownNode || !this.editable) return;
 
@@ -253,39 +247,36 @@ export class D3Component implements AfterViewInit, OnInit {
           this.resetMouseVars();
           return;
         }
-        console.log('\tMouse Up Node: ', this.mouseupNode);
         // unenlarge target node
         d3.select(d3.event.currentTarget).attr('transform', '');
 
         // add link to graph (update if exists)
         // NB: links are strictly source < target; arrows separately specified by booleans
         // const isRight = this.mousedownNode.id < this.mouseupNode.id;
+        const link = this.links.filter((l) => l.source === source && l.target === target)[0];
         const source = this.mousedownNode;
         const target = this.mouseupNode;
-        const link = this.links.filter((l) => l.source === source && l.target === target)[0];
-        if (link) {
-          // link[isRight ? 'right' : 'left'] = true;
-          // link['right'] = true;
-        } else {
-          console.log('source: ', source.title, " target: ", target.title);
-          console.log('source order: ', source.order, " target order: ", target.order);
-          if(source.order <= target.order || (source.order > target.order && target.order === 0)) {
-            if(source.order === 0) {
-              source.order += 1;
-            }
-            target.order += source.order + 1;
-            const _link = { source, target, left: false, right: true };
-            this.links.push(_link);
-            this.linkService.save(_link).subscribe(response => {
-              _link['md5h'] = response['md5h'];
-              this.links[this.links.length-1] = _link;
-              console.log('Link successfully saved: ', _link);
-            });
-            this.updateNode(source);
-            this.updateNode(target);
-          }
+        if(!this.checkLinkConnection(target.title, source.knowledgeState)){
+          target.knowledgeState = target.knowledgeState.concat(source.knowledgeState);
+          target.knowledgeState = this.removeDuplicates(target.knowledgeState);
+          const _link = { source, target, left: false, right: true };
+          this.links.push(_link);
+          this.linkService.save(_link).subscribe(response => {
+            _link['md5h'] = response['md5h'];
+            this.links[this.links.length-1] = _link;
+          });
+          this.links.forEach(element => {
+              console.log(element.source.md5h, target.md5h);
+              if (element.source.md5h === target.md5h) {
+                console.log(element.target);
+                element.target.knowledgeState = element.target.knowledgeState.concat(element.source.knowledgeState);
+                element.target.knowledgeState = this.removeDuplicates(element.target.knowledgeState);
+                this.updateNode(element.target);
+              }
+          });
+          this.updateNode(source);
+          this.updateNode(target);
         }
-
         // select new link
         this.selectedLink = link;
         this.selectedNode = null;
@@ -304,24 +295,30 @@ export class D3Component implements AfterViewInit, OnInit {
       .nodes(this.nodes)
       .force('link').links(this.links);
 
-    this.force.alphaTarget(0.3).restart();
+    this.force.alphaTarget(0.00001).restart();
   }
 
   mousedown(dataItem: any, value: any, source: any) {
     // because :active only works in WebKit?
     this.svg.classed('active', true);
-    console.log('Editable: ', this.editable);
     if (d3.event.ctrlKey || this.mousedownNode || this.mousedownLink || !this.editable) return;
 
     // insert new node at point
     const point = d3.mouse(d3.event.currentTarget);
     // const point = d3.mouse(this);
-    const node = { id: ++this.lastNodeId, reflexive: false, x: point[0], y: point[1], title: "title", order: 0, domain: { id: this.data['domain']['id']}};
-    console.log('new node: ', node);
+    const node = { id: ++this.lastNodeId, 
+                   reflexive: false, 
+                   x: point[0], y: point[1], 
+                   title: "node",
+                   credibility: 100,
+                   probability: 0.0, 
+                   domain: { id: this.data['domain']['id']},
+                   knowledgeState: []};
+    node.knowledgeState.push(node.title);
     this.nodes.push(node);
     this.problemService.save(node).subscribe(response => {
       this.nodes[this.nodes.length-1]['md5h'] = response['md5h'];
-      console.log('Problem succesfully saved: ', node);
+      this.loadAndUpdateProblems(this.data['domain']['id']);
     });
     this.restart();
   }
@@ -356,10 +353,6 @@ export class D3Component implements AfterViewInit, OnInit {
   }
 
   public keydown(event) {
-    console.log('Key Down: ', d3.event.keyCode);
-    console.log("\tSelected node: ", this.selectedNode);
-    console.log("\ttitleInputFocus node: ", this.titleInputFocus);
-    console.log("\tastKeyDown: ", this.lastKeyDown);
     if(this.titleInputFocus || !this.editable) {return;}
     // console.log("\tLast key Down: ", this.lastKeyDown);
     d3.event.preventDefault();
@@ -371,27 +364,26 @@ export class D3Component implements AfterViewInit, OnInit {
       // this.circle.call(this.drag);
       // this.svg.classed('ctrl', true);
     }
-    console.log('\tselected node: ', this.selectedNode);
-    console.log('\tselected link: ', this.selectedLink);
     // if (!this.selectedNode && !this.selectedLink) return;
     switch (d3.event.keyCode) {
       case 8: // backspace
       case 46: // delete
-        console.log('\tdelete case');
         if (this.selectedNode) {
           this.nodes.splice(this.nodes.indexOf(this.selectedNode), 1);
           this.spliceLinksForNode(this.selectedNode);
           this.problemService.delete(this.selectedNode.md5h).subscribe(response => {
             console.log('Problem successfully deleted! ', this.selectedNode);
             this.deleteLinksWithoutNode(response['md5h']);
+            this.loadAndUpdateProblems(this.data['domain']['id']);
           });
         } else if (this.selectedLink) {
-          console.log('target order: ', this.selectedLink.target.order, ' source order: ', this.selectedLink.source.order);
-          if (this.selectedLink.source.order > this.selectedLink.target.order){
-            this.nodes[this.nodes.indexOf(this.selectedLink.target)].order = 0;
-          } else {
-            this.nodes[this.nodes.indexOf(this.selectedLink.target)].order -= this.selectedLink.source.order;
-          }
+          console.log('delete selected link: ', this.selectedLink);
+          // remove deleted (source) nodes from target node
+          var targetNodeIndex = this.nodes.findIndex(item => item.md5h === this.selectedLink.target.md5h);
+          this.selectedLink.source.knowledgeState.forEach(element => {
+            this.nodes[targetNodeIndex].knowledgeState.splice(this.selectedLink.target.knowledgeState.indexOf(element), 1);
+          });
+          this.updateNode(this.nodes[targetNodeIndex]);  
           this.links.splice(this.links.indexOf(this.selectedLink), 1);
           this.linkService.delete(this.selectedLink.md5h).subscribe(response => {
             console.log("Link successfully deleted!");
@@ -432,7 +424,6 @@ export class D3Component implements AfterViewInit, OnInit {
   }
 
   keyup() {
-    console.log('Key Up: ', d3.event.keyCode);
     this.lastKeyDown = -1;
     // ctrl
     // if (d3.event.keyCode === 17) {
@@ -470,15 +461,17 @@ export class D3Component implements AfterViewInit, OnInit {
     this.titleInputFocus = true;
   }
 
-  public focusout(){
+  public confirm(){
+    this.selectedNode.knowledgeState[0] = this.selectedNode.title;
     this.problemService.update(this.selectedNode).subscribe(response => {
       // update text of node
       this.circle.select("text")
-        .text(function(d) { console.log('title: ', d.title); return d.title; })
+        .text(function(d) { return d.title; })
         .style("fill-opacity", 1);
       this.nodes[this.nodes.indexOf(this.selectedNode)].title = response['title'];
+      this.nodes[this.nodes.indexOf(this.selectedNode)].knowledgeState[0] = response['title'];
       this.titleInputFocus = false;
-      // this.selectedNode = null;
+      this.selectedNode = null;
     });
   }
 
@@ -488,7 +481,29 @@ export class D3Component implements AfterViewInit, OnInit {
     });
   }
 
-  back() {
+  back(){
     this._location.back();
+  }
+
+  removeDuplicates(array){
+    return array.filter((a, b) => array.indexOf(a) == b);
+  }
+
+  checkLinkConnection(sourceTitle, targetKnowledgeList){
+    for(let title in targetKnowledgeList){
+      if(targetKnowledgeList[title] === sourceTitle){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  loadAndUpdateProblems(domainId: string){
+    this.problemService.getProblemsByDomainId(domainId).subscribe((problems: any) => {
+      problems.forEach(element => {
+        this.nodes[this.nodes.findIndex(item => item.md5h == element.md5h)].probability = element.probability;
+        this.nodes[this.nodes.findIndex(item => item.md5h == element.md5h)].credibility = element.credibility;
+      });
+    });
   }
 }

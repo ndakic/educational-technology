@@ -17,6 +17,7 @@ export class FillTestComponent implements OnInit {
 
   public test: any;
   public answers: Array<string> = [];
+  public selectedAnswer: any;
 
   constructor(private answerService: AnswerService, private route: ActivatedRoute, private router: Router) {
   }
@@ -45,7 +46,7 @@ export class FillTestComponent implements OnInit {
     }
     this.answerService.submitAnswers(answers).subscribe(
       response => {
-        this.router.navigate(['/test/preview'])
+        this.router.navigate(['/'])
         .then(success => console.log('navigation success?' , success))
         .catch(console.error); 
       },
@@ -53,6 +54,36 @@ export class FillTestComponent implements OnInit {
         console.log(error)
         alert("Error occured: " + error);
       });
+  }
+
+  setAnswer(checked, answer){
+    if(checked) {
+      this.selectedAnswer = answer;
+      console.log(checked, answer);
+    }
+  }
+
+  submitAnswer(question){
+    var answer = new Answer();
+    answer.answerId = this.selectedAnswer.answerId;
+    this.answerService.submitAnswer(answer).subscribe((response: any) => {
+      /*
+        if answer is wrong, remove questions
+      */
+      if(!response.correct) {
+        this.removeSubQuestions(response['problem']['title']);
+      }
+      question.answered = true;
+    })
+  }
+
+  removeSubQuestions(title: string){
+    this.test.questions.forEach(element => {
+      if(element['problem']['knowledgeState'].includes(title) && element['id'] !== this.selectedAnswer['questionId']) {
+        const index = this.test.questions.indexOf(element);
+        this.test.questions.splice(index, 1);
+      }
+    });
   }
 
 }
