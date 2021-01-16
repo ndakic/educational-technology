@@ -65,6 +65,7 @@ public class TestService {
                                 .build())
                         .sorted(Comparator.comparingDouble(QuestionResource::getProbability).reversed())
                         .collect(Collectors.toList()))
+                .domain(DomainResource.entityToResource(testEntity.getDomain()))
                 .build();
     }
 

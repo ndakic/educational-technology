@@ -12,3 +12,8 @@
 .ml-20 {
     margin-left: 20px !important;
 }
+
+.ks-button {
+    display: flex;
+    justify-content: end;
+}

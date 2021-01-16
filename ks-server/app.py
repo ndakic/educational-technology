@@ -17,7 +17,7 @@ def get_knowledge_space():
 	data = request.get_json(force=True)
 	result = calc_knowledge_space(data)
 	print(result)
-	ks = result['implications'];
+	ks = result['implications']
 	print("Knowledge Space: ", ks)
 	return jsonify(ks)
 

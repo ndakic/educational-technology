@@ -16,7 +16,9 @@ import uns.ac.rs.elearningserver.repository.TestRepository;
 import uns.ac.rs.elearningserver.rest.resource.KnowledgeSpaceGraphResource;
 import uns.ac.rs.elearningserver.rest.resource.LinkResource;
 import uns.ac.rs.elearningserver.rest.resource.ProblemResource;
+import uns.ac.rs.elearningserver.util.FileUtil;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -53,6 +55,19 @@ public class KnowledgeSpaceService {
         Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(map);
         return getKnowledgeSpaceGraphResource(knowledgeSpace, testId);
     }
+
+    public KnowledgeSpaceGraphResource getDefaultKnowledgeSpace(String testId) {
+        try {
+            InputStream initialStream = new FileInputStream("files/pisa.txt");
+            Map<String, int[]> result = FileUtil.readFromInputStream(initialStream);
+            Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(result);
+            return getKnowledgeSpaceGraphResource(knowledgeSpace, testId);
+        } catch (IOException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+        return new KnowledgeSpaceGraphResource();
+    }
+
 
     public KnowledgeSpaceGraphResource getKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId){
         List<LinkEntity> links = new ArrayList<>();

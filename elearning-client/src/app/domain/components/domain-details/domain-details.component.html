@@ -14,9 +14,7 @@
                     <mat-card-title><a href="/test/{{test.id}}/details">{{test.title}}</a></mat-card-title>
                     <mat-card-subtitle>{{test.startDate | date}} - {{test.endDate | date}}</mat-card-subtitle>
                     <mat-card-content class="test-body-content">
-                        <a href="/ks/{{test.id}}">Real Knowledge Space</a>
-                        <a class="mt-10" href="/compare-graphs/{{test.id}}">Compared Teacher's and Real Knowledge Space</a>
-                        <a class="mt-10" href="" (click)="export(test.id)">Export in IMS QTI</a>
+                        <button class="mt-10 export-button" mat-raised-button color="primary" (click)="export(test.id)">Export in IMS QTI</button>
                     </mat-card-content>
                 </mat-card>
             </div>

@@ -26,4 +26,9 @@ public class KnowledgeSpaceController {
     public ResponseEntity<?> compareGraphs(@PathVariable String testId){
         return ResponseEntity.ok(knowledgeSpaceService.compareGraphs(testId));
     }
+
+    @RequestMapping(value = "/default/{testId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getDefaultKS(@PathVariable String testId){
+        return ResponseEntity.ok(knowledgeSpaceService.getDefaultKnowledgeSpace(testId));
+    }
 }

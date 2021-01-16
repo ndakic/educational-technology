@@ -71,19 +71,15 @@ export class FillTestComponent implements OnInit {
     answer.answerId = this.selectedAnswer.answerId;
     answer.questionId = question.id;
     this.answerService.submitAnswer(answer).subscribe((response: any) => {
-      /*
-        if answer is wrong, remove questions
-      */
-      if(!response.correct) {
-        this.removeSubQuestions(response['problem']['title']);
-      }
       question.answered = true;
     })
   }
 
+  /*
+    Deprecated
+  */
   removeSubQuestions(title: string){
     this.test.questions.forEach(question => {
-      console.log("\t ", question['problem']['knowledgeState'], " ", title)
       if(question['problem']['knowledgeState'].includes(title) && question['id'] !== this.selectedAnswer['questionId']) {
         this.answerService.rejectedQuestion(question['id'], '5bc67bef74afd2fb0f5a370d72b1c913').subscribe(response => {
           const index = this.test.questions.indexOf(question);

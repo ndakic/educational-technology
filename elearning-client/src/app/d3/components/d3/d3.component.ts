@@ -1,9 +1,12 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
 import { ProblemService } from 'src/app/domain/services/problem.service';
 import { LinkService } from 'src/app/domain/services/link.service';
 import { Location } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
+import { CompareGraphsService } from 'src/app/compare-graphs/services/compare-graph.service';
+import { KsService } from 'src/app/knowledge-space/services/ks.service';
 
 @Component({
   selector: 'app-d3',
@@ -14,6 +17,11 @@ export class D3Component implements AfterViewInit, OnInit {
 
   title = 'ng-d3-graph-editor';
   @ViewChild('graphContainer') graphContainer: ElementRef;
+
+  @Input() events: Observable<void>;
+  public eventsSubscription: Subscription;
+  public selectedKs: string;
+  public testId: string;
 
   width = 960;
   height = 600;
@@ -42,31 +50,28 @@ export class D3Component implements AfterViewInit, OnInit {
   public nodes = [];
   public links = [];
   public data: any;
-  public editable = true;
+  public editable = false;
 
   constructor(
     private route: ActivatedRoute,
     private problemService: ProblemService,
     private linkService: LinkService,
-    private _location: Location
+    private _location: Location,
+    private comparedKsService: CompareGraphsService,
+    private realKsService: KsService
   ) {}
 
   ngOnInit(){
+    console.log('Data: ', this.route.snapshot.data["data"]);
+    if(this.events) {
+      this.eventsSubscription = this.events.subscribe(response => this.updateKS(response));
+      this.testId = this.route.snapshot.data["data"]['test']['id'];
+    }
     this.data = this.route.snapshot.data["data"];
     if(this.data['domain']) {
+      this.editable = true;
       this.nodes = this.data['domain']['problems'];
       this.links = this.data['domain']['links'];
-    }
-    if(this.data['ks']) {
-      this.nodes = this.data['ks']['problems'];
-      this.links = this.data['ks']['links'];
-      this.editable = false;
-    }
-    if(this.data['compare']) {
-      this.nodes = this.data['compare']['problems'];
-      this.links = this.data['compare']['links'];
-      this.editable = false;
-      this.graphSimilarityPercent = this.data['compare']['graphSimilarityPercent'];
     }
     this.lastNodeId = this.nodes ? this.nodes.length: 0;
   }
@@ -506,4 +511,39 @@ export class D3Component implements AfterViewInit, OnInit {
       });
     });
   }
+
+  updateKS(object) {
+    this.editable = false;
+    this.selectedKs = object.ks;
+    switch(this.selectedKs){
+      case "default":
+        this.realKsService.getDefaultKnowledgeSpaceByTestId(this.testId).subscribe((response: any) => {
+          this.nodes = response['problems'];
+          this.links = response['links'];
+          this.restart();
+        });
+        break;
+      case "real":
+        this.realKsService.getRealKnowledgeSpaceByTestId(this.testId).subscribe((response: any) => {
+          this.nodes = response['problems'];
+          this.links = response['links'];
+          this.graphSimilarityPercent = response['graphSimilarityPercent'];
+          this.restart();
+        });
+        break;
+      case "compared":
+        this.comparedKsService.getComparedGraphByTestId(this.testId).subscribe((response: any) => {
+          this.nodes = response['problems'];
+          this.links = response['links'];
+          this.graphSimilarityPercent = response['graphSimilarityPercent'];
+          this.restart();
+        });
+        break;
+      default:
+        this.nodes = [];
+        this.links = [];
+        this.graphSimilarityPercent = null;
+    }
+  }
+
 }

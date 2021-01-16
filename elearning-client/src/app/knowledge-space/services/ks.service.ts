@@ -11,8 +11,12 @@ export class KsService {
     private http: HttpClient
   ) {}
 
-  getKnowledgeSpaceByTestId(testId: string) {
+  getRealKnowledgeSpaceByTestId(testId: string) {
     return this.http.get(environment.apiUrlPrefix + `/knowledge-space/${testId}`);
+  }
+
+  getDefaultKnowledgeSpaceByTestId(testId: string) {
+    return this.http.get(environment.apiUrlPrefix + `/knowledge-space/default/${testId}`);
   }
 
 }

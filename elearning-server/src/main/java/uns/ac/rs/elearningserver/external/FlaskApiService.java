@@ -13,8 +13,8 @@ public class FlaskApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String KNOWLEDGE_SPACE_API_URL = "http://172.17.0.1:5000";
-//    private static final String KNOWLEDGE_SPACE_API_URL = "http://localhost:5000";
+//    private static final String KNOWLEDGE_SPACE_API_URL = "http://172.17.0.1:5000";
+    private static final String KNOWLEDGE_SPACE_API_URL = "http://localhost:5000";
 
     public Integer[][] getKnowledgeSpace(Map<String, int[]> testAnswers){
         ResponseEntity<Integer[][]> response = restTemplate.postForEntity

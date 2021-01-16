@@ -7,4 +7,18 @@
             <a mat-raised-button color="primary" href="/test/{{test.id}}/fill">Start Test</a>
         </div>
     </mat-card>
+    <div class="ks-button mt-20">
+        <mat-form-field appearance="fill">
+            <mat-label>Select an option</mat-label>
+            <mat-select [(value)]="selected" (selectionChange)="emitEventToChild($event)">
+              <mat-option value="default">Default KS</mat-option>
+              <mat-option value="real">Real KS</mat-option>
+              <mat-option value="compared">Compared KS</mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <app-d3 [events]="eventsSubject.asObservable()"></app-d3>
 </div>
+
+
+  

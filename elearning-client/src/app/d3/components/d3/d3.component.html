@@ -1,6 +1,6 @@
-<button class="ml-20" mat-raised-button (click)="back()">Back</button>
+<button *ngIf="editable" class="ml-20" mat-raised-button (click)="back()">Back</button>
 <p class="center" *ngIf="graphSimilarityPercent">Similarity: {{graphSimilarityPercent | number:'1.1-2'}} %</p>
-<div class="editor-container">
+<div class="editor-container mb-50">
       <div class="editor">
             <svg id="graphContainer"
             width="100%"
