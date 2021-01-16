@@ -520,6 +520,7 @@ export class D3Component implements AfterViewInit, OnInit {
         this.realKsService.getDefaultKnowledgeSpaceByTestId(this.testId).subscribe((response: any) => {
           this.nodes = response['problems'];
           this.links = response['links'];
+          this.graphSimilarityPercent = null;
           this.restart();
         });
         break;
@@ -527,7 +528,7 @@ export class D3Component implements AfterViewInit, OnInit {
         this.realKsService.getRealKnowledgeSpaceByTestId(this.testId).subscribe((response: any) => {
           this.nodes = response['problems'];
           this.links = response['links'];
-          this.graphSimilarityPercent = response['graphSimilarityPercent'];
+          this.graphSimilarityPercent = null;
           this.restart();
         });
         break;

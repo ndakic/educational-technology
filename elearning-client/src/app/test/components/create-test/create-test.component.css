@@ -12,3 +12,23 @@
 .test-question-answer {
     margin-left:100px;
 }
+
+.error {
+    color: red;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.ml-20 {
+    margin-left: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}

@@ -1,4 +1,6 @@
+<button class="mt-20 ml-20" mat-raised-button (click)="back()">Back</button>
 <div class="create-test-container">
+    <h1 class="error" *ngIf="testErrorMessage"> Please first create at least 5 problems in Knowledge Space Editor! </h1>
     <h1>
         New Test
     </h1>

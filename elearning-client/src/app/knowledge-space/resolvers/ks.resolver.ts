@@ -14,7 +14,7 @@ export class KSResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     const testId = route.paramMap.get('testId');
     const response = forkJoin([
-      this.ksService.getKnowledgeSpaceByTestId(testId)
+      this.ksService.getRealKnowledgeSpaceByTestId(testId)
     ]);
     return new Observable(observer => {
       response.subscribe((data: any) => {
