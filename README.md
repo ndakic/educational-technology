@@ -42,11 +42,17 @@ Supported applications are:
 ### Bring down specific service with command:
     docker-compose down [SERVICE_NAME]
 
-## Knowledge Space Editor
-![Screenshot](files/knowledge-space-editor.png)
 
-## Generated Real Knowledge Space
-![Screenshot](files/real-knowledge-space.png)
+Domain List            |  Domain Details
+:-------------------------:|:-------------------------:
+![Screenshot](files/domain-list.png)  |  ![Screenshot](files/domain-details.png)
 
-## Compared Spaces - Similarity
-![Screenshot](files/compared-spaces.png)
+
+Test Details            |  Taking the Test
+:-------------------------:|:-------------------------:
+![Screenshot](files/test-details.png) | ![Screenshot](files/test-taking.png)
+
+
+Knowledge Space Editor            |  Real Knowledge Space          |  Compared Spaces - Teachers and Real 
+:-------------------------:|:-------------------------:|:-------------------------:
+![Screenshot](files/knowledge-space-editor.png) | ![Screenshot](files/real-knowledge-space.png) | ![Screenshot](files/compared-spaces.png)
