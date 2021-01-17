@@ -42,6 +42,7 @@ Supported applications are:
 ### Bring down specific service with command:
     docker-compose down [SERVICE_NAME]
 
+## Screenshots
 
 Domain List            |  Domain Details
 :-------------------------:|:-------------------------:
@@ -53,6 +54,6 @@ Test Details            |  Taking the Test
 ![Screenshot](files/test-details.png) | ![Screenshot](files/test-taking.png)
 
 
-Knowledge Space Editor            |  Real Knowledge Space          |  Compared Spaces - Teachers and Real 
+Knowledge Space Editor            |  Real Knowledge Space          |  Teacher's vs Real KS
 :-------------------------:|:-------------------------:|:-------------------------:
 ![Screenshot](files/knowledge-space-editor.png) | ![Screenshot](files/real-knowledge-space.png) | ![Screenshot](files/compared-spaces.png)
