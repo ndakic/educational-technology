@@ -59,6 +59,14 @@ export class FillTestComponent implements OnInit {
       });
   }
 
+
+  back() {
+    this._location.back();
+  }
+
+  /*
+    Deprecated
+  */
   setAnswer(checked, answer){
     if(checked) {
       this.selectedAnswer = answer;
@@ -66,6 +74,9 @@ export class FillTestComponent implements OnInit {
     }
   }
 
+  /*
+    Deprecated
+  */
   submitAnswer(question){
     var answer = new Answer();
     answer.answerId = this.selectedAnswer.answerId;
@@ -89,8 +100,5 @@ export class FillTestComponent implements OnInit {
     });
   }
 
-  back() {
-    this._location.back();
-  }
 
 }

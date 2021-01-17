@@ -75,7 +75,7 @@ public class AnswerService {
                 .date(DateUtil.nowSystemTime())
                 .build());
 
-        Optional<QuestionEntity> questionEntity = questionRepository.getOneByMd5H(resource.getQuestionId());
+        Optional<QuestionEntity> questionEntity = questionRepository.getOneByMd5H(answer.getQuestion().getMd5H());
         List<ProblemEntity> problems = problemRepository.findAllByDomain_Md5HAndStatus_idAndKnowledgeStateContaining(answer.getQuestion().getProblem().getDomain().getMd5H(),
                                        ProblemStatus.ACTIVE.getId(), answer.getQuestion().getProblem().getTitle())
                 .stream()

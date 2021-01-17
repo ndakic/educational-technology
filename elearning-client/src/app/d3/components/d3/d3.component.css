@@ -68,6 +68,7 @@
 
   .editor-container {
     display: flex;
+    flex-direction: column;
   }
 
   .input-container{

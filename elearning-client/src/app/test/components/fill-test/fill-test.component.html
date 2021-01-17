@@ -7,11 +7,13 @@
     <div *ngFor="let question of test.questions; let i = index" class="test-question">
         {{question.text}}
         <div *ngFor="let answer of question.answers; let j = index" class="test-question-answer">
-            <mat-checkbox color="primary" (change)="setAnswer($event, answer)">{{answer.text}}</mat-checkbox>
+            <mat-checkbox color="primary" (change)="addOrRemoveAnswer($event, answer.answerId)">{{answer.text}}</mat-checkbox>
         </div>
-        <button *ngIf="!question.answered" class="confirm-answer" mat-raised-button color="primary" (click)="submitAnswer(question)">
-            Confirm
-        </button>
     </div>
     <br>
+    <div>
+        <button mat-raised-button color="primary" (click)="submitAnswers()">
+            Finish
+        </button>
+    </div>
 </div>
