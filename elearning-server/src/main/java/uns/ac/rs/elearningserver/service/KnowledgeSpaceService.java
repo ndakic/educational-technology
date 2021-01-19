@@ -3,8 +3,10 @@ package uns.ac.rs.elearningserver.service;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+import uns.ac.rs.elearningserver.constant.ErrorCode;
 import uns.ac.rs.elearningserver.constant.LinkStatus;
 import uns.ac.rs.elearningserver.constant.ProblemStatus;
+import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
 import uns.ac.rs.elearningserver.external.FlaskApiService;
 import uns.ac.rs.elearningserver.model.LinkEntity;
 import uns.ac.rs.elearningserver.model.ProblemEntity;
@@ -18,8 +20,15 @@ import uns.ac.rs.elearningserver.rest.resource.LinkResource;
 import uns.ac.rs.elearningserver.rest.resource.ProblemResource;
 import uns.ac.rs.elearningserver.util.FileUtil;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -41,7 +50,7 @@ public class KnowledgeSpaceService {
     @NonNull
     private final LinkRepository linkRepository;
 
-    public KnowledgeSpaceGraphResource getKnowledgeSpace(String testId){
+    public KnowledgeSpaceGraphResource getKnowledgeSpace(String testId, boolean graphComparing){
         List<Long> questions = answerHistoryRepository.findAllQuestionsByTest_Md5H(testId);
         Map<String, int[]> map = new HashMap<>();
         for(Long question: questions) {
@@ -53,7 +62,7 @@ public class KnowledgeSpaceService {
         }
         if(map.isEmpty()) { return new KnowledgeSpaceGraphResource();}
         Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(map);
-        return getKnowledgeSpaceGraphResource(knowledgeSpace, testId);
+        return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, graphComparing);
     }
 
     public KnowledgeSpaceGraphResource getDefaultKnowledgeSpace(String testId) {
@@ -61,7 +70,7 @@ public class KnowledgeSpaceService {
             InputStream initialStream = new FileInputStream("files/pisa.txt");
             Map<String, int[]> result = FileUtil.readFromInputStream(initialStream);
             Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(result);
-            return getKnowledgeSpaceGraphResource(knowledgeSpace, testId);
+            return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, false);
         } catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
@@ -69,18 +78,52 @@ public class KnowledgeSpaceService {
     }
 
 
-    public KnowledgeSpaceGraphResource getKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId){
+    public KnowledgeSpaceGraphResource getRealKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId, boolean graphComparing){
         List<LinkEntity> links = new ArrayList<>();
         List<ProblemEntity> problems = problemRepository.findAllProblemsByTest(testId);
+        List<LinkEntity> duplicateLinks = new ArrayList<>();
+        for(ProblemEntity problemEntity: problems) {
+            String [] subProblems = problemEntity.getKnowledgeState().split(",");
+            if(subProblems.length > 1) {
+                for(String title: Arrays.copyOfRange(subProblems, 1, subProblems.length)) {
+                    ProblemEntity subProblem = problemRepository.findFirstByTitleAndDomain_Md5H(title, problemEntity.getDomain().getMd5H()).orElseThrow(() -> new ResourceNotExistException("Problem not found!", ErrorCode.NOT_FOUND));
+                    duplicateLinks.add(LinkEntity.builder()
+                            .source(problemEntity)
+                            .target(subProblem)
+                            .leftDirection(false)
+                            .rightDirection(false)
+                            .build());
+                }
+            }
+        }
         for(Integer[] knowledge: knowledgeSpace){
             Integer source = knowledge[0];
             Integer target = knowledge[1];
-            links.add(LinkEntity.builder()
+            LinkEntity link = LinkEntity.builder()
                     .source(problems.get(source))
                     .target(problems.get(target))
-                    .leftDirection(true)
+                    .leftDirection(false)
                     .rightDirection(false)
-                    .build());
+                    .build();
+            if(!compareLink(links
+                            .stream()
+                            .map(LinkResource::entityToResource)
+                            .collect(Collectors.toList()), LinkResource.entityToResource(link)) &&
+                    !compareLink(duplicateLinks
+                            .stream()
+                            .map(LinkResource::entityToResource)
+                            .collect(Collectors.toList()), LinkResource.entityToResource(link)) && !graphComparing)
+            {
+                links.add(link);
+            }
+            if(!compareInBothDirection(links
+                    .stream()
+                    .map(LinkResource::entityToResource)
+                    .collect(Collectors.toList()), LinkResource.entityToResource(link)) && graphComparing)
+            {
+                links.add(link);
+            }
+
         }
         return KnowledgeSpaceGraphResource.builder()
                 .problems(problems.stream()
@@ -96,27 +139,25 @@ public class KnowledgeSpaceService {
 
     public KnowledgeSpaceGraphResource compareGraphs(String testId){
         TestEntity testEntity = testRepository.getOnyByMd5H(testId).get();
-        KnowledgeSpaceGraphResource knowledgeSpaceGraphResource = getKnowledgeSpace(testId);
+        KnowledgeSpaceGraphResource knowledgeSpaceGraphResource = getKnowledgeSpace(testId, true);
         List<LinkEntity> links = linkRepository.findAllByDomain_Md5HAndStatus_Id(testEntity.getDomain().getMd5H(), LinkStatus.ACTIVE.getId());
-        return compare(links
+        return compare(testEntity.getDomain().getMd5H(), links
                         .stream()
                         .map(LinkResource::entityToResource)
                         .collect(Collectors.toList()), knowledgeSpaceGraphResource.getLinks()
                        );
     }
 
-    public KnowledgeSpaceGraphResource compare(List<LinkResource> graph1Links, List<LinkResource> graph2Links){
+    public KnowledgeSpaceGraphResource compare(String domainId, List<LinkResource> graph1Links, List<LinkResource> graph2Links){
         List<LinkResource> sameLinks = new ArrayList<>();
-        List<ProblemResource> sameProblems = new ArrayList<>();
+        List<ProblemEntity> problems = problemRepository.getAllByDomain_Md5HAndStatus_Id(domainId, ProblemStatus.ACTIVE.getId());
         for(LinkResource link: graph1Links){
-            if(compareLink(graph2Links, link)) {
+            if(compareInBothDirection(graph2Links, link)) {
                 sameLinks.add(link);
-                sameProblems.add(link.getSource());
-                sameProblems.add(link.getTarget());
             }
         }
         return KnowledgeSpaceGraphResource.builder()
-                .problems(sameProblems.stream().filter(distinctByKey(ProblemResource::getMd5h)).collect(Collectors.toList())) // filter duplicates
+                .problems(problems.stream().map(ProblemResource::entityToResource).collect(Collectors.toList()))
                 .links(sameLinks.stream().filter(distinctByKey(LinkResource::getMd5h)).collect(Collectors.toList()))          // filter duplicates
                 .graphSimilarityPercent((double) sameLinks.size() / Math.max(graph1Links.size(), graph2Links.size()) * 100)
                 .build();
@@ -125,12 +166,21 @@ public class KnowledgeSpaceService {
     /*
         Two links are same if their source and target nodes are the same.
      */
-    public boolean compareLink(List<LinkResource> links, LinkResource compareToLink){
+    public boolean compareInBothDirection(List<LinkResource> links, LinkResource compareToLink){
         for(LinkResource linkResource: links) {
             if(
                (linkResource.getSource().getId().equals(compareToLink.getSource().getId()) && linkResource.getTarget().getId().equals(compareToLink.getTarget().getId())) ||
                (linkResource.getSource().getId().equals(compareToLink.getTarget().getId()) && linkResource.getTarget().getId().equals(compareToLink.getSource().getId()))
               ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean compareLink(List<LinkResource> links, LinkResource compareToLink){
+        for(LinkResource linkResource: links) {
+            if(linkResource.getSource().getId().equals(compareToLink.getSource().getId()) && linkResource.getTarget().getId().equals(compareToLink.getTarget().getId())){
                 return true;
             }
         }

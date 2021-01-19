@@ -23,4 +23,6 @@ public interface ProblemRepository extends JpaRepository<ProblemEntity, Long> {
     List<ProblemEntity> getAllByDomain_Md5HAndStatus_Id(String domainId, Long statusId);
 
     List<ProblemEntity> findAllByDomain_Md5HAndStatus_idAndKnowledgeStateContaining(String domainId, Long statusId, String title);
+
+    Optional<ProblemEntity> findFirstByTitleAndDomain_Md5H(String title, String domainId);
 }
