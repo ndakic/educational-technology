@@ -26,6 +26,7 @@ public class TestResource {
     private UserResource teacher;
     private DomainResource domain;
     private List<QuestionResource> questions;
+    private UserResource mockedUser;
 
     public static TestResource entityToResource(TestEntity testEntity){
         if(ObjectUtils.isEmpty(testEntity)) { return null; }

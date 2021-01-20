@@ -2,13 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AnswerService } from '../../services/answer.service';
+import { QuestionService } from '../../services/question.service';
 import { Location } from '@angular/common';
-
 
 class Answer {
   public answerId: string;
-  public userId: string = "5bc67bef74afd2fb0f5a370d72b1c913";
+  public userId: string;
   public questionId: string;
+
+  constructor(answerId: string, userId: string, questionId: string){
+    this.answerId = answerId;
+    this.userId = userId;
+    this.questionId = questionId;
+  }
 }
 
 @Component({
@@ -19,54 +25,27 @@ class Answer {
 export class FillTestComponent implements OnInit {
 
   public test: any;
-  public answers: Array<string> = [];
+  public currentQuestion: any;
   public selectedAnswer: any;
+  public testFinishedMessage = false;
 
-  constructor(private answerService: AnswerService, private route: ActivatedRoute, private router: Router, private _location: Location) {
+  constructor(
+    private answerService: AnswerService, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private _location: Location,
+    private questionService: QuestionService) {
   }
 
   ngOnInit(): void {
     this.test = this.route.snapshot.data["data"]["test"];
+    this.loadNextQuestion();
   }
-
-  addOrRemoveAnswer(event: any, answerId: string): void {
-    if (event.checked) {
-      this.answers.push(answerId);
-    } else {
-      const index = this.answers.indexOf(answerId);
-      if (index > -1) {
-        this.answers.splice(index, 1);
-      }
-    }
-  }
-
-  submitAnswers(): void {
-    var answers = [];
-    for (let i=0; i< this.answers.length; i++) {
-      var answer = new Answer();
-      answer.answerId = this.answers[i];
-      answers.push(answer);
-    }
-    this.answerService.submitAnswers(answers).subscribe(
-      response => {
-        this.router.navigate(['/'])
-        .then(success => console.log('navigation success?' , success))
-        .catch(console.error); 
-      },
-      error => {
-        console.log(error)
-        alert("Error occured: " + error);
-      });
-  }
-
 
   back() {
     this._location.back();
   }
 
-  /*
-    Deprecated
-  */
   setAnswer(checked, answer){
     if(checked) {
       this.selectedAnswer = answer;
@@ -74,16 +53,9 @@ export class FillTestComponent implements OnInit {
     }
   }
 
-  /*
-    Deprecated
-  */
-  submitAnswer(question){
-    var answer = new Answer();
-    answer.answerId = this.selectedAnswer.answerId;
-    answer.questionId = question.id;
-    this.answerService.submitAnswer(answer).subscribe((response: any) => {
-      question.answered = true;
-    })
+  submitAnswer(){
+    this.answerService.submitAnswer(new Answer(this.selectedAnswer.answerId, this.test.mockedUser.id, this.currentQuestion.id))
+                      .subscribe(() => this.loadNextQuestion())
   }
 
   /*
@@ -100,5 +72,12 @@ export class FillTestComponent implements OnInit {
     });
   }
 
-
+  loadNextQuestion(){
+    this.questionService.getQuestion(this.test.id, this.test.mockedUser.id).subscribe(question => {
+      this.currentQuestion = question
+      if(!question) {
+        this.testFinishedMessage = true;
+      }
+    });
+  }
 }

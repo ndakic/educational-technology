@@ -1,19 +1,20 @@
 <button class="mt-20 ml-20" mat-raised-button (click)="back()">Back</button>
-<div class="fill-test-container">
+<div class="fill-test-container" *ngIf="currentQuestion && !testFinishedMessage">
     <h1>
        {{test.title}}
     </h1>
     <hr>
-    <div *ngFor="let question of test.questions; let i = index" class="test-question">
-        {{question.text}}
-        <div *ngFor="let answer of question.answers; let j = index" class="test-question-answer">
-            <mat-checkbox color="primary" (change)="addOrRemoveAnswer($event, answer.answerId)">{{answer.text}}</mat-checkbox>
-        </div>
+    {{currentQuestion.text}}
+    <div *ngFor="let answer of currentQuestion.answers; let j = index" class="test-question-answer">
+        <mat-checkbox color="primary" (change)="setAnswer($event, answer)">{{answer.text}}</mat-checkbox>
     </div>
     <br>
     <div>
-        <button class="confirm-test" mat-raised-button color="primary" (click)="submitAnswers()">
+        <button class="confirm-test" mat-raised-button color="primary" (click)="submitAnswer()">
             Finish
         </button>
     </div>
+</div>
+<div class="fill-test-container" *ngIf="testFinishedMessage">
+    <p> Test is finished. Thank you!</p>
 </div>

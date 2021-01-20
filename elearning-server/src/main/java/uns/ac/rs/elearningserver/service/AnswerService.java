@@ -40,6 +40,8 @@ public class AnswerService {
     @NonNull
     private final ProblemRepository problemRepository;
 
+    public static final Integer ANSWER_REWARD = 10;
+    public static final Integer SUB_ANSWER_REWARD = 2;
 
     @Transactional
     public void create(AnswerResource resource){
@@ -85,12 +87,12 @@ public class AnswerService {
             if answer is correct/wrong, update all problems which are related to that question/problem
          */
         for(ProblemEntity problem: problems) {
-            int value = answer.getCorrect() ? 2: -2;
+            int value = answer.getCorrect() ? SUB_ANSWER_REWARD: - SUB_ANSWER_REWARD;
             problem.setCredibility(problem.getCredibility() + value);
             problem.setCredibility(problem.getCredibility() < 0 ? 0: problem.getCredibility());
             problemRepository.save(problem);
         }
-        int value = answer.getCorrect() ? 10: -10;
+        int value = answer.getCorrect() ? ANSWER_REWARD: - ANSWER_REWARD;
         ProblemEntity problemEntity = questionEntity.get().getProblem();
         problemEntity.setCredibility(problemEntity.getCredibility() + value);
         problemEntity.setCredibility(problemEntity.getCredibility() < 0 ? 0: problemEntity.getCredibility());

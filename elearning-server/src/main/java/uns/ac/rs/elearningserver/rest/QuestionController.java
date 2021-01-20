@@ -24,6 +24,11 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.get(questionId));
     }
 
+    @RequestMapping(value = "/{testId}/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getQuestionByTestAndProbability(@PathVariable String testId, @PathVariable String userId){
+        return ResponseEntity.ok(questionService.getQuestionByTestAndProbability(testId, userId));
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody QuestionResource resource) {
         questionService.create(resource);

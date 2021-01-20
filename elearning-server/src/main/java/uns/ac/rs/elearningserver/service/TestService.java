@@ -9,6 +9,7 @@ import uns.ac.rs.elearningserver.model.AnswerEntity;
 import uns.ac.rs.elearningserver.model.ProblemEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 import uns.ac.rs.elearningserver.model.TestEntity;
+import uns.ac.rs.elearningserver.model.UserEntity;
 import uns.ac.rs.elearningserver.repository.*;
 import uns.ac.rs.elearningserver.rest.resource.*;
 import uns.ac.rs.elearningserver.util.DateUtil;
@@ -38,6 +39,7 @@ public class TestService {
     @NonNull
     private final UserRepository userRepository;
 
+    @Transactional
     public TestResource get(String testId){
         TestEntity testEntity = testRepository.getOnyByMd5H(testId).orElseThrow(() -> new ResourceNotExistException(String.format("Test with %s not found!", testId), ErrorCode.NOT_FOUND));
         return TestResource.builder()
@@ -66,6 +68,7 @@ public class TestService {
                         .sorted(Comparator.comparingDouble(QuestionResource::getProbability).reversed())
                         .collect(Collectors.toList()))
                 .domain(DomainResource.entityToResource(testEntity.getDomain()))
+                .mockedUser(mockNewUser())
                 .build();
     }
 
@@ -145,5 +148,21 @@ public class TestService {
         }
         resource.setId(test.getMd5H());
         return resource;
+    }
+
+
+    public UserResource mockNewUser(){
+        UserEntity mockedUser = UserEntity.builder()
+                .firstName("FirstName")
+                .lastName("LastName")
+                .email("Email")
+                .password("1234")
+                .registrationDate(DateUtil.nowSystemTime())
+                .userType(UserType.STUDENT)
+                .status(statusRepository.getOne(UserStatus.ACTIVE.getId()))
+                .build();
+        userRepository.save(mockedUser);
+        mockedUser.setMd5H(Md5Generator.generateHash(mockedUser.getId(), Md5Salt.USER));
+        return UserResource.entityToResource(mockedUser);
     }
 }

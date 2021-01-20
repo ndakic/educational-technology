@@ -10,6 +10,7 @@ import uns.ac.rs.elearningserver.model.DomainEntity;
 import uns.ac.rs.elearningserver.model.QuestionEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -33,6 +34,7 @@ public class QuestionResource {
                 .testId(questionEntity.getTest().getMd5H())
                 .probability(questionEntity.getProblem().getProbability())
                 .problem(ProblemResource.entityToResource(questionEntity.getProblem()))
+                .answers(questionEntity.getAnswers().stream().map(AnswerResource::entityToResource).collect(Collectors.toList()))
                 .answered(false)
                 .build();
     }
