@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import uns.ac.rs.elearningserver.constant.KnowledgeSpaceStatus;
 import uns.ac.rs.elearningserver.service.KnowledgeSpaceService;
 
 @RestController
@@ -19,7 +20,7 @@ public class KnowledgeSpaceController {
 
     @RequestMapping(value = "/{testId}", method = RequestMethod.GET)
     public ResponseEntity<?> get(@PathVariable String testId){
-        return ResponseEntity.ok(knowledgeSpaceService.getKnowledgeSpace(testId, false));
+        return ResponseEntity.ok(knowledgeSpaceService.getKnowledgeSpace(testId, KnowledgeSpaceStatus.REAL));
     }
 
     @RequestMapping(value = "/compare/{testId}", method = RequestMethod.GET)

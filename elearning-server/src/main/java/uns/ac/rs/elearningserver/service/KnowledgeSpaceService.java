@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import uns.ac.rs.elearningserver.constant.ErrorCode;
+import uns.ac.rs.elearningserver.constant.KnowledgeSpaceStatus;
 import uns.ac.rs.elearningserver.constant.LinkStatus;
 import uns.ac.rs.elearningserver.constant.ProblemStatus;
 import uns.ac.rs.elearningserver.exception.ResourceNotExistException;
@@ -50,7 +51,7 @@ public class KnowledgeSpaceService {
     @NonNull
     private final LinkRepository linkRepository;
 
-    public KnowledgeSpaceGraphResource getKnowledgeSpace(String testId, boolean graphComparing){
+    public KnowledgeSpaceGraphResource getKnowledgeSpace(String testId, KnowledgeSpaceStatus knowledgeSpaceStatus){
         List<Long> questions = answerHistoryRepository.findAllQuestionsByTest_Md5H(testId);
         Map<String, int[]> map = new HashMap<>();
         for(Long question: questions) {
@@ -62,7 +63,7 @@ public class KnowledgeSpaceService {
         }
         if(map.isEmpty()) { return new KnowledgeSpaceGraphResource();}
         Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(map);
-        return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, graphComparing);
+        return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, knowledgeSpaceStatus);
     }
 
     public KnowledgeSpaceGraphResource getDefaultKnowledgeSpace(String testId) {
@@ -70,7 +71,7 @@ public class KnowledgeSpaceService {
             InputStream initialStream = new FileInputStream("files/pisa.txt");
             Map<String, int[]> result = FileUtil.readFromInputStream(initialStream);
             Integer[][] knowledgeSpace = flaskApiService.getKnowledgeSpace(result);
-            return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, false);
+            return getRealKnowledgeSpaceGraphResource(knowledgeSpace, testId, KnowledgeSpaceStatus.DEFAULT);
         } catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
@@ -78,7 +79,7 @@ public class KnowledgeSpaceService {
     }
 
 
-    public KnowledgeSpaceGraphResource getRealKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId, boolean graphComparing){
+    public KnowledgeSpaceGraphResource getRealKnowledgeSpaceGraphResource(Integer[][] knowledgeSpace, String testId, KnowledgeSpaceStatus knowledgeSpaceStatus){
         List<LinkEntity> links = new ArrayList<>();
         List<ProblemEntity> problems = problemRepository.findAllProblemsByTest(testId);
         List<LinkEntity> duplicateLinks = new ArrayList<>();
@@ -112,14 +113,14 @@ public class KnowledgeSpaceService {
                     !compareLink(duplicateLinks
                             .stream()
                             .map(LinkResource::entityToResource)
-                            .collect(Collectors.toList()), LinkResource.entityToResource(link)) && !graphComparing)
+                            .collect(Collectors.toList()), LinkResource.entityToResource(link)) && knowledgeSpaceStatus == KnowledgeSpaceStatus.REAL)
             {
                 links.add(link);
             }
             if(!compareInBothDirection(links
                     .stream()
                     .map(LinkResource::entityToResource)
-                    .collect(Collectors.toList()), LinkResource.entityToResource(link)) && graphComparing)
+                    .collect(Collectors.toList()), LinkResource.entityToResource(link)) && knowledgeSpaceStatus != KnowledgeSpaceStatus.REAL)
             {
                 links.add(link);
             }
@@ -139,7 +140,7 @@ public class KnowledgeSpaceService {
 
     public KnowledgeSpaceGraphResource compareGraphs(String testId){
         TestEntity testEntity = testRepository.getOnyByMd5H(testId).get();
-        KnowledgeSpaceGraphResource knowledgeSpaceGraphResource = getKnowledgeSpace(testId, true);
+        KnowledgeSpaceGraphResource knowledgeSpaceGraphResource = getKnowledgeSpace(testId, KnowledgeSpaceStatus.COMPARED);
         List<LinkEntity> links = linkRepository.findAllByDomain_Md5HAndStatus_Id(testEntity.getDomain().getMd5H(), LinkStatus.ACTIVE.getId());
         return compare(testEntity.getDomain().getMd5H(), links
                         .stream()

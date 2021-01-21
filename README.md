@@ -49,9 +49,9 @@ Domain List            |  Domain Details
 ![Screenshot](files/domain-list.png)  |  ![Screenshot](files/domain-details.png)
 
 
-Test Details            |  Taking the Test
+Test Details            |  Guided Testing
 :-------------------------:|:-------------------------:
-![Screenshot](files/test-details.png) | ![Screenshot](files/test-taking.png)
+![Screenshot](files/test-details.png) | ![Screenshot](files/guide-testing.png)
 
 
 Knowledge Space Editor            |  Real Knowledge Space          |  Teacher's vs Real KS
