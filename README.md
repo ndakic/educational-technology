@@ -56,4 +56,4 @@ Test Details            |  Guided Testing
 
 Knowledge Space Editor            |  Real Knowledge Space          |  Teacher's vs Real KS
 :-------------------------:|:-------------------------:|:-------------------------:
-![Screenshot](files/knowledge-space-editor.png) | ![Screenshot](files/real-knowledge-space.png) | ![Screenshot](files/compared-spaces.png)
+![Screenshot](files/ks-editor.png) | ![Screenshot](files/real-knowledge-space.png) | ![Screenshot](files/compared-spaces.png)
